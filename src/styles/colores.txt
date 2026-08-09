@@ -1,0 +1,332 @@
+# Paleta de colores (V1)
+["#0c6efd","#44c66f","#091431","#96c4fd","#eaf4fb","#888fa0","#5097fc","#515b73","#0057fd"]
+
+## Colores principales
+
+```text
+Primary
+#2563EB
+```
+
+Azul principal de la aplicación. Se utiliza en:
+
+* Botones principales
+* FAB (Floating Action Button)
+* Iconos activos
+* Enlaces
+* Elementos destacados
+
+---
+
+```text
+Primary Dark
+#1D4ED8
+```
+
+Utilizado para:
+
+* Estado presionado de botones
+* Hover (Web)
+* Títulos destacados
+
+---
+
+```text
+Primary Light
+#DBEAFE
+```
+
+Utilizado para:
+
+* Fondos de tarjetas informativas
+* Badges
+* Indicadores suaves
+
+---
+
+## Fondo
+
+```text
+Background
+#F8FAFC
+```
+
+Color de fondo general de la aplicación.
+
+---
+
+```text
+Surface
+#FFFFFF
+```
+
+Color de:
+
+* Cards
+* Modales
+* Bottom Sheets
+* Inputs
+
+---
+
+## Texto
+
+```text
+Title
+#0F172A
+```
+
+Títulos.
+
+---
+
+```text
+Text
+#334155
+```
+
+Texto normal.
+
+---
+
+```text
+Secondary Text
+#64748B
+```
+
+Texto secundario.
+
+---
+
+```text
+Placeholder
+#94A3B8
+```
+
+Placeholder de Inputs.
+
+---
+
+## Bordes
+
+```text
+Border
+#E2E8F0
+```
+
+Separadores y bordes.
+
+---
+
+## Estados
+
+### Éxito
+
+```text
+Success
+#22C55E
+```
+
+Ejemplos:
+
+* Sincronización correcta
+* Operación exitosa
+
+---
+
+### Advertencia
+
+```text
+Warning
+#F59E0B
+```
+
+Ejemplos:
+
+* Conexión lenta
+* Reportes pendientes
+
+---
+
+### Error
+
+```text
+Error
+#EF4444
+```
+
+Ejemplos:
+
+* Eliminar
+* Error de sincronización
+* Validaciones
+
+---
+
+### Información
+
+```text
+Info
+#3B82F6
+```
+
+Mensajes informativos.
+
+---
+
+## Grises
+
+```text
+Gray 50
+#F8FAFC
+
+Gray 100
+#F1F5F9
+
+Gray 200
+#E2E8F0
+
+Gray 300
+#CBD5E1
+
+Gray 400
+#94A3B8
+
+Gray 500
+#64748B
+
+Gray 600
+#475569
+
+Gray 700
+#334155
+
+Gray 800
+#1E293B
+
+Gray 900
+#0F172A
+```
+
+---
+
+# Colores para indicadores de conexión
+
+```text
+Excelente
+#22C55E
+
+Buena
+#84CC16
+
+Aceptable
+#FACC15
+
+Lenta
+#F59E0B
+
+Muy lenta
+#F97316
+
+Sin conexión
+#EF4444
+```
+
+---
+
+# Estado de inspecciones
+
+```text
+Draft
+#94A3B8
+
+Editing
+#3B82F6
+
+Completed
+#22C55E
+
+Exported
+#2563EB
+```
+
+---
+
+# Fotografías
+
+```text
+Sin editar
+#CBD5E1
+
+Editada
+#2563EB
+```
+
+---
+
+# Botones
+
+Botón Primario
+
+Fondo:
+#2563EB
+
+Texto:
+#FFFFFF
+
+---
+
+Botón Secundario
+
+Fondo:
+#FFFFFF
+
+Texto:
+#2563EB
+
+Borde:
+#2563EB
+
+---
+
+Botón Destructivo
+
+Fondo:
+#EF4444
+
+Texto:
+#FFFFFF
+
+---
+
+# Floating Action Button
+
+Fondo
+
+#2563EB
+
+Icono
+
+#FFFFFF
+
+---
+
+# Sombras
+
+Cards
+
+```text
+0 2 8 rgba(15,23,42,0.08)
+```
+
+FAB
+
+```text
+0 6 16 rgba(37,99,235,0.28)
+```
+
+Modales
+
+```text
+0 12 30 rgba(15,23,42,0.15)
+```

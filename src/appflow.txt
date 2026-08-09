@@ -1,0 +1,28 @@
+Dashboard
+      │
+      ▼
+Nueva inspección
+      │
+      ▼
+Crear ambientes
+      │
+      ▼
+Agregar observaciones
+      │
+      ▼
+Tomar fotografías
+      │
+      ▼
+Editar fotografías
+      │
+      ▼
+Vista previa del reporte
+      │
+      ▼
+Generar PDF
+      │
+      ▼
+Guardar PDF
+      │
+      ▼
+Compartir PDF

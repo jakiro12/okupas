@@ -1,0 +1,7 @@
+//compress()
+
+//resize()
+
+//createThumbnail()
+
+//deleteImage()

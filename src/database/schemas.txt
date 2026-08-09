@@ -1,0 +1,102 @@
+# Modelo de Datos (V1)
+
+## Inspection
+
+```text
+Inspection
+------------------------------
+id                  -- UUID
+title               -- TEXT
+clientName          -- TEXT
+propertyAddress     -- TEXT
+city                -- TEXT
+province            -- TEXT
+notes               -- TEXT
+status              -- TEXT
+createdAt           -- DATETIME
+updatedAt           -- DATETIME
+```
+
+---
+
+## Environment
+
+```text
+Environment
+------------------------------
+id                  -- UUID
+inspectionId        -- UUID
+name                -- TEXT
+orderIndex          -- INTEGER
+createdAt           -- DATETIME
+```
+
+---
+
+## Observation
+
+```text
+Observation
+------------------------------
+id                  -- UUID
+environmentId       -- UUID
+title               -- TEXT
+description         -- TEXT
+createdAt           -- DATETIME
+updatedAt           -- DATETIME
+```
+
+---
+
+## Photo
+
+```text
+Photo
+------------------------------
+id                  -- UUID
+observationId       -- UUID
+originalPath        -- TEXT
+editedPath          -- TEXT
+thumbnailPath       -- TEXT
+displayOrder        -- INTEGER
+createdAt           -- DATETIME
+updatedAt           -- DATETIME
+```
+
+---
+
+## Report
+
+```text
+Report
+------------------------------
+id                  -- UUID
+inspectionId        -- UUID
+pdfPath             -- TEXT
+templateVersion     -- INTEGER
+createdAt           -- DATETIME
+```
+
+---
+
+# Relaciones
+
+```text
+Inspection
+│
+├── Environment
+│      └── inspectionId → Inspection.id
+│
+├── Report
+│      └── inspectionId → Inspection.id
+│
+Environment
+│
+└── Observation
+       └── environmentId → Environment.id
+
+Observation
+│
+└── Photo
+       └── observationId → Observation.id
+```

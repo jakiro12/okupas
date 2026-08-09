@@ -1,0 +1,101 @@
+Crear inspección
+↓
+Guardar inmediatamente en SQLite
+↓
+Cada cambio actualiza SQLite
+
+Por ejemplo:
+
+escribe el título → UPDATE
+añade una observación → INSERT
+toma una foto → INSERT
+dibuja sobre una foto → UPDATE
+elimina una observación → DELETE
+
+Usuario
+    ↓
+SQLite
+    ↓
+Firestore (futuro)
+
+status:
+- draft
+- editing
+- completed
+- exported
+
+Foto tomada
+      ↓
+Guardar archivo
+      ↓
+Guardar ruta en SQLite
+ 
+SQLite guarda referencias, no archivos grandes.
+
+Dibujo imagen
+↓
+Guardar proyecto
+↓
+Exportar cuando termine
+
+O incluso guardar automáticamente cada pocos segundos.
+
+Arch-- SQLite
+
+inspection
+------------
+id
+title
+status
+createdAt
+updatedAt
+
+environment
+------------
+id
+inspectionId
+name
+
+observation
+------------
+id
+environmentId
+title
+description
+
+photo
+------------
+id
+environmentId
+localPath
+editedPath
+createdAt
+
+Una recomendación importante
+
+Cuando implementes delete() desde la pantalla de inspecciones, no llames solamente a InspectionRepository.delete(id).
+
+Lo correcto será hacer:
+
+Eliminar inspección
+
+↓
+
+FileSystemService.deleteInspectionDirectory(id)
+
+↓
+
+InspectionRepository.delete(id)
+
+Porque el DELETE CASCADE de SQLite eliminará los registros de las fotos, pero no eliminará los archivos físicos (.jpg) que guardaste en:
+
+okupas/
+└── inspections/
+    └── inspectionId/
+        └── photos/
+
+Más adelante te convendrá agregar este método en FileSystemService:
+
+deleteInspectionDirectory(id: string)
+
+que elimine toda la carpeta de la inspección de una sola vez. Así, cuando el usuario borre una inspección, también desaparecerán automáticamente todas sus fotos y cualquier PDF asociado. Esa estrategia mantiene sincronizados el sistema de archivos y la base de datos.

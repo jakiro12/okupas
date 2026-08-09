@@ -1,18 +1,28 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import FileSystemService from "@/services/fyilesystem/FileSystemService";
+import { Stack } from "expo-router";
+import { useEffect } from "react";
+import SQLiteService  from '../database/sqlite'
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+export default function RootLayout() {
+ useEffect(() => {
+  const init = async () => {
+    try {
+      await Promise.all([
+        SQLiteService.initialize(),
+        FileSystemService.initialize(),
+      ]);
 
-SplashScreen.preventAutoHideAsync();
+      console.log("✅ Aplicación inicializada");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
-  );
-}
+  init();
+}, []);
+  return ( <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="index" />    
+              <Stack.Screen name="inspection/inspection" />   
+              <Stack.Screen name="inspection/[inspectionId]/photos" />  
+          </Stack>)
+      }

@@ -32,6 +32,18 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
+      ],
+      "expo-sqlite",
+      "@react-native-vector-icons/ionicons",
+      "@react-native-vector-icons/material-design-icons",
+      "@react-native-vector-icons/feather",
+      "@react-native-vector-icons/fontawesome6",
+       [
+        "expo-image-picker",
+        {
+          "photosPermission": "La aplicación necesita acceder a tus fotos para seleccionar imágenes de las inspecciones.",
+          "cameraPermission": "La aplicación necesita acceder a la cámara para tomar fotografías de las inspecciones."
+        }
       ]
     ],
     "experiments": {
