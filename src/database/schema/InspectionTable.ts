@@ -1,8 +1,9 @@
 export const INSPECTION_TABLE = "inspections";
+export type InspectionStatus = "draft" | "completed" | "editing";
 
 export interface Inspection {
   id: string;
-
+  status:InspectionStatus;
   name: string;
 
   createdBy: string;
@@ -23,6 +24,7 @@ export interface Inspection {
 export const createInspectionTable = `
 CREATE TABLE IF NOT EXISTS inspections (
     id TEXT PRIMARY KEY NOT NULL,
+    status TEXT NOT NULL,
     name TEXT NOT NULL,
     createdBy TEXT NOT NULL,
     address TEXT,

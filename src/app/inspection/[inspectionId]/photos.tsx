@@ -3,12 +3,14 @@ import { Alert, Image, Linking, ScrollView, Text, TouchableOpacity, View } from 
 import { SafeAreaView } from "react-native-safe-area-context"
 import CameraService, { CameraResult } from "@/services/camera/CameraService";
 import ImageProcessor from "@/services/image/ImageProcessor";
-import { StyleSheet } from "react-native";
+import styles from '../../../styles/photo-screen-styles'
 import FileSystemService from "@/services/fyilesystem/FileSystemService";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { Photo } from "@/database/schema/PhotoTable";
 import PhotoRepository from "@/database/repositories/PhotoRepository";
 import * as Crypto from "expo-crypto";
+import InspectionRepository from "@/database/repositories/InspectionRepository";
+import { Inspection } from "@/database/schema/InspectionTable";
 
 const CameraScreen=()=>{
     const [image, setImage] = useState<CameraResult | null>(null);
@@ -139,7 +141,47 @@ const handleDeleteImage = async (photo: Photo) => {
     );
   }
 };
+const handleFinishInspection = async () => {
+  if (!inspectionId) {
+    Alert.alert("Error", "No se encontró la inspección.");
+    return;
+  }
 
+  try {
+    const inspection =
+      await InspectionRepository.findById(inspectionId);
+
+    if (!inspection) {
+      Alert.alert(
+        "Error",
+        "La inspección no existe."
+      );
+      return;
+    }
+
+    const updatedInspection: Inspection = {
+      ...inspection,
+      status: "completed",
+      updatedAt: new Date().toISOString(),
+    };
+
+    await InspectionRepository.update(
+      updatedInspection
+    );
+
+    router.replace("/");
+  } catch (error) {
+    console.error(
+      "Error finalizando inspección:",
+      error
+    );
+
+    Alert.alert(
+      "Error",
+      "No fue posible finalizar la inspección."
+    );
+  }
+};
   useEffect(() => {
   CameraService.requestCameraPermission();
   CameraService.requestGalleryPermission();
@@ -231,97 +273,5 @@ useEffect(() => {
         </SafeAreaView>
     )
 }
-
-
-
-const styles= StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 20,
-    backgroundColor: "#F8FAFC",
-  },
-
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#0F172A",
-  },
-
-  subtitle: {
-    marginTop: 6,
-    marginBottom: 24,
-    fontSize: 16,
-    color: "#64748B",
-  },
-
-  previewContainer: {
-    height: 260,
-    borderRadius: 20,
-    backgroundColor: "#EFF6FF",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 24,
-    overflow: "hidden",
-
-    borderWidth: 1,
-    borderColor: "#D6E4F5",
-  },
-
-  image: {
-    width: "100%",
-    height: "100%",
-  },
-
-  emptyText: {
-    color: "#64748B",
-    fontSize: 16,
-  },
-
-  buttonContainer: {
-    gap: 14,
-    marginBottom: 28,
-  },
-
-  button: {
-    backgroundColor: "#2563EB",
-    borderRadius: 16,
-    paddingVertical: 16,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  buttonText: {
-    color: "#FFFFFF",
-    fontWeight: "600",
-    fontSize: 16,
-  },
-
-  infoCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
-  },
-
-  infoTitle: {
-    fontWeight: "700",
-    fontSize: 18,
-    marginBottom: 12,
-    color: "#0F172A",
-  },
-
-  info: {
-    fontSize: 14,
-    color: "#64748B",
-    marginTop: 10,
-  },
-
-  value: {
-    marginTop: 4,
-    fontSize: 14,
-    color: "#0F172A",
-  },
-});
 
 export default CameraScreen
