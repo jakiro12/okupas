@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, Image, Linking, ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { Alert, Image, Linking, Modal, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import CameraService, { CameraResult } from "@/services/camera/CameraService";
 import ImageProcessor from "@/services/image/ImageProcessor";
@@ -15,6 +15,7 @@ import { Inspection } from "@/database/schema/InspectionTable";
 const CameraScreen=()=>{
     const [image, setImage] = useState<CameraResult | null>(null);
     const [savedImages, setSavedImages] = useState<Photo[]>([]);
+    const [showAlert,setShowAlert]=useState<{show:boolean,message:string}>({show:false,message:''})
 
     const { inspectionId } = useLocalSearchParams<{ inspectionId: string }>()
     console.log(inspectionId)
@@ -62,7 +63,8 @@ const handleSaveImage = async () => {
   }
 
   if (!inspectionId) {
-    Alert.alert("Error", "No se encontró la inspección.");
+
+    setShowAlert({show:true,message:"No se encontró la inspección."});
     return;
   }
 
@@ -103,11 +105,7 @@ const handleSaveImage = async () => {
 
   } catch (error) {
     console.error("Error guardando imagen:", error);
-
-    Alert.alert(
-      "Error",
-      "No fue posible guardar la imagen."
-    );
+    setShowAlert({show:true,message:"No fue posible guardar la imagen."});
   }
 };
 const handleDeleteImage = async (photo: Photo) => {
@@ -116,10 +114,7 @@ const handleDeleteImage = async (photo: Photo) => {
       await FileSystemService.deleteImage(photo);
 
     if (!deleted) {
-      Alert.alert(
-        "Error",
-        "El archivo de imagen no existe."
-      );
+    setShowAlert({show:true,message:"No se puede eliminar un imagen que no existe."});  
       return;
     }
 
@@ -134,16 +129,12 @@ const handleDeleteImage = async (photo: Photo) => {
       "Error eliminando imagen:",
       error
     );
-
-    Alert.alert(
-      "Error",
-      "No fue posible eliminar la imagen."
-    );
+    setShowAlert({show:true,message:"No fue posible eliminar la imagen."});  
   }
 };
 const handleFinishInspection = async () => {
   if (!inspectionId) {
-    Alert.alert("Error", "No se encontró la inspección.");
+    setShowAlert({show:true,message:"No se encontró la inspección."});  
     return;
   }
 
@@ -152,10 +143,7 @@ const handleFinishInspection = async () => {
       await InspectionRepository.findById(inspectionId);
 
     if (!inspection) {
-      Alert.alert(
-        "Error",
-        "La inspección no existe."
-      );
+    setShowAlert({show:true,message:"No se encontró la inspección."});  
       return;
     }
 
@@ -168,18 +156,14 @@ const handleFinishInspection = async () => {
     await InspectionRepository.update(
       updatedInspection
     );
-
+    
     router.replace("/");
   } catch (error) {
     console.error(
       "Error finalizando inspección:",
       error
     );
-
-    Alert.alert(
-      "Error",
-      "No fue posible finalizar la inspección."
-    );
+    setShowAlert({show:true,message:"No fue posible finalizar la inspección."});  
   }
 };
   useEffect(() => {
@@ -268,8 +252,55 @@ useEffect(() => {
                     </View>
                   ))}
              
-          
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleFinishInspection}
+                  >
+                    <Text
+                    style={styles.buttonText}
+                    >Generar Reporte</Text>
+                  </TouchableOpacity>
                 </ScrollView>
+                <Modal
+                  visible={showAlert.show}
+                  transparent
+                  animationType="fade"
+         >
+           <View
+           style={{
+             flex: 1,
+             backgroundColor: "rgba(0,0,0,0.6)",
+             justifyContent: "center",
+             alignItems: "center"
+           }}
+         >
+           <View
+             style={{
+               width: "80%",
+               backgroundColor: "white",
+               padding: 30,
+               borderRadius: 10
+             }}
+           >
+            <Text>
+              {showAlert.message}
+            </Text>
+ <TouchableOpacity
+             activeOpacity={0.8}
+               style={{
+                 marginTop: 20,
+                 alignSelf: "flex-end",
+                 width:'auto',
+                 height:'auto',
+                 padding:6
+               }}
+               onPress={()=>setShowAlert({show:false,message:''})}
+             >
+               <Text style={{ color: "#6e8ac6",fontFamily: "Optima-Medium" }}>Cerrar</Text>
+             </TouchableOpacity>
+           </View>
+           </View>
+                </Modal>
         </SafeAreaView>
     )
 }

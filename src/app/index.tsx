@@ -141,7 +141,8 @@ export default function Index() {
               </View>
               </View>
             </TouchableOpacity>
-               <View
+               <TouchableOpacity
+               onPress={()=>router.push("/list/inpectionsList")}
               style={styles.cardsDashboardBtn}
             >
               <View
@@ -172,7 +173,7 @@ export default function Index() {
                     />
               </View>
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
             <View
             style={styles.cardsDashboardContainer}

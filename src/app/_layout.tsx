@@ -24,5 +24,7 @@ export default function RootLayout() {
               <Stack.Screen name="index" />    
               <Stack.Screen name="inspection/inspection" />   
               <Stack.Screen name="inspection/[inspectionId]/photos" />  
-          </Stack>)
+              <Stack.Screen name="list/inspectionsList" />    
+          </Stack>
+          )
       }
