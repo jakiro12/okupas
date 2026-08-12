@@ -14,6 +14,13 @@ interface InspectionScreen{
   inputboxContainerViewDesc:TextStyle
   inputboxContainerViewTitle:TextStyle
   getPhotosBtn:ViewStyle
+  headerViewContainerCardIcon:ViewStyle
+  inspectionCard:ViewStyle
+  inspectionContainer:ViewStyle
+  inspectionScreenContainer:ViewStyle
+  mainTitle:TextStyle
+  inspectionDate:TextStyle
+  inspectionName:TextStyle
 }
 
 const InspectionStyles : InspectionScreen = StyleSheet.create({
@@ -131,6 +138,59 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     justifyContent:'center',
     flexDirection:'row',
     columnGap:10
+  },
+  inspectionCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#D6E4F5",
+    padding: 16,
+    flexDirection: "row",
+    width:'95%'
+  },
+  headerViewContainerCardIcon:{
+    width:30,
+    height:30,
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'#5098fc31',
+    borderRadius:5
+  },
+  inspectionContainer:{
+    width:'100%',
+    height:'auto',
+    backgroundColor:'#F8FAFC',
+    display:'flex',
+    flexDirection:'column',
+    justifyContent:'flex-start',
+    alignItems:'center',
+    rowGap:16
+  },
+  inspectionScreenContainer:{
+    width:'100%',
+    height:'100%',
+    backgroundColor:'#F8FAFC',
+     display:'flex',
+    flexDirection:'column',
+    justifyContent:'space-between',
+    alignItems:'center'
+  },
+   mainTitle:{
+    width:'auto',
+    height:'auto',
+    fontSize:24,
+    fontWeight:'bold',
+    color:'#091431'
+  },
+  inspectionDate: { 
+    fontSize: 12, 
+    color: "#888fa0"
+   },
+   inspectionName: { 
+    fontSize: 18, 
+    fontWeight: "700", 
+    color: "#091431"
   }
 })
 
