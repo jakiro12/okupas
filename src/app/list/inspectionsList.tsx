@@ -6,9 +6,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import styles from '../../styles/inspection-styles'
 import { router } from "expo-router";
+import ModalToDeleteItems from "@/components/ModalToDeleteItems";
 const InspectionsList = () => {
   const [inspections, setInspections] = useState<Inspection[]>([]);
-
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedInspection, setSelectedInspection] =
+    useState<Inspection | null>(null);
   useEffect(() => {
     const loadInspections = async () => {
       try {
@@ -26,47 +29,39 @@ const InspectionsList = () => {
   }, []);
 
   const getValue = (value?: string) => {
-    return value?.trim() ? value : "No especificado";
+    return value?.trim() ? value : "Sin completar";
   };
-const handleDeleteInspection = (inspection: Inspection) => {
-  Alert.alert(
-    "Eliminar inspección",
-    `¿Quieres eliminar "${inspection.name}"?`,
-    [
-      {
-        text: "Cancelar",
-        style: "cancel",
-      },
-      {
-        text: "Eliminar",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            await InspectionRepository.delete(inspection.id);
+const handleOpenDeleteModal = (inspection: Inspection) => {
+  setSelectedInspection(inspection);
+  setShowDeleteModal(true);
+};
+const handleDeleteInspection = async () => {
+  if (!selectedInspection) return;
 
-            setInspections((prev) =>
-              prev.filter((item) => item.id !== inspection.id)
-            );
+  try {
+    await InspectionRepository.delete(
+      selectedInspection.id
+    );
 
-            console.log(
-              "🗑️ Inspección eliminada:",
-              inspection.id
-            );
-          } catch (error) {
-            console.error(
-              "Error eliminando inspección:",
-              error
-            );
+    setInspections((prev) =>
+      prev.filter(
+        (item) => item.id !== selectedInspection.id
+      )
+    );
 
-            Alert.alert(
-              "Error",
-              "No se pudo eliminar la inspección."
-            );
-          }
-        },
-      },
-    ]
-  );
+    setShowDeleteModal(false);
+    setSelectedInspection(null);
+
+    console.log(
+      "🗑️ Inspección eliminada:",
+      selectedInspection.id
+    );
+  } catch (error) {
+    console.error(
+      "Error eliminando inspección:",
+      error
+    );
+  }
 };
   return (
     <SafeAreaView
@@ -227,7 +222,7 @@ const handleDeleteInspection = (inspection: Inspection) => {
                     />
                   </View>
                    <TouchableOpacity
-                   onPress={()=>handleDeleteInspection(inspection)}
+                   onPress={() => handleOpenDeleteModal(inspection)}
                 style={styles.headerViewContainerCardIcon}
               >
                 <FontAwesome6
@@ -242,7 +237,16 @@ const handleDeleteInspection = (inspection: Inspection) => {
             ))
           )}
         </ScrollView>
-      </View>
+        <ModalToDeleteItems
+          visible={showDeleteModal}
+          inspection={selectedInspection}
+          onCancel={() => {
+            setShowDeleteModal(false);
+            setSelectedInspection(null);
+          }}
+          onConfirm={handleDeleteInspection}
+        />
+              </View>
     </SafeAreaView>
   );
 };
