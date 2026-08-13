@@ -26,6 +26,7 @@ interface InspectionScreen{
   dataInspectionCardContainerBtns:ViewStyle
   valueInspectionData:TextStyle
   headerInspectionsListContainer:ViewStyle
+  inspectionDetailContainer:ViewStyle
 }
 
 const InspectionStyles : InspectionScreen = StyleSheet.create({
@@ -185,7 +186,7 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
    mainTitle:{
     width:'auto',
     height:'auto',
-    fontSize:24,
+    fontSize:22,
     fontWeight:'bold',
     color:'#091431'
   },
@@ -229,6 +230,15 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     alignItems:'center',
     flexDirection:'row',
     columnGap:10
+  },
+  inspectionDetailContainer:{
+     width:'100%',
+    height:'100%',
+    backgroundColor:'#F8FAFC',
+     display:'flex',
+    flexDirection:'column',
+    justifyContent:'space-between',
+    alignItems:'center'
   }
 })
 

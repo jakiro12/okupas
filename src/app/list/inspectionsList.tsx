@@ -87,7 +87,7 @@ const handleDeleteInspection = async () => {
                         </TouchableOpacity> 
           <Text 
             style={styles.mainTitle}
-          >Inspecciones Realizadas</Text>    
+          >Observaciones </Text>    
         </View>
         <ScrollView
           contentContainerStyle={styles.inspectionContainer}
@@ -201,7 +201,14 @@ const handleDeleteInspection = async () => {
                     iconStyle="solid"
                     />
               </View>
-                <View
+                <TouchableOpacity
+                onPress={()=>
+                   router.push({
+                      pathname: "/list/[id]/inspectionDetail",
+                      params: {
+                        id: inspection.id,
+                      }})
+                }
                 style={styles.headerViewContainerCardIcon}
               >
                 <FontAwesome6
@@ -210,7 +217,7 @@ const handleDeleteInspection = async () => {
                     color="#2563EB"
                     iconStyle="solid"
                     />
-                  </View>
+                  </TouchableOpacity>
                    <View
                 style={styles.headerViewContainerCardIcon}
               >
