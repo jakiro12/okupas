@@ -21,6 +21,11 @@ interface InspectionScreen{
   mainTitle:TextStyle
   inspectionDate:TextStyle
   inspectionName:TextStyle
+  labelInspectionData:TextStyle
+  dataInspectionCardContainer:ViewStyle
+  dataInspectionCardContainerBtns:ViewStyle
+  valueInspectionData:TextStyle
+  headerInspectionsListContainer:ViewStyle
 }
 
 const InspectionStyles : InspectionScreen = StyleSheet.create({
@@ -146,11 +151,12 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     borderColor: "#D6E4F5",
     padding: 16,
     flexDirection: "row",
-    width:'95%'
+    width:'95%',
+    height:300
   },
   headerViewContainerCardIcon:{
-    width:30,
-    height:30,
+    width:40,
+    height:40,
     display:'flex',
     justifyContent:'center',
     alignItems:'center',
@@ -191,6 +197,38 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     fontSize: 18, 
     fontWeight: "700", 
     color: "#091431"
+  },
+  labelInspectionData: { 
+    fontSize: 12, 
+    fontWeight: "600", 
+    color: "#091431", 
+    marginBottom: 2, 
+  },
+  dataInspectionCardContainer:{
+    width:'80%',
+    height:'100%',
+  },
+  dataInspectionCardContainerBtns:{
+    width:'20%',
+    height:'100%',
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    flexDirection:'column',
+    rowGap:18
+  },
+  valueInspectionData:{
+    color: "#091431",
+    fontSize:14
+  },
+  headerInspectionsListContainer:{
+    width:'95%',
+    height:'10%',
+    display:'flex',
+    justifyContent:'flex-start',
+    alignItems:'center',
+    flexDirection:'row',
+    columnGap:10
   }
 })
 

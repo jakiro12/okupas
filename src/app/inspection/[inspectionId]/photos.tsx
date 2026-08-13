@@ -69,18 +69,15 @@ const handleSaveImage = async () => {
   }
 
   try {
-    // 1. Comprimir y redimensionar
     const processedImage =
       await ImageProcessor.resizeAndCompress(image);
 
-    // 2. Guardar archivo físicamente
     const savedImage =
       await FileSystemService.saveImage(
         inspectionId,
         processedImage
       );
 
-    // 3. Crear registro en SQLite
     const photo: Photo = {
       id: Crypto.randomUUID(),
       inspectionId,
@@ -95,10 +92,8 @@ const handleSaveImage = async () => {
 
     await PhotoRepository.create(photo);
 
-    // 4. Actualizar lista
     setSavedImages(prev => [...prev, photo]);
 
-    // 5. Limpiar preview
     setImage(null);
 
     console.log("📸 Foto guardada:", photo);

@@ -26,9 +26,9 @@ const NewDataInspection=()=>{
   }
    const handleSubmitInspectionData = async () => {
   const now = new Date().toISOString();
-
   const inspection: Inspection = {
     id: Crypto.randomUUID(),
+    status:"editing",
     name: inspectionData.name,
     createdBy: inspectionData.createdBy,
     address: inspectionData.address,
