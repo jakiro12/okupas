@@ -27,6 +27,13 @@ interface InspectionScreen{
   valueInspectionData:TextStyle
   headerInspectionsListContainer:ViewStyle
   inspectionDetailContainer:ViewStyle
+  boxInspectionCurrentData:ViewStyle
+  boxInspectionCurrentDataPhotos:ViewStyle
+  boxInspectionCurrentDataHeader:ViewStyle
+  boxInspectionCurrentDataHeaderLogo:ViewStyle
+  boxInspectionCurrentDataHeaderAbout:ViewStyle
+  cardPhotoData:ViewStyle
+  tinyPhoto:ImageStyle
 }
 
 const InspectionStyles : InspectionScreen = StyleSheet.create({
@@ -146,10 +153,9 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     columnGap:10
   },
   inspectionCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "#D6E4F5",
+    borderWidth:1,
+    borderColor:'#888fa041',
+    borderRadius:10,
     padding: 16,
     flexDirection: "row",
     width:'95%',
@@ -239,6 +245,69 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     flexDirection:'column',
     justifyContent:'space-between',
     alignItems:'center'
+  },
+  boxInspectionCurrentData:{
+    width:'95%',
+    height:'40%',
+    borderWidth:1,
+     borderColor:'#888fa041',
+     borderRadius:10,
+     display:'flex',
+     justifyContent:'space-between',
+     alignItems:'center',
+     flexDirection:'column'
+
+  },
+  boxInspectionCurrentDataPhotos:{
+    width:'95%',
+    height:'45%',
+    borderWidth:1,
+    borderColor:'#000000'
+  },
+  boxInspectionCurrentDataHeader:{
+    width:'90%',
+    height:'25%',
+    borderBottomColor:'#888fa041',
+    borderBottomWidth:1,
+    display:'flex',
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'flex-start',
+    columnGap:10
+  },
+  boxInspectionCurrentDataHeaderLogo:{
+    width:50,
+    height:50,
+    borderRadius:25,
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'#5098fc31',
+  },
+  boxInspectionCurrentDataHeaderAbout:{
+    width:'90%',
+    height:'15%',
+    borderBottomColor:'#888fa041',
+    borderBottomWidth:1,
+    display:'flex',
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'flex-start',
+    columnGap:10
+  },
+  cardPhotoData:{
+    width:'100%',
+    height:100,
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'#5098fc31',
+    borderRadius:10
+  },
+  tinyPhoto:{
+    width:100,
+    height:80,
+    objectFit:'cover'
   }
 })
 

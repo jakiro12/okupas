@@ -246,7 +246,8 @@ useEffect(() => {
                       </TouchableOpacity>
                     </View>
                   ))}
-             
+                  {savedImages.length === 0 ? null
+                  :
                   <TouchableOpacity
                     style={styles.button}
                     onPress={handleFinishInspection}
@@ -255,6 +256,7 @@ useEffect(() => {
                     style={styles.buttonText}
                     >Generar Reporte</Text>
                   </TouchableOpacity>
+                }
                 </ScrollView>
                 <Modal
                   visible={showAlert.show}

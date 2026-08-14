@@ -87,7 +87,7 @@ const handleDeleteInspection = async () => {
                         </TouchableOpacity> 
           <Text 
             style={styles.mainTitle}
-          >Observaciones </Text>    
+          >Inspecciones </Text>    
         </View>
         <ScrollView
           contentContainerStyle={styles.inspectionContainer}
