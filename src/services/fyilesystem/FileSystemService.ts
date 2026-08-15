@@ -1,25 +1,3 @@
-/*
-class FileSystemService {
-
-    private appDirectory
-
-    private inspectionsDirectory
-
-    private tempDirectory
-
-    initialize()
-
-    createInspectionFolder()
-
-    saveImage()
-
-    deleteImage()
-
-    imageExists()
-
-    getImageInfo()
-}
-*/
 import { Directory, File, Paths } from "expo-file-system";
 import { CameraResult } from "../camera/CameraService";
 
@@ -49,7 +27,6 @@ class FileSystemService {
       this.tempDirectory.create();
     }
 
-    console.log("📁 Directorios inicializados");
   }
 
   async createInspectionDirectory(
@@ -68,7 +45,6 @@ class FileSystemService {
     new Directory(inspectionDirectory, "thumbnails").create();
     new Directory(inspectionDirectory, "pdf").create();
 
-    console.log("📂 Carpeta creada:", inspectionDirectory.uri);
   }
 async deleteImage(image:CameraResult): Promise<boolean> {
 
@@ -77,7 +53,6 @@ async deleteImage(image:CameraResult): Promise<boolean> {
   if (file.exists === false) return false;
 
   file.delete();
-  console.log("imagen eliminada",file.uri)
   return true;
 }
 async saveImage(
@@ -109,9 +84,7 @@ async saveImage(
   // Copiar la imagen
   sourceFile.copy(destinationFile);
 
-  // Leer información REAL del archivo copiado
   const savedFile = new File(destinationFile.uri);
-
   return {
     uri: savedFile.uri,
     width: image.width,
@@ -139,7 +112,6 @@ async saveImage(
 
     const file = new File(uri);
 
-    console.log("Existe:", file.exists);
 
     return file.exists;
   }

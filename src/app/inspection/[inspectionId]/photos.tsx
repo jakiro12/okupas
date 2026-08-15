@@ -232,11 +232,11 @@ useEffect(() => {
                 </View>
                   {savedImages.map((photo) => (
                     <View
-                      style={{width:'100%',height:'auto',display:'flex',justifyContent:'space-between',flexDirection:'row',marginBottom:10}}
+                      style={styles.cardPhotoData}
                     key={photo.id}>
                       <Image
                         source={{ uri: photo.uri }}
-                        style={{width:90,height:90,objectFit:'contain'}}
+                        style={{width:100,height:80,objectFit:'cover'}}
                       />
 
                       <TouchableOpacity

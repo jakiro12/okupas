@@ -34,6 +34,7 @@ interface InspectionScreen{
   boxInspectionCurrentDataHeaderAbout:ViewStyle
   cardPhotoData:ViewStyle
   tinyPhoto:ImageStyle
+  subtitle:TextStyle
 }
 
 const InspectionStyles : InspectionScreen = StyleSheet.create({
@@ -260,9 +261,7 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
   },
   boxInspectionCurrentDataPhotos:{
     width:'95%',
-    height:'45%',
-    borderWidth:1,
-    borderColor:'#000000'
+    height:'45%'
   },
   boxInspectionCurrentDataHeader:{
     width:'90%',
@@ -299,15 +298,23 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     width:'100%',
     height:100,
     display:'flex',
-    justifyContent:'center',
+    justifyContent:'space-between',
     alignItems:'center',
     backgroundColor:'#5098fc31',
-    borderRadius:10
+    borderRadius:10,
+    flexDirection:'row',
+    paddingInline:20
   },
   tinyPhoto:{
     width:100,
     height:80,
     objectFit:'cover'
+  },
+  subtitle:{
+    color: "#091431",
+    fontSize:16,
+    fontWeight:'bold',
+    marginBottom:5
   }
 })
 

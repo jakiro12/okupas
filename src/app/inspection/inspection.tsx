@@ -179,7 +179,7 @@ const NewDataInspection=()=>{
 
                                 </View>
                                 <TextInput 
-                                    onChangeText={(t)=>handleInputChange("adress",t)}                                    
+                                    onChangeText={(t)=>handleInputChange("address",t)}                                    
                                     style={styles.inputboxContainerViewDesc}
                                     placeholder="Ej: Av. Example 123"
                                 />

@@ -8,6 +8,7 @@ interface PhotoScreenStyles{
   buttonContainer:ViewStyle
   button:ViewStyle
   buttonText:TextStyle
+  cardPhotoData:ViewStyle
 }
 
 const PhotoScreenStyles : PhotoScreenStyles = StyleSheet.create({
@@ -55,6 +56,18 @@ const PhotoScreenStyles : PhotoScreenStyles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "600",
     fontSize: 16,
+  },
+  cardPhotoData:{
+    width:'100%',
+    height:100,
+    display:'flex',
+    justifyContent:'space-between',
+    alignItems:'center',
+    backgroundColor:'#5098fc31',
+    borderRadius:10,
+    flexDirection:'row',
+    paddingInline:20,
+    marginBottom:10
   },
 });
 export default PhotoScreenStyles
