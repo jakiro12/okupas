@@ -37,7 +37,7 @@ const InspectionDetail=()=>{
             const resultDataPhotos = await PhotoRepository.findByInspectionId(id);
             setInspectionData(resultData)
             setInspectionPhotos(resultDataPhotos)
-            console.log("fotos:",resultDataPhotos);
+            console.log("datos",resultData?.status);
           } catch (error) {
             console.error("Error cargando inspecciones:", error);
           }
@@ -89,9 +89,18 @@ const InspectionDetail=()=>{
               <Text
                 style={styles.inspectionName}
               >{inspectionData?.name}</Text>
-              <Text
-                style={{marginLeft:'auto'}}
-              >PDF</Text>
+               <TouchableOpacity
+                disabled={inspectionData?.status === "completed" ? false : true}
+                onPress={()=>console.log('generar pdf')}
+                style={[styles.boxInspectionCurrentDataHeaderLogo,{marginLeft:'auto'}]}
+              >
+                 <FontAwesome6
+                      name={inspectionData?.status === "completed" ? "file-pdf" : "file-circle-xmark" }
+                      size={20}
+                      color="#F40F02"
+                      iconStyle="solid"
+                      />
+              </TouchableOpacity>
             </View>
             <View
               style={styles.boxInspectionCurrentDataHeaderAbout}

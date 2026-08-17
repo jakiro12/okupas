@@ -16,9 +16,10 @@ class InspectionRepository {
         province,
         observations,
         createdAt,
-        updatedAt
+        updatedAt,
+        status
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
         inspection.id,
@@ -29,7 +30,8 @@ class InspectionRepository {
         inspection.province,
         inspection.observations,
         inspection.createdAt,
-        inspection.updatedAt
+        inspection.updatedAt,
+        inspection.status
       ]
     );
   }
@@ -60,7 +62,7 @@ class InspectionRepository {
       `
     );
   }
-  async update(inspection: Inspection): Promise<void> {
+async update(inspection: Inspection): Promise<void> {
   const db = SQLiteService.getDatabase();
 
   await db.runAsync(
@@ -73,7 +75,8 @@ class InspectionRepository {
       city = ?,
       province = ?,
       observations = ?,
-      updatedAt = ?
+      updatedAt = ?,
+      status = ?
     WHERE id = ?
     `,
     [
@@ -84,6 +87,7 @@ class InspectionRepository {
       inspection.province,
       inspection.observations,
       inspection.updatedAt,
+      inspection.status,
       inspection.id,
     ]
   );

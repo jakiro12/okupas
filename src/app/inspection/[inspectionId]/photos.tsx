@@ -18,7 +18,6 @@ const CameraScreen=()=>{
     const [showAlert,setShowAlert]=useState<{show:boolean,message:string}>({show:false,message:''})
 
     const { inspectionId } = useLocalSearchParams<{ inspectionId: string }>()
-    console.log(inspectionId)
     const handleTakePhoto = async () => {
     const result = await CameraService.takePhoto();
 switch (result?.status) {
@@ -93,11 +92,7 @@ const handleSaveImage = async () => {
     await PhotoRepository.create(photo);
 
     setSavedImages(prev => [...prev, photo]);
-
     setImage(null);
-
-    console.log("📸 Foto guardada:", photo);
-
   } catch (error) {
     console.error("Error guardando imagen:", error);
     setShowAlert({show:true,message:"No fue posible guardar la imagen."});
@@ -129,7 +124,10 @@ const handleDeleteImage = async (photo: Photo) => {
 };
 const handleFinishInspection = async () => {
   if (!inspectionId) {
-    setShowAlert({show:true,message:"No se encontró la inspección."});  
+    setShowAlert({
+      show: true,
+      message: "No se encontró la inspección.",
+    });
     return;
   }
 
@@ -138,7 +136,10 @@ const handleFinishInspection = async () => {
       await InspectionRepository.findById(inspectionId);
 
     if (!inspection) {
-    setShowAlert({show:true,message:"No se encontró la inspección."});  
+      setShowAlert({
+        show: true,
+        message: "No se encontró la inspección.",
+      });
       return;
     }
 
@@ -148,17 +149,19 @@ const handleFinishInspection = async () => {
       updatedAt: new Date().toISOString(),
     };
 
-    await InspectionRepository.update(
-      updatedInspection
-    );
-    
+    await InspectionRepository.update(updatedInspection);
+
     router.replace("/");
   } catch (error) {
     console.error(
       "Error finalizando inspección:",
       error
     );
-    setShowAlert({show:true,message:"No fue posible finalizar la inspección."});  
+
+    setShowAlert({
+      show: true,
+      message: "No fue posible finalizar la inspección.",
+    });
   }
 };
   useEffect(() => {

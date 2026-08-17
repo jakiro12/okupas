@@ -3,11 +3,16 @@ import { Stack } from "expo-router";
 import { useEffect } from "react";
 import SQLiteService  from '../database/sqlite'
 
+//para borrar y resetar todo en caso de agregar algo
+//import * as SQLite from "expo-sqlite";
+//await SQLite.deleteDatabaseAsync("okupas.db"),
 export default function RootLayout() {
  useEffect(() => {
+    
   const init = async () => {
     try {
       await Promise.all([
+        
         SQLiteService.initialize(),
         FileSystemService.initialize(),
       ]);

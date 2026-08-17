@@ -195,9 +195,9 @@ const handleDeleteInspection = async () => {
                 style={styles.headerViewContainerCardIcon}
               >
                 <FontAwesome6
-                    name="file-invoice"
+                    name="file-pdf"
                     size={20}
-                    color="#2563EB"
+                    color="#F40F02"
                     iconStyle="solid"
                     />
               </View>
