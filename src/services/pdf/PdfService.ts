@@ -1,6 +1,8 @@
 import * as Print from "expo-print";
+import { File } from "expo-file-system";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
 import PhotoRepository from "@/database/repositories/PhotoRepository";
+import FileSystemService from "@/services/fyilesystem/FileSystemService";
 
 class PdfService {
   async generateInspectionPdf(
@@ -51,7 +53,6 @@ class PdfService {
 
               h1 {
                 color: #2563eb;
-                margin-bottom: 5px;
               }
 
               h2 {
@@ -78,10 +79,6 @@ class PdfService {
                 padding: 15px;
                 border-radius: 8px;
                 margin-top: 10px;
-              }
-
-              .photos {
-                margin-top: 20px;
               }
 
               .photo-container {
@@ -148,13 +145,11 @@ class PdfService {
 
             <h2>Fotografías</h2>
 
-            <div class="photos">
-              ${
-                photos.length > 0
-                  ? photosHtml
-                  : "<p>No se registraron fotografías.</p>"
-              }
-            </div>
+            ${
+              photos.length > 0
+                ? photosHtml
+                : "<p>No se registraron fotografías.</p>"
+            }
 
           </body>
         </html>
@@ -164,7 +159,36 @@ class PdfService {
         html,
       });
 
-      return result.uri;
+      const pdfDirectory =
+        FileSystemService.getInspectionPdfDirectory(
+          inspectionId
+        );
+
+      if (!pdfDirectory.exists) {
+         pdfDirectory.create();
+      }
+
+      const destinationFile = new File(
+        pdfDirectory,
+        `inspection-${inspectionId}.pdf`
+      );
+
+      const temporaryFile = new File(result.uri);
+
+    await  temporaryFile.copy(destinationFile);
+
+      console.log(
+        "PDF temporal:",
+        result.uri
+      );
+
+      console.log(
+        "PDF guardado permanentemente:",
+        destinationFile.uri
+      );
+
+      return destinationFile.uri;
+
     } catch (error) {
       console.error(
         "Error generando PDF:",

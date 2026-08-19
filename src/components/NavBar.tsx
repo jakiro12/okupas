@@ -1,6 +1,7 @@
 import { Text, TouchableOpacity, View } from "react-native"
 import styles from '../styles/navbar-styles'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
+import { router } from "expo-router";
 
 const NavigationBar=()=>{
     return(
@@ -21,6 +22,7 @@ const NavigationBar=()=>{
                 >Inicio</Text>
             </TouchableOpacity>
                <TouchableOpacity
+               onPress={()=>router.push('/inspection/inspection')}
             style={styles.btnContainer}
             >
                 <FontAwesome6

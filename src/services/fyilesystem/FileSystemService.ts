@@ -115,6 +115,19 @@ async saveImage(
 
     return file.exists;
   }
+  getInspectionPdfDirectory(
+  inspectionId: string
+): Directory {
+  const inspectionDirectory = new Directory(
+    this.inspectionsDirectory,
+    inspectionId
+  );
+
+  return new Directory(
+    inspectionDirectory,
+    "pdf"
+  );
+}
 }
 
 export default new FileSystemService();
