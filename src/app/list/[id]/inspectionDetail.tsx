@@ -10,6 +10,7 @@ import { Inspection } from "@/database/schema/InspectionTable"
 import { Photo } from "@/database/schema/PhotoTable"
 import Ionicons from "@react-native-vector-icons/ionicons";
 import ModalToShowInformation from "@/components/ModalToShowInformation"
+import PdfService from "@/services/pdf/PdfService"
 
 const InspectionDetail=()=>{
     const [inspectionData,setInspectionData]=useState<Inspection | null>(null)
@@ -45,7 +46,20 @@ const InspectionDetail=()=>{
     
         loadInspections();
       }, []);
- 
+ const handleGeneratePdf = async () => {
+  if (!id) {
+    console.log("No se encontró el ID de la inspección");
+    return;
+  }
+
+  try {
+    const pdfUri = await PdfService.generateInspectionPdf(id);
+
+    console.log("PDF generado:", pdfUri);
+  } catch (error) {
+    console.error("Error generando PDF:", error);
+  }
+};
     return(
         <SafeAreaView
               style={{ flex: 1, backgroundColor: "black" }}
@@ -91,7 +105,7 @@ const InspectionDetail=()=>{
               >{inspectionData?.name}</Text>
                <TouchableOpacity
                 disabled={inspectionData?.status === "completed" ? false : true}
-                onPress={()=>console.log('generar pdf')}
+                onPress={handleGeneratePdf}
                 style={[styles.boxInspectionCurrentDataHeaderLogo,{marginLeft:'auto'}]}
               >
                  <FontAwesome6
