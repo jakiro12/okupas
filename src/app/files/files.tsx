@@ -1,0 +1,197 @@
+import InspectionRepository from "@/database/repositories/InspectionRepository";
+import { Inspection } from "@/database/schema/InspectionTable";
+import PdfService from "@/services/pdf/PdfService";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
+import styles from '../../styles/files-styles'
+
+const FilesList=()=>{
+    const [files, setFiles] =useState<Inspection[]>([]);
+      const loadPdfs = async () => {
+    try {
+      const result =
+        await InspectionRepository.findAll();
+
+      const inspectionsWithPdf: Inspection[] = [];
+        console.log(result)
+      for (const inspection of result) {
+        const pdf =
+          await PdfService.getInspectionPdf(
+            inspection.id
+          );
+          console.log(pdf)
+        if (pdf) {
+          inspectionsWithPdf.push(inspection);
+        }
+      }
+
+      setFiles(inspectionsWithPdf);
+    } catch (error) {
+      console.error(
+        "Error cargando PDFs:",
+        error
+      );
+    }
+  };
+    useEffect(()=>{
+        loadPdfs()
+    },[])
+    return(
+        <SafeAreaView
+                      style={{ flex: 1, backgroundColor: "black" }}
+                      edges={["bottom", "top"]}
+                    >
+        <View style={styles.container}>
+                <View>
+                    <TouchableOpacity
+                onPress={() => router.back()}
+                style={{
+                width: 40,
+                height: 40,
+                justifyContent: "center",
+                alignItems: "center",
+                }}
+            >
+                <FontAwesome6
+                name="arrow-left"
+                size={20}
+                color="#2563EB"
+                iconStyle="solid"
+                />
+            </TouchableOpacity>
+
+            <Text
+                style={{
+                fontSize: 24,
+                fontWeight: "700",
+                color: "#1e293b",
+                marginLeft: 10,
+                }}
+            >
+                PDFs generados
+            </Text>
+            </View>
+
+            <ScrollView
+            showsVerticalScrollIndicator={false}
+            >
+            {files.length === 0 ? (
+                <View
+                style={{
+                    backgroundColor: "white",
+                    padding: 25,
+                    borderRadius: 18,
+                    alignItems: "center",
+                }}
+                >
+                <Text
+                    style={{
+                    fontSize: 16,
+                    fontWeight: "600",
+                    color: "#334155",
+                    }}
+                >
+                    No hay PDFs generados
+                </Text>
+
+                <Text
+                    style={{
+                    marginTop: 8,
+                    color: "#64748b",
+                    textAlign: "center",
+                    }}
+                >
+                    Los PDFs que generes aparecerán aquí.
+                </Text>
+                </View>
+            ) : (
+                files.map((inspection) => (
+                <View
+                    key={inspection.id}
+                    style={{
+                    backgroundColor: "white",
+                    borderRadius: 18,
+                    padding: 18,
+                    marginBottom: 12,
+                    borderWidth: 1,
+                    borderColor: "#d6e4f5",
+                    }}
+                >
+                    <Text
+                    style={{
+                        fontSize: 18,
+                        fontWeight: "700",
+                        color: "#1e293b",
+                    }}
+                    >
+                    {inspection.name}
+                    </Text>
+
+                    <Text
+                    style={{
+                        marginTop: 6,
+                        color: "#64748b",
+                    }}
+                    >
+                    {inspection.createdAt}
+                    </Text>
+
+                    <View
+                    style={{
+                        flexDirection: "row",
+                        marginTop: 15,
+                        gap: 10,
+                    }}
+                    >
+                    <TouchableOpacity
+                        style={{
+                        flex: 1,
+                        backgroundColor: "#2563EB",
+                        padding: 12,
+                        borderRadius: 10,
+                        alignItems: "center",
+                        }}
+                    >
+                        <Text
+                        style={{
+                            color: "white",
+                            fontWeight: "600",
+                        }}
+                        >
+                        Ver PDF
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={{
+                        flex: 1,
+                        backgroundColor: "#e2e8f0",
+                        padding: 12,
+                        borderRadius: 10,
+                        alignItems: "center",
+                        }}
+                    >
+                        <Text
+                        style={{
+                            color: "#1e293b",
+                            fontWeight: "600",
+                        }}
+                        >
+                        Descargar
+                        </Text>
+                    </TouchableOpacity>
+                    </View>
+                </View>
+                ))
+            )}
+            </ScrollView>
+
+        </View>
+
+        </SafeAreaView>
+    )
+}
+export default FilesList

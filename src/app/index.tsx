@@ -210,25 +210,26 @@ export default function Index() {
               </View>
               </View>
             </View>
-             <View
+             <TouchableOpacity
+              onPress={()=>router.push("/files/files")}
               style={styles.cardsDashboardBtn}
             >
               <View
                 style={styles.cardsDashboardBtnLogo}
               >
                 <FontAwesome6
-                  name="gear"
-                  size={34}
+                  name="file-pdf"
+                  size={28}
                   color="#2563EB"
                   iconStyle="solid"
                   />
               </View>
               <Text
                 style={styles.cardsDashboardBtnTitle}
-              >Configuracion</Text>
+              >Archivos</Text>
               <Text
                 style={styles.cardsDashboardBtnAbout}
-              >Ajustes de la aplicacion y preferencias</Text>
+              >Lista de archivos generados en formato PDF</Text>
               <View>
               <View
                 style={styles.cardsDashboardBtnLogoArrow}
@@ -241,7 +242,7 @@ export default function Index() {
                     />
               </View>
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

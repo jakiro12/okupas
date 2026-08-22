@@ -128,6 +128,23 @@ async saveImage(
     "pdf"
   );
 }
+async getInspectionPdf(
+  inspectionId: string
+): Promise<File | null> {
+  const pdfDirectory =
+    this.getInspectionPdfDirectory(inspectionId);
+
+  const pdfFile = new File(
+    pdfDirectory,
+    `inspection-${inspectionId}.pdf`
+  );
+
+  if (!pdfFile.exists) {
+    return null;
+  }
+
+  return pdfFile;
+}
 }
 
 export default new FileSystemService();

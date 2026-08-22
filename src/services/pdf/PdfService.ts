@@ -3,7 +3,7 @@ import { File } from "expo-file-system";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
 import PhotoRepository from "@/database/repositories/PhotoRepository";
 import FileSystemService from "@/services/fyilesystem/FileSystemService";
-
+import * as FileSystem from "expo-file-system/legacy";
 class PdfService {
   async generateInspectionPdf(
     inspectionId: string
@@ -155,39 +155,52 @@ class PdfService {
         </html>
       `;
 
-      const result = await Print.printToFileAsync({
-        html,
-      });
+ const result = await Print.printToFileAsync({
+  html,
+  base64: true,
+});
 
-      const pdfDirectory =
-        FileSystemService.getInspectionPdfDirectory(
-          inspectionId
-        );
+console.log("RESULT PRINT:", result);
 
-      if (!pdfDirectory.exists) {
-         pdfDirectory.create();
-      }
+const pdfDirectory =
+  FileSystemService.getInspectionPdfDirectory(
+    inspectionId
+  );
 
-      const destinationFile = new File(
-        pdfDirectory,
-        `inspection-${inspectionId}.pdf`
-      );
+if (!pdfDirectory.exists) {
+  pdfDirectory.create();
+}
 
-      const temporaryFile = new File(result.uri);
+const destinationFile = new File(
+  pdfDirectory,
+  `inspection-${inspectionId}.pdf`
+);
 
-    await  temporaryFile.copy(destinationFile);
+await destinationFile.write(result.base64, {
+  encoding: "base64",
+});
 
-      console.log(
-        "PDF temporal:",
-        result.uri
-      );
+console.log(
+  "PDF generado por Print:",
+  result.uri
+);
 
-      console.log(
-        "PDF guardado permanentemente:",
-        destinationFile.uri
-      );
+console.log(
+  "PDF guardado permanentemente:",
+  destinationFile.uri
+);
 
-      return destinationFile.uri;
+console.log(
+  "PDF existe:",
+  destinationFile.exists
+);
+
+console.log(
+  "PDF tamaño:",
+  destinationFile.size
+);
+
+return destinationFile.uri;
 
     } catch (error) {
       console.error(
@@ -198,6 +211,66 @@ class PdfService {
       return null;
     }
   }
+async getInspectionPdf(
+  inspectionId: string
+): Promise<string | null> {
+  try {
+    const pdfDirectory =
+      FileSystemService.getInspectionPdfDirectory(
+        inspectionId
+      );
+
+    console.log(
+      "DIRECTORIO PDF:",
+      pdfDirectory.uri
+    );
+
+    console.log(
+      "DIRECTORIO EXISTE:",
+      pdfDirectory.exists
+    );
+
+    if (!pdfDirectory.exists) {
+      return null;
+    }
+
+    const files = pdfDirectory.list();
+
+    console.log(
+      "ARCHIVOS EN PDF:",
+      files
+    );
+
+    const pdfFile = new File(
+      pdfDirectory,
+      `inspection-${inspectionId}.pdf`
+    );
+
+    console.log(
+      "PDF BUSCADO:",
+      pdfFile.uri
+    );
+
+    console.log(
+      "PDF EXISTS:",
+      pdfFile.exists
+    );
+
+    if (!pdfFile.exists) {
+      return null;
+    }
+
+    return pdfFile.uri;
+
+  } catch (error) {
+    console.error(
+      "Error buscando PDF:",
+      error
+    );
+
+    return null;
+  }
+}
 }
 
 export default new PdfService();
