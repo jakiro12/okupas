@@ -3,7 +3,7 @@ import { Inspection } from "@/database/schema/InspectionTable";
 import PdfService from "@/services/pdf/PdfService";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import styles from '../../styles/files-styles'
@@ -39,6 +39,45 @@ const FilesList=()=>{
     useEffect(()=>{
         loadPdfs()
     },[])
+    const handleDeletePdf = async (
+  inspectionId: string
+) => {
+
+  try {
+
+    const deleted =
+      await PdfService.deleteInspectionPdf(
+        inspectionId
+      );
+
+    if (!deleted) {
+      Alert.alert(
+        "PDF no encontrado",
+        "El archivo ya no existe."
+      );
+      return;
+    }
+
+    Alert.alert(
+      "PDF eliminado",
+      "El PDF fue eliminado correctamente."
+    );
+
+    loadPdfs();
+
+  } catch (error) {
+
+    console.error(
+      "Error eliminando PDF:",
+      error
+    );
+
+    Alert.alert(
+      "Error",
+      "No se pudo eliminar el PDF."
+    );
+  }
+};
     return(
         <SafeAreaView
                       style={{ flex: 1, backgroundColor: "black" }}
@@ -77,12 +116,13 @@ const FilesList=()=>{
 
             <ScrollView
             showsVerticalScrollIndicator={false}
+            style={{width:'100%',height:'auto',borderWidth:1,borderColor:'#000000'}}
             >
             {files.length === 0 ? (
                 <View
                 style={{
                     backgroundColor: "white",
-                    padding: 25,
+                    width:'95%',
                     borderRadius: 18,
                     alignItems: "center",
                 }}
@@ -113,6 +153,7 @@ const FilesList=()=>{
                     key={inspection.id}
                     style={{
                     backgroundColor: "white",
+                    width:'95%',
                     borderRadius: 18,
                     padding: 18,
                     marginBottom: 12,
@@ -154,6 +195,7 @@ const FilesList=()=>{
                         borderRadius: 10,
                         alignItems: "center",
                         }}
+                        onPress={()=>handleDeletePdf(inspection.id)}
                     >
                         <Text
                         style={{
@@ -161,7 +203,7 @@ const FilesList=()=>{
                             fontWeight: "600",
                         }}
                         >
-                        Ver PDF
+                        Eliminar PDF
                         </Text>
                     </TouchableOpacity>
 
@@ -173,6 +215,9 @@ const FilesList=()=>{
                         borderRadius: 10,
                         alignItems: "center",
                         }}
+                        onPress={() =>
+                                    PdfService.openPdf(inspection.id)
+                                }
                     >
                         <Text
                         style={{
@@ -180,7 +225,7 @@ const FilesList=()=>{
                             fontWeight: "600",
                         }}
                         >
-                        Descargar
+                        Ver PDF
                         </Text>
                     </TouchableOpacity>
                     </View>

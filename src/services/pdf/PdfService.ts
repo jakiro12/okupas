@@ -3,12 +3,20 @@ import { File } from "expo-file-system";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
 import PhotoRepository from "@/database/repositories/PhotoRepository";
 import FileSystemService from "@/services/fyilesystem/FileSystemService";
-import * as FileSystem from "expo-file-system/legacy";
+import * as Sharing from "expo-sharing";
+
 class PdfService {
   async generateInspectionPdf(
     inspectionId: string
   ): Promise<string | null> {
     try {
+      const existingPdf =
+  await this.getInspectionPdf(inspectionId);
+
+if (existingPdf) {
+  console.log("El PDF ya existe:", existingPdf);
+  return existingPdf;
+}
       const inspection =
         await InspectionRepository.findById(inspectionId);
 
@@ -176,7 +184,7 @@ const destinationFile = new File(
   `inspection-${inspectionId}.pdf`
 );
 
-await destinationFile.write(result.base64, {
+await destinationFile.write(result.base64!, {
   encoding: "base64",
 });
 
@@ -269,6 +277,61 @@ async getInspectionPdf(
     );
 
     return null;
+  }
+}
+async deleteInspectionPdf(
+  inspectionId: string
+): Promise<boolean> {
+
+  const pdfDirectory =
+    FileSystemService.getInspectionPdfDirectory(
+      inspectionId
+    );
+
+  const pdfFile = new File(
+    pdfDirectory,
+    `inspection-${inspectionId}.pdf`
+  );
+
+  if (!pdfFile.exists) {
+    return false;
+  }
+
+  pdfFile.delete();
+
+  console.log("PDF eliminado:", pdfFile.uri);
+
+  return true;
+}
+async openPdf(inspectionId: string): Promise<void> {
+  try {
+    const pdfUri =
+      await this.getInspectionPdf(inspectionId);
+
+    if (!pdfUri) {
+      throw new Error("No se encontró el PDF.");
+    }
+
+    const available =
+      await Sharing.isAvailableAsync();
+
+    if (!available) {
+      throw new Error(
+        "La función de compartir archivos no está disponible en este dispositivo."
+      );
+    }
+
+    await Sharing.shareAsync(pdfUri, {
+      mimeType: "application/pdf",
+      dialogTitle: "Abrir PDF",
+      UTI: "com.adobe.pdf",
+    });
+
+  } catch (error) {
+    console.error(
+      "Error abriendo PDF:",
+      error
+    );
   }
 }
 }
