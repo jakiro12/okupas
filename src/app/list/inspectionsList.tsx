@@ -7,6 +7,8 @@ import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import styles from '../../styles/inspection-styles'
 import { router } from "expo-router";
 import ModalToDeleteItems from "@/components/ModalToDeleteItems";
+import { formatDate } from "@/utils/dateFormat";
+import PdfService from "@/services/pdf/PdfService";
 const InspectionsList = () => {
   const [inspections, setInspections] = useState<Inspection[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -16,10 +18,7 @@ const InspectionsList = () => {
     const loadInspections = async () => {
       try {
         const result = await InspectionRepository.findAll();
-
         setInspections(result);
-
-        console.log("📋 Inspecciones:", result);
       } catch (error) {
         console.error("Error cargando inspecciones:", error);
       }
@@ -61,6 +60,20 @@ const handleDeleteInspection = async () => {
       "Error eliminando inspección:",
       error
     );
+  }
+};
+const handleGeneratePdf = async (id:string) => {
+  if (!id) {
+    console.log("No se encontró el ID de la inspección");
+    return;
+  }
+
+  try {
+    const pdfUri = await PdfService.generateInspectionPdf(id);
+
+    console.log("PDF generado:", pdfUri);
+  } catch (error) {
+    console.error("Error generando PDF:", error);
   }
 };
   return (
@@ -184,14 +197,17 @@ const handleDeleteInspection = async () => {
                   <Text 
                     style={styles.inspectionDate}
                   >
-                    {inspection.createdAt}
+                    {formatDate(inspection.createdAt,"date")}
+                    {"  "}
+                    {formatDate(inspection.createdAt,"time")}
                   </Text>
                 </View>
 
                 <View
                   style={styles.dataInspectionCardContainerBtns}
                 >              
-                  <View
+                  <TouchableOpacity
+                  onPress={()=>handleGeneratePdf(inspection.id)}
                 style={styles.headerViewContainerCardIcon}
               >
                 <FontAwesome6
@@ -200,7 +216,7 @@ const handleDeleteInspection = async () => {
                     color="#F40F02"
                     iconStyle="solid"
                     />
-              </View>
+              </TouchableOpacity>
                 <TouchableOpacity
                 onPress={()=>
                    router.push({

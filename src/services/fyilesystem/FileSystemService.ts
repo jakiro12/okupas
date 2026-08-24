@@ -115,6 +115,23 @@ async saveImage(
 
     return file.exists;
   }
+  async getImageBase64(uri: string): Promise<string | null> {
+  try {
+    const file = new File(uri);
+
+    if (!file.exists) {
+      console.error("La imagen no existe:", uri);
+      return null;
+    }
+
+    const base64 = await file.base64();
+
+    return base64;
+  } catch (error) {
+    console.error("Error leyendo imagen como Base64:", error);
+    return null;
+  }
+}
   getInspectionPdfDirectory(
   inspectionId: string
 ): Directory {

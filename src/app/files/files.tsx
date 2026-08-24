@@ -7,6 +7,7 @@ import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import styles from '../../styles/files-styles'
+import { formatDate } from "@/utils/dateFormat";
 
 const FilesList=()=>{
     const [files, setFiles] =useState<Inspection[]>([]);
@@ -84,39 +85,32 @@ const FilesList=()=>{
                       edges={["bottom", "top"]}
                     >
         <View style={styles.container}>
-                <View>
-                    <TouchableOpacity
-                onPress={() => router.back()}
-                style={{
-                width: 40,
-                height: 40,
-                justifyContent: "center",
-                alignItems: "center",
-                }}
-            >
-                <FontAwesome6
-                name="arrow-left"
-                size={20}
-                color="#2563EB"
-                iconStyle="solid"
-                />
-            </TouchableOpacity>
+                <View
+                  style={styles.headerFilesListContainer}
+                >
+                  <TouchableOpacity
+                            style={styles.arrowBackView}
+                            onPress={()=>router.back()}
+                        >
+                                <FontAwesome6
+                                    name="arrow-left"
+                                    size={20}
+                                    color="#2563EB"
+                                    iconStyle="solid"
+                                    />
+                        </TouchableOpacity>
 
             <Text
-                style={{
-                fontSize: 24,
-                fontWeight: "700",
-                color: "#1e293b",
-                marginLeft: 10,
-                }}
+                style={styles.mainTitle}
             >
-                PDFs generados
+                PDF generados
             </Text>
             </View>
 
             <ScrollView
             showsVerticalScrollIndicator={false}
-            style={{width:'100%',height:'auto',borderWidth:1,borderColor:'#000000'}}
+            style={{width:'100%',height:'auto',paddingTop:10}}
+            contentContainerStyle={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'flex-start'}}
             >
             {files.length === 0 ? (
                 <View
@@ -177,7 +171,7 @@ const FilesList=()=>{
                         color: "#64748b",
                     }}
                     >
-                    {inspection.createdAt}
+                      {formatDate(inspection.createdAt,"date")}
                     </Text>
 
                     <View

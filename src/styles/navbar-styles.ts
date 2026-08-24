@@ -12,7 +12,7 @@ const NavBarStyles : NavigationBarStyles = StyleSheet.create({
     width:'100%',
     height:80,
     borderTopWidth:1,
-    borderTopColor:'#888fa0',
+    borderTopColor:'#96c4fd',
     justifyContent:'space-around',
     alignItems:'center',
     flexDirection:'row'

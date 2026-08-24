@@ -9,6 +9,7 @@ const NavigationBar=()=>{
         style={styles.container}
         >
             <TouchableOpacity
+            onPress={()=>router.push('/')}
             style={styles.btnContainer}
             >
             <FontAwesome6
@@ -22,7 +23,7 @@ const NavigationBar=()=>{
                 >Inicio</Text>
             </TouchableOpacity>
                <TouchableOpacity
-               onPress={()=>router.push('/inspection/inspection')}
+               onPress={()=>router.push('/list/inspectionsList')}
             style={styles.btnContainer}
             >
                 <FontAwesome6

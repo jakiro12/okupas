@@ -29,22 +29,41 @@ if (existingPdf) {
           inspectionId
         );
 
-      const photosHtml = photos
-        .map(
-          (photo) => `
-            <div class="photo-container">
-              <img
-                src="${photo.uri}"
-                class="photo"
-              />
+      const photosHtml = (
+  await Promise.all(
+    photos.map(async (photo) => {
 
-              <div class="photo-info">
-                <span>${photo.fileName}</span>
-              </div>
+      const base64 =
+        await FileSystemService.getImageBase64(
+          photo.uri
+        );
+
+      if (!base64) {
+        return `
+          <div class="photo-container">
+            <p>No se pudo cargar la imagen.</p>
+            <div class="photo-info">
+              ${photo.fileName}
             </div>
-          `
-        )
-        .join("");
+          </div>
+        `;
+      }
+
+      const mimeType =
+        photo.mimeType || "image/jpeg";
+
+      return `
+        <div class="photo-container">
+
+          <img
+            src="data:${mimeType};base64,${base64}"
+            class="photo"
+          />
+        </div>
+      `;
+    })
+  )
+).join("");
 
       const html = `
         <!DOCTYPE html>

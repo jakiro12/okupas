@@ -12,12 +12,9 @@ export default function RootLayout() {
   const init = async () => {
     try {
       await Promise.all([
-        
         SQLiteService.initialize(),
         FileSystemService.initialize(),
       ]);
-
-      console.log("✅ Aplicación inicializada");
     } catch (error) {
       console.error(error);
     }

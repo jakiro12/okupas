@@ -11,6 +11,7 @@ import { Photo } from "@/database/schema/PhotoTable"
 import Ionicons from "@react-native-vector-icons/ionicons";
 import ModalToShowInformation from "@/components/ModalToShowInformation"
 import PdfService from "@/services/pdf/PdfService"
+import { formatDate } from "@/utils/dateFormat"
 
 const InspectionDetail=()=>{
     const [inspectionData,setInspectionData]=useState<Inspection | null>(null)
@@ -38,7 +39,6 @@ const InspectionDetail=()=>{
             const resultDataPhotos = await PhotoRepository.findByInspectionId(id);
             setInspectionData(resultData)
             setInspectionPhotos(resultDataPhotos)
-            console.log("datos",resultData?.status);
           } catch (error) {
             console.error("Error cargando inspecciones:", error);
           }
@@ -156,7 +156,8 @@ const InspectionDetail=()=>{
               <Text>Fecha:</Text>
               <Text
                 style={{marginLeft:'auto'}}
-              >{inspectionData?.createdAt}</Text>
+              >{formatDate(inspectionData?.createdAt!,"date")}
+                </Text>
             </View>
             <View
               style={styles.boxInspectionCurrentDataHeaderAbout}
@@ -170,7 +171,7 @@ const InspectionDetail=()=>{
               <Text>Hora:</Text>
               <Text
                 style={{marginLeft:'auto'}}
-              >{inspectionData?.createdAt}</Text>
+              >{formatDate(inspectionData?.createdAt!,"time")}</Text>
             </View>
             <TouchableOpacity
               style={styles.boxInspectionCurrentDataHeaderAbout}
