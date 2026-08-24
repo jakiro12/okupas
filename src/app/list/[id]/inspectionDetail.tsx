@@ -12,6 +12,7 @@ import Ionicons from "@react-native-vector-icons/ionicons";
 import ModalToShowInformation from "@/components/ModalToShowInformation"
 import PdfService from "@/services/pdf/PdfService"
 import { formatDate } from "@/utils/dateFormat"
+import FileSystemService from "@/services/fyilesystem/FileSystemService"
 
 const InspectionDetail=()=>{
     const [inspectionData,setInspectionData]=useState<Inspection | null>(null)
@@ -46,18 +47,57 @@ const InspectionDetail=()=>{
     
         loadInspections();
       }, []);
- const handleGeneratePdf = async () => {
+const handleGeneratePdf = async () => {
   if (!id) {
-    console.log("No se encontró el ID de la inspección");
+    setSelectedInfo({
+      title: "Error",
+      about: "No se encontró el ID de la inspección",
+    });
+    setShowInfoModal(true);
     return;
   }
 
   try {
-    const pdfUri = await PdfService.generateInspectionPdf(id);
+    const existingPdf =
+      await FileSystemService.getInspectionPdf(id);
 
-    console.log("PDF generado:", pdfUri);
+    if (existingPdf) {
+      setSelectedInfo({
+        title: "PDF ya generado",
+        about: "El PDF de esta inspección ya se encuentra creado y puede visualizarlo en la pantalla de archivos.",
+      });
+
+      setShowInfoModal(true);
+      return;
+    }
+    const pdfUri =
+      await PdfService.generateInspectionPdf(id);
+
+    if (!pdfUri) {
+      setSelectedInfo({
+        title: "Error",
+        about: "No fue posible generar el PDF.",
+      });
+
+      setShowInfoModal(true);
+      return;
+    }
+    setSelectedInfo({
+      title: "PDF generado",
+      about: "El PDF de la inspección se creó correctamente.",
+    });
+
+    setShowInfoModal(true);
+
   } catch (error) {
     console.error("Error generando PDF:", error);
+
+    setSelectedInfo({
+      title: "Error",
+      about: "Ocurrió un error al generar el PDF.",
+    });
+
+    setShowInfoModal(true);
   }
 };
     return(
@@ -186,7 +226,7 @@ const InspectionDetail=()=>{
               <Text>Observaciones:</Text>
               <Text
                   numberOfLines={1}
-                style={{marginLeft:'auto',width:'60%',color:"#0057fd"}}
+                style={{marginLeft:'auto',width:'60%',color:"#0057fd",textAlign:'right'}}
               >{inspectionData?.observations}</Text>
             </TouchableOpacity>
           </View>

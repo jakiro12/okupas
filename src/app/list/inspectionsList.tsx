@@ -9,11 +9,15 @@ import { router } from "expo-router";
 import ModalToDeleteItems from "@/components/ModalToDeleteItems";
 import { formatDate } from "@/utils/dateFormat";
 import PdfService from "@/services/pdf/PdfService";
+import FileSystemService from "@/services/fyilesystem/FileSystemService";
+import ModalToShowInformation from "@/components/ModalToShowInformation";
 const InspectionsList = () => {
   const [inspections, setInspections] = useState<Inspection[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedInspection, setSelectedInspection] =
     useState<Inspection | null>(null);
+    const [showInfoModal,setShowInfoModal]=useState<boolean>(false)
+    const [selectedInfo,setSelectedInfo]=useState<{title:string,about:string}>({title:"",about:""})
   useEffect(() => {
     const loadInspections = async () => {
       try {
@@ -64,16 +68,55 @@ const handleDeleteInspection = async () => {
 };
 const handleGeneratePdf = async (id:string) => {
   if (!id) {
-    console.log("No se encontró el ID de la inspección");
+    setSelectedInfo({
+      title: "Error",
+      about: "No se encontró el ID de la inspección",
+    });
+    setShowInfoModal(true);
     return;
   }
 
   try {
-    const pdfUri = await PdfService.generateInspectionPdf(id);
+    const existingPdf =
+      await FileSystemService.getInspectionPdf(id);
 
-    console.log("PDF generado:", pdfUri);
+    if (existingPdf) {
+      setSelectedInfo({
+        title: "PDF ya generado",
+        about: "El PDF de esta inspección ya se encuentra creado y puede visualizarlo en la pantalla de archivos.",
+      });
+
+      setShowInfoModal(true);
+      return;
+    }
+    const pdfUri =
+      await PdfService.generateInspectionPdf(id);
+
+    if (!pdfUri) {
+      setSelectedInfo({
+        title: "Error",
+        about: "No fue posible generar el PDF.",
+      });
+
+      setShowInfoModal(true);
+      return;
+    }
+    setSelectedInfo({
+      title: "PDF generado",
+      about: "El PDF de la inspección se creó correctamente.",
+    });
+
+    setShowInfoModal(true);
+
   } catch (error) {
     console.error("Error generando PDF:", error);
+
+    setSelectedInfo({
+      title: "Error",
+      about: "Ocurrió un error al generar el PDF.",
+    });
+
+    setShowInfoModal(true);
   }
 };
   return (
@@ -268,6 +311,12 @@ const handleGeneratePdf = async (id:string) => {
             setSelectedInspection(null);
           }}
           onConfirm={handleDeleteInspection}
+        />
+        <ModalToShowInformation 
+          visible={showInfoModal}
+          about={selectedInfo.about}
+          title={selectedInfo.title}
+          onCancel={()=>setShowInfoModal(false)}
         />
               </View>
     </SafeAreaView>

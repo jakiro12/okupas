@@ -51,7 +51,6 @@ const ModalToShowInformation=({about,visible,onCancel,title}:ModalDeleteProps)=>
             style={{
               fontSize: 15,
               textAlign: "center",
-              marginBottom: 24,
               width:'95%'
             }}
           >
