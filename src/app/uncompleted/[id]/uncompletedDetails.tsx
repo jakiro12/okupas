@@ -2,7 +2,7 @@ import InspectionRepository from "@/database/repositories/InspectionRepository"
 import PhotoRepository from "@/database/repositories/PhotoRepository"
 import { router, useLocalSearchParams } from "expo-router"
 import { useEffect, useState } from "react"
-import { ActivityIndicator, Image, Modal, ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { Image, Modal, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import styles from '../../../styles/inspection-styles'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
@@ -10,19 +10,15 @@ import { Inspection } from "@/database/schema/InspectionTable"
 import { Photo } from "@/database/schema/PhotoTable"
 import Ionicons from "@react-native-vector-icons/ionicons";
 import ModalToShowInformation from "@/components/ModalToShowInformation"
-import PdfService from "@/services/pdf/PdfService"
 import { formatDate } from "@/utils/dateFormat"
-import FileSystemService from "@/services/fyilesystem/FileSystemService"
 
-const InspectionDetail=()=>{
+const UncompletedInspectionDetail=()=>{
     const [inspectionData,setInspectionData]=useState<Inspection | null>(null)
     const [inspectionPhotos,setInspectionPhotos]=useState<Photo[]>([])
     const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
     const [showPhotoModal, setShowPhotoModal] = useState<boolean>(false);
     const [showInfoModal,setShowInfoModal]=useState<boolean>(false)
     const [selectedInfo,setSelectedInfo]=useState<{title:string,about:string}>({title:"",about:""})
-    const [fileLoader,setFileLoader]=useState<boolean>(false)
-
         const { id } = useLocalSearchParams<{ id: string }>()
     const handleOpenPhoto = (photo: Photo) => {
             setSelectedPhoto(photo);
@@ -49,62 +45,7 @@ const InspectionDetail=()=>{
     
         loadInspections();
       }, []);
-const handleGeneratePdf = async () => {
-  setFileLoader(true)
-  if (!id) {
-    setSelectedInfo({
-      title: "Error",
-      about: "No se encontró el ID de la inspección",
-    });
-    setShowInfoModal(true);
-    return;
-  }
 
-  try {
-    const existingPdf =
-      await FileSystemService.getInspectionPdf(id);
-
-    if (existingPdf) {
-      setSelectedInfo({
-        title: "PDF ya generado",
-        about: "El PDF de esta inspección ya se encuentra creado y puede visualizarlo en la pantalla de archivos.",
-      });
-
-      setShowInfoModal(true);
-      return;
-    }
-    const pdfUri =
-      await PdfService.generateInspectionPdf(id);
-
-    if (!pdfUri) {
-      setSelectedInfo({
-        title: "Error",
-        about: "No fue posible generar el PDF.",
-      });
-
-      setShowInfoModal(true);
-      return;
-    }
-    setSelectedInfo({
-      title: "PDF generado",
-      about: "El PDF de la inspección se creó correctamente.",
-    });
-
-    setShowInfoModal(true);
-
-  } catch (error) {
-    console.error("Error generando PDF:", error);
-
-    setSelectedInfo({
-      title: "Error",
-      about: "Ocurrió un error al generar el PDF.",
-    });
-
-    setShowInfoModal(true);
-  }finally{
-    setFileLoader(false)
-  }
-};
     return(
         <SafeAreaView
               style={{ flex: 1, backgroundColor: "black" }}
@@ -127,7 +68,7 @@ const handleGeneratePdf = async () => {
                         </TouchableOpacity> 
           <Text 
             style={styles.mainTitle}
-          >Inspeccion </Text>    
+          >Inspeccion Sin Completar </Text>    
         </View>
           <View
             style={styles.boxInspectionCurrentData}
@@ -148,21 +89,16 @@ const handleGeneratePdf = async () => {
               <Text
                 style={styles.inspectionName}
               >{inspectionData?.name}</Text>
-              {
-                 fileLoader ? <ActivityIndicator size={30} color="#2563EB"/>
-                                    :
-               <TouchableOpacity
-                onPress={handleGeneratePdf}
+               <View                
                 style={[styles.boxInspectionCurrentDataHeaderLogo,{marginLeft:'auto'}]}
               >
                  <FontAwesome6
-                      name="file-pdf"
+                      name="file-circle-xmark" 
                       size={20}
                       color="#F40F02"
                       iconStyle="solid"
                       />
-              </TouchableOpacity>
-              }
+              </View>
             </View>
             <View
               style={styles.boxInspectionCurrentDataHeaderAbout}
@@ -249,7 +185,7 @@ const handleGeneratePdf = async () => {
             contentContainerStyle={{rowGap:10}}
            >
             {
-             inspectionPhotos.length === 0 ? null : 
+             inspectionPhotos.length === 0 ? <Text>Fotografias sin agregar</Text> : 
               inspectionPhotos.map((p)=>              
               <View
                 key={p.id}
@@ -331,4 +267,4 @@ const handleGeneratePdf = async () => {
     )
 }
 
-export default InspectionDetail
+export default UncompletedInspectionDetail

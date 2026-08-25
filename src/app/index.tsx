@@ -178,7 +178,8 @@ export default function Index() {
             <View
             style={styles.cardsDashboardContainer}
           >
-             <View
+             <TouchableOpacity
+             onPress={()=>router.push('/uncompleted/uncompletedInspections')}
               style={styles.cardsDashboardBtn}
             >
               <View
@@ -209,7 +210,7 @@ export default function Index() {
                     />
               </View>
               </View>
-            </View>
+            </TouchableOpacity>
              <TouchableOpacity
               onPress={()=>router.push("/files/files")}
               style={styles.cardsDashboardBtn}

@@ -28,6 +28,7 @@ export default function RootLayout() {
               <Stack.Screen name="inspection/[inspectionId]/photos" />  
               <Stack.Screen name="list/[id]/inspectionDetail" />    
               <Stack.Screen name="files/files"/>
+              <Stack.Screen name="uncompleted/[id]/uncompletedDetails"/>
           </Stack>
           )
       }

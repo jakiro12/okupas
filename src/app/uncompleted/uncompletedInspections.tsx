@@ -11,7 +11,7 @@ import { formatDate } from "@/utils/dateFormat";
 import PdfService from "@/services/pdf/PdfService";
 import FileSystemService from "@/services/fyilesystem/FileSystemService";
 import ModalToShowInformation from "@/components/ModalToShowInformation";
-const InspectionsList = () => {
+const UncompletedInspectionsList = () => {
   const [inspections, setInspections] = useState<Inspection[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedInspection, setSelectedInspection] =useState<Inspection | null>(null);
@@ -22,7 +22,7 @@ const InspectionsList = () => {
     const loadInspections = async () => {
       try {
         const result = await InspectionRepository.findAll();
-        const completedInspections = result.filter(inspection => inspection.status === "completed")
+        const completedInspections = result.filter(inspection => inspection.status !== "completed")
       setInspections(completedInspections)
       } catch (error) {
         console.error("Error cargando inspecciones:", error);
@@ -67,7 +67,6 @@ const handleDeleteInspection = async () => {
   }
 };
 const handleGeneratePdf = async (id:string) => {
-  setFileLoader(true)
   if (!id) {
     setSelectedInfo({
       title: "Error",
@@ -76,6 +75,7 @@ const handleGeneratePdf = async (id:string) => {
     setShowInfoModal(true);
     return;
   }
+  setFileLoader(true)
 
   try {
     const existingPdf =
@@ -146,7 +146,7 @@ const handleGeneratePdf = async (id:string) => {
                         </TouchableOpacity> 
           <Text 
             style={styles.mainTitle}
-          >Inspecciones </Text>    
+          >Sin Completar</Text>    
         </View>
         <ScrollView
           contentContainerStyle={styles.inspectionContainer}
@@ -160,7 +160,7 @@ const handleGeneratePdf = async (id:string) => {
               </Text>
 
               <Text >
-                Las inspecciones que crees aparecerán aquí.
+                Las inspecciones sin completar aparecerán aquí.
               </Text>
             </View>
           ) : (
@@ -252,25 +252,22 @@ const handleGeneratePdf = async (id:string) => {
                 <View
                   style={styles.dataInspectionCardContainerBtns}
                 >
-                  {
-                    fileLoader ? <ActivityIndicator size={30} color="#2563EB"/>
-                    :
-                  <TouchableOpacity
-                  onPress={()=>handleGeneratePdf(inspection.id)}
+                 
+                  <View
                 style={styles.headerViewContainerCardIcon}
               >
                 <FontAwesome6
-                    name="file-pdf"
+                    name="file-circle-xmark"
                     size={20}
                     color="#F40F02"
                     iconStyle="solid"
                     />
-              </TouchableOpacity>
-                  }              
+              </View>
+                             
                 <TouchableOpacity
                 onPress={()=>
                    router.push({
-                      pathname: "/list/[id]/inspectionDetail",
+                      pathname: "/uncompleted/[id]/uncompletedDetails",
                       params: {
                         id: inspection.id,
                       }})
@@ -332,5 +329,5 @@ const handleGeneratePdf = async (id:string) => {
 
 
 
-export default InspectionsList;
+export default UncompletedInspectionsList;
 
