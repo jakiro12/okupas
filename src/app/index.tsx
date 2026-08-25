@@ -4,8 +4,30 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import NavigationBar from "@/components/NavBar";
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { Inspection } from "@/database/schema/InspectionTable";
+import InspectionRepository from "@/database/repositories/InspectionRepository";
+import PdfService from "@/services/pdf/PdfService";
 
 export default function Index() {
+   const [lastFile, setLastFile] =useState<{name:string,createdAt:string}>({name:"",createdAt:""});
+        const loadPdfsData = async () => {
+      try {
+        const result =
+          await InspectionRepository.findAll();
+  
+          console.log(result[0])
+        
+      } catch (error) {
+        console.error(
+          "Error cargando PDFs:",
+          error
+        );
+      }
+    };
+    useEffect(()=>{
+      //loadPdfsData()
+    },[])
   return (
      <SafeAreaView
           style={{ flex: 1, backgroundColor: "black" }}
