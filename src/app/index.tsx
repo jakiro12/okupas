@@ -4,30 +4,74 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import NavigationBar from "@/components/NavBar";
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Inspection } from "@/database/schema/InspectionTable";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
 import PdfService from "@/services/pdf/PdfService";
+import { DataContext } from "./_layout";
+import FileSystemService from "@/services/fyilesystem/FileSystemService";
+import { formatDate } from "@/utils/dateFormat";
 
 export default function Index() {
    const [lastFile, setLastFile] =useState<{name:string,createdAt:string}>({name:"",createdAt:""});
-        const loadPdfsData = async () => {
-      try {
-        const result =
-          await InspectionRepository.findAll();
-  
-          console.log(result[0])
-        
-      } catch (error) {
-        console.error(
-          "Error cargando PDFs:",
-          error
-        );
+   const [filesQuantity,setFilesQuantity]=useState<string | number>("")
+    const context = useContext(DataContext)
+      if (!context) throw new Error("DataContext no está disponible")
+     
+       const { initialized } = context
+    const loadPdfsData = async () => {
+  try {
+    const result = await InspectionRepository.findAll();
+    setFilesQuantity(result.length)
+    const completedInspections = result
+      .filter(
+        inspection => inspection.status === "completed"
+      )
+      .sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() -
+          new Date(a.updatedAt).getTime()
+      );
+
+    if (completedInspections.length === 0) {
+      setLastFile({
+        name: "",
+        createdAt: "",
+      });
+
+      return;
+    }
+
+    for (const inspection of completedInspections) {
+      const pdf = await FileSystemService.getInspectionPdf(
+        inspection.id
+      );
+
+      if (pdf) {
+        setLastFile({
+          name: inspection.name,
+          createdAt: inspection.updatedAt,
+        });
+
+        return;
       }
-    };
-    useEffect(()=>{
-      //loadPdfsData()
-    },[])
+    }
+
+    // Hay inspecciones completas pero ninguna tiene PDF
+    setLastFile({
+      name: "",
+      createdAt: "",
+    });
+
+  } catch (error) {
+    console.error("Error cargando PDFs:", error);
+  }
+};
+    useEffect(() => {
+  if (!initialized) return;
+
+  loadPdfsData();
+}, [initialized]);
   return (
      <SafeAreaView
           style={{ flex: 1, backgroundColor: "black" }}
@@ -72,7 +116,7 @@ export default function Index() {
             >Inspecciones</Text>
             <Text
               style={styles.headerViewContainerCardTextValue}
-            >27</Text>
+            >{filesQuantity}</Text>
             <Text
              style={styles.headerViewContainerCardText}
             >Almacenadas</Text>
@@ -95,7 +139,7 @@ export default function Index() {
             >Ultimo Reporte</Text>
             <Text
               style={styles.headerViewContainerCardTextValue}
-            >Reporte_012.pdf</Text>
+            >{lastFile.name}</Text>
             <Text
              style={styles.headerViewContainerCardText}
             >PDF Generado</Text>
@@ -118,10 +162,10 @@ export default function Index() {
             >Generado</Text>
             <Text
               style={styles.headerViewContainerCardTextValue}
-            >31/07/2026</Text>
+            >{formatDate(lastFile.createdAt,"date")}</Text>
             <Text
              style={styles.headerViewContainerCardText}
-            >10:30 a.m.</Text>
+            >{formatDate(lastFile.createdAt,"time")}</Text>
           </View>
         </View>
         <View

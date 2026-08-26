@@ -37,6 +37,7 @@ const NavigationBar=()=>{
                 >Inspecciones</Text>
             </TouchableOpacity>
               <TouchableOpacity
+              onPress={()=>router.push('/uncompleted/uncompletedInspections')}
             style={styles.btnContainer}
             >
                  <FontAwesome6
