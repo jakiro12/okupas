@@ -1,17 +1,16 @@
-import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, Alert, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import styles from '../../styles/inspection-styles'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import NavigationBar from "@/components/NavBar";
 import { InspectionData } from "@/types/dataTypes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Inspection } from "@/database/schema/InspectionTable";
-import FileSystemService from "@/services/fyilesystem/FileSystemService";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
-import * as Crypto from "expo-crypto";
 
-const NewDataInspection=()=>{
+const EditDataInspection=()=>{
+    const [loadingInspection,setLoadingInspection]=useState<boolean>(false)
     const [inspectionData,setInspectionData]=useState<InspectionData>({
         name:'',
         address:'',
@@ -20,47 +19,91 @@ const NewDataInspection=()=>{
         observations:'',
         province:''
     })
-
+const { inspectionId } =useLocalSearchParams<{ inspectionId: string }>();
     const handleInputChange = (field:string,value:string)=>{
     setInspectionData(prev=>({...prev,[field]:value}))
   }
-   const handleSubmitInspectionData = async () => {
-  const now = new Date().toISOString();
-  const inspection: Inspection = {
-    id: Crypto.randomUUID(),
-    status:"editing",
-    name: inspectionData.name,
-    createdBy: inspectionData.createdBy,
-    address: inspectionData.address,
-    city: inspectionData.city,
-    province: inspectionData.province,
-    observations: inspectionData.observations,
-    createdAt: now,
-    updatedAt: now,
-  };
+const handleSubmitInspectionData = async () => {
+  if (!inspectionId) {
+    Alert.alert(
+      "Error",
+      "No se encontró el ID de la inspección."
+    );
+    return;
+  }
 
   try {
-    await InspectionRepository.create(inspection);
+    const existingInspection =
+      await InspectionRepository.findById(inspectionId);
 
-    await FileSystemService.createInspectionDirectory(
-      inspection.id
+    if (!existingInspection) {
+      Alert.alert(
+        "Error",
+        "No se encontró la inspección."
+      );
+      return;
+    }
+
+    const updatedInspection: Inspection = {
+      ...existingInspection,
+
+      name: inspectionData.name,
+      createdBy: inspectionData.createdBy,
+      address: inspectionData.address,
+      city: inspectionData.city,
+      province: inspectionData.province,
+      observations: inspectionData.observations,
+
+      updatedAt: new Date().toISOString(),
+    };
+
+    await InspectionRepository.update(
+      updatedInspection
     );
 
     router.push({
       pathname: "/inspection/[inspectionId]/photos",
       params: {
-        inspectionId: inspection.id,
+        inspectionId: inspectionId,
       },
     });
+
   } catch (error) {
-    console.error(error);
+    console.error(
+      "Error actualizando inspección:",
+      error
+    );
 
     Alert.alert(
       "Error",
-      "No fue posible crear la inspección."
+      "No fue posible actualizar la inspección."
     );
   }
 };
+  useEffect(() => {
+        const loadInspections = async () => {
+            setLoadingInspection(true)
+          try {
+            const resultData = await InspectionRepository.findById(inspectionId);
+            setInspectionData(
+                {
+                    name:resultData?.name!,
+                    address:resultData?.address!,
+                    city:resultData?.city!,
+                    createdBy:resultData?.createdBy!,
+                    observations:resultData?.observations!,
+                    province:resultData?.province!
+                }
+            )
+          } catch (error) {
+            console.error("Error cargando inspecciones:", error);
+          }finally{
+            setLoadingInspection(false)
+          }
+        };
+    
+        loadInspections();
+      }, [inspectionId]);
     return(
           <SafeAreaView
                           style={{ flex: 1, backgroundColor: "black" }}
@@ -95,7 +138,15 @@ const NewDataInspection=()=>{
                             >Completa la Información de la inspección</Text>
                             </View>
                     </View>
-                    <View
+                    {loadingInspection ? (
+  <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <ActivityIndicator size="large" color="#0c6efd" />
+    <Text style={{ marginTop: 10 }}>
+      Cargando inspección...
+    </Text>
+  </View>
+) : (
+    <View
                         style={styles.mainContainerView}
                     >
                         <View
@@ -123,7 +174,8 @@ const NewDataInspection=()=>{
                                 <TextInput 
                                     onChangeText={(t)=>handleInputChange("name",t)}
                                     style={styles.inputboxContainerViewDesc}
-                                    placeholder="Ej: inspeccion Departamento 123"
+                                    placeholder={inspectionData.name}
+                                    value={inspectionData.name}
                                 />
                             </View>
                         </View>
@@ -151,7 +203,8 @@ const NewDataInspection=()=>{
                                 <TextInput                                     
                                     onChangeText={(t)=>handleInputChange("createdBy",t)}
                                     style={styles.inputboxContainerViewDesc}
-                                    placeholder="Ej: Juan Gomez"
+                                    placeholder={inspectionData.createdBy}
+                                    value={inspectionData.createdBy}
                                 />
                             </View>
                         </View>
@@ -179,7 +232,8 @@ const NewDataInspection=()=>{
                                 <TextInput 
                                     onChangeText={(t)=>handleInputChange("address",t)}                                    
                                     style={styles.inputboxContainerViewDesc}
-                                    placeholder="Ej: Av. Example 123"
+                                    placeholder={inspectionData.address}
+                                    value={inspectionData.address}
                                 />
                             </View>
                         </View>
@@ -207,7 +261,8 @@ const NewDataInspection=()=>{
                                 <TextInput                                     
                                     onChangeText={(t)=>handleInputChange("city",t)}                                    
                                     style={styles.inputboxContainerViewDesc}
-                                    placeholder="Ej: Buenos Aires"
+                                    placeholder={inspectionData.city}
+                                    value={inspectionData.city}
                                 />
                             </View>
                         </View>
@@ -235,7 +290,8 @@ const NewDataInspection=()=>{
                                 <TextInput 
                                     onChangeText={(t)=>handleInputChange("province",t)}                                    
                                     style={styles.inputboxContainerViewDesc}
-                                    placeholder="Ej: Buenos Aires"
+                                    placeholder={inspectionData.province}
+                                    value={inspectionData.province}
                                 />
                             </View>
                         </View>
@@ -263,7 +319,8 @@ const NewDataInspection=()=>{
                                 <TextInput 
                                     onChangeText={(t)=>handleInputChange("observations",t)}                                    
                                     style={styles.inputboxContainerViewDesc}
-                                    placeholder="Ej: Buenos Aires"
+                                    placeholder={inspectionData.observations}
+                                    value={inspectionData.observations}
                                 />
                             </View>
                         </View>
@@ -279,10 +336,12 @@ const NewDataInspection=()=>{
                                     />
                             <Text>Tomar fotos</Text>
                         </TouchableOpacity>
-                    </View>                    
+                    </View> 
+)}
+                                     
                 <NavigationBar/>
                 </View>
           </SafeAreaView>
           )
 }
-export default NewDataInspection
+export default EditDataInspection

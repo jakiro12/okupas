@@ -1,13 +1,11 @@
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View,  TouchableOpacity } from "react-native";
 import styles from '../styles/index-styles'
 import { SafeAreaView } from "react-native-safe-area-context";
 import NavigationBar from "@/components/NavBar";
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { router } from "expo-router";
 import { useContext, useEffect, useState } from "react";
-import { Inspection } from "@/database/schema/InspectionTable";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
-import PdfService from "@/services/pdf/PdfService";
 import { DataContext } from "./_layout";
 import FileSystemService from "@/services/fyilesystem/FileSystemService";
 import { formatDate } from "@/utils/dateFormat";

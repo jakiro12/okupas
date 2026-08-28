@@ -284,7 +284,15 @@ const handleGeneratePdf = async (id:string) => {
                     iconStyle="solid"
                     />
                   </TouchableOpacity>
-                   <View
+                   <TouchableOpacity
+                   onPress={()=>{
+                                  router.push({
+                                  pathname: "/inspection/edit",
+                                  params: {
+                                    inspectionId: inspection.id,
+                                  },
+                                })
+                   }}   
                 style={styles.headerViewContainerCardIcon}
               >
                 <FontAwesome6
@@ -293,7 +301,7 @@ const handleGeneratePdf = async (id:string) => {
                     color="#2563EB"
                     iconStyle="solid"
                     />
-                  </View>
+                  </TouchableOpacity>
                    <TouchableOpacity
                    onPress={() => handleOpenDeleteModal(inspection)}
                 style={styles.headerViewContainerCardIcon}
