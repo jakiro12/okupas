@@ -11,6 +11,7 @@ import PhotoRepository from "@/database/repositories/PhotoRepository";
 import * as Crypto from "expo-crypto";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
 import { Inspection } from "@/database/schema/InspectionTable";
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 
 const CameraScreen=()=>{
     const [image, setImage] = useState<CameraResult | null>(null);
@@ -216,22 +217,39 @@ useEffect(() => {
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity 
                         onPress={handleTakePhoto}
-                    style={styles.button}>
-                    <Text style={styles.buttonText}>📷 Tomar fotografía</Text>
+                    style={styles.buttonActions}>
+                     <FontAwesome6
+                        name="camera"
+                        size={20}
+                        color="#eaf4fb"
+                        iconStyle="solid"
+                        />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>🖼️ Elegir desde galería</Text>
-                    </TouchableOpacity>                                         
+                    <TouchableOpacity style={styles.buttonActions}>
+                    <FontAwesome6
+                        name="image"
+                        size={20}
+                        color="#eaf4fb"
+                        iconStyle="solid"
+                        />
+                    </TouchableOpacity> 
+                    {image ?
                     <TouchableOpacity
                       onPress={handleSaveImage}
-                      style={styles.button}
+                      style={styles.buttonActions}
                       disabled={!image}
                     >
-                      <Text style={styles.buttonText}>
-                        💾 Guardar imagen
-                      </Text>
+                      <FontAwesome6
+                        name="check"
+                        size={20}
+                        color="#eaf4fb"
+                        iconStyle="solid"
+                        />
                     </TouchableOpacity>                                                           
+                    :
+                    null
+                     }                                        
                 </View>
                   {savedImages.map((photo) => (
                     <View

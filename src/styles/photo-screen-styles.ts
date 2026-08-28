@@ -9,6 +9,7 @@ interface PhotoScreenStyles{
   button:ViewStyle
   buttonText:TextStyle
   cardPhotoData:ViewStyle
+  buttonActions:ViewStyle
 }
 
 const PhotoScreenStyles : PhotoScreenStyles = StyleSheet.create({
@@ -40,8 +41,12 @@ const PhotoScreenStyles : PhotoScreenStyles = StyleSheet.create({
   },
 
   buttonContainer: {
-    gap: 14,
     marginBottom: 28,
+    display:'flex',
+    width:'100%',
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-around'
   },
 
   button: {
@@ -68,6 +73,14 @@ const PhotoScreenStyles : PhotoScreenStyles = StyleSheet.create({
     flexDirection:'row',
     paddingInline:20,
     marginBottom:10
+  },
+   buttonActions: {
+    backgroundColor: "#2563EB",
+    borderRadius: 6,
+    justifyContent: "center",
+    alignItems: "center",
+    width:46,
+    height:46
   },
 });
 export default PhotoScreenStyles

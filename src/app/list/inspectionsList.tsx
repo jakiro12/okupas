@@ -1,7 +1,7 @@
 import InspectionRepository from "@/database/repositories/InspectionRepository";
 import { Inspection } from "@/database/schema/InspectionTable";
 import { useEffect, useState } from "react";
-import { Text,  View,  TouchableOpacity,  ScrollView, Alert, ActivityIndicator,} from "react-native";
+import { Text,  View,  TouchableOpacity,  ScrollView, ActivityIndicator,} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import styles from '../../styles/inspection-styles'
