@@ -46,7 +46,6 @@ const handleSubmitInspectionData = async () => {
 
     const updatedInspection: Inspection = {
       ...existingInspection,
-
       name: inspectionData.name,
       createdBy: inspectionData.createdBy,
       address: inspectionData.address,
@@ -336,9 +335,7 @@ const handleSubmitInspectionData = async () => {
                                     />
                             <Text>Tomar fotos</Text>
                         </TouchableOpacity>
-                    </View> 
-)}
-                                     
+                    </View>)}                                     
                 <NavigationBar/>
                 </View>
           </SafeAreaView>

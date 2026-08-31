@@ -1,15 +1,16 @@
-import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native"
+import {  Text, TextInput, TouchableOpacity, View,Keyboard } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import styles from '../../styles/inspection-styles'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { router } from "expo-router";
 import NavigationBar from "@/components/NavBar";
 import { InspectionData } from "@/types/dataTypes";
-import { useState } from "react";
+import {  useEffect, useRef, useState } from "react";
 import { Inspection } from "@/database/schema/InspectionTable";
 import FileSystemService from "@/services/fyilesystem/FileSystemService";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
 import * as Crypto from "expo-crypto";
+import ObservationInput,{ObservationInputRef} from "@/components/ObservationsInput";
 
 const NewDataInspection=()=>{
     const [inspectionData,setInspectionData]=useState<InspectionData>({
@@ -20,7 +21,8 @@ const NewDataInspection=()=>{
         observations:'',
         province:''
     })
-
+    const [observationsFocused, setObservationsFocused] = useState(false);
+    const observationInputRef = useRef<ObservationInputRef>(null);
     const handleInputChange = (field:string,value:string)=>{
     setInspectionData(prev=>({...prev,[field]:value}))
   }
@@ -54,13 +56,21 @@ const NewDataInspection=()=>{
     });
   } catch (error) {
     console.error(error);
-
-    Alert.alert(
-      "Error",
-      "No fue posible crear la inspección."
-    );
   }
 };
+useEffect(() => {
+  const keyboardDidHideListener = Keyboard.addListener(
+    "keyboardDidHide",
+    () => {
+      observationInputRef.current?.blur();
+      setObservationsFocused(false);
+    }
+  );
+
+  return () => {
+    keyboardDidHideListener.remove();
+  };
+}, []);
     return(
           <SafeAreaView
                           style={{ flex: 1, backgroundColor: "black" }}
@@ -96,9 +106,11 @@ const NewDataInspection=()=>{
                             </View>
                     </View>
                     <View
-                        style={styles.mainContainerView}
+                        style={[styles.mainContainerView,{marginBottom:observationsFocused ? 'auto':0}]}
                     >
-                        <View
+                         {!observationsFocused && (
+    <>
+     <View
                             style={styles.inputboxContainer}
                         >
                             <Text
@@ -239,36 +251,22 @@ const NewDataInspection=()=>{
                                 />
                             </View>
                         </View>
-                                <View
-                            style={styles.inputboxContainer}
-                        >
-                            <Text
-                                style={styles.inputboxContainerViewTitle}
-                            >
-                                Observaciones:
-                            </Text>
-                            <View
-                                style={styles.inputboxContainerView}
-                            >
-                                <View
-                                    style={styles.inputboxContainerViewLogo}
-                                >
-                                <FontAwesome6
-                                    name="award"
-                                    size={20}
-                                    color="#2563EB"
-                                    iconStyle="solid"
-                                    />
-                                </View>
-                                <TextInput 
-                                    onChangeText={(t)=>handleInputChange("observations",t)}                                    
-                                    style={styles.inputboxContainerViewDesc}
-                                    placeholder="Ej: Buenos Aires"
-                                />
-                            </View>
-                        </View>
+    </>
+                         )}
+                       
+                  <ObservationInput
+                        ref={observationInputRef}
+                        value={inspectionData.observations}
+                        onChangeText={(text) =>
+                            handleInputChange("observations", text)
+                        }
+                        onFocus={() => setObservationsFocused(true)}
+                        onBlur={() => {}}
+                        expanded={observationsFocused}
+                        />
+                     
                         <TouchableOpacity
-                            style={styles.getPhotosBtn}
+                            style={[styles.getPhotosBtn,{marginTop:observationsFocused ? 0 : 'auto'}]}
                             onPress={handleSubmitInspectionData}  
                         >
                              <FontAwesome6
@@ -279,8 +277,11 @@ const NewDataInspection=()=>{
                                     />
                             <Text>Tomar fotos</Text>
                         </TouchableOpacity>
-                    </View>                    
-                <NavigationBar/>
+                    </View>         
+                     {!observationsFocused &&                       
+                        <NavigationBar/>
+                       }
+                         
                 </View>
           </SafeAreaView>
           )

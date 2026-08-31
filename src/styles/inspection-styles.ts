@@ -146,7 +146,6 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     width:'100%',
     height:40,
     borderRadius:4,
-    marginTop:'auto',
      display:'flex',
     alignItems:'center',
     justifyContent:'center',
