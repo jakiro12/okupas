@@ -1,498 +1,75 @@
-# Tecnologías del proyecto
+# 📋 App de Inspecciones Offline
 
-## Base
+Aplicación móvil para la gestión y realización de inspecciones de forma **offline-first**, permitiendo registrar información, tomar y gestionar fotografías y generar reportes PDF directamente desde el dispositivo.
 
-- React Native
-- Expo
-- TypeScript
-- Expo Router
+El objetivo principal es que todas las funcionalidades esenciales puedan utilizarse **sin conexión a Internet**, almacenando la información y los archivos localmente.
 
-## Base de datos local (Offline First)
+## 🚀 Tecnologías
 
-- Expo SQLite
+- **React Native**
+- **Expo**
+- **TypeScript**
+- **Expo Router** — navegación y gestión de rutas
+- **SQLite** — almacenamiento local de inspecciones
+- **FileSystem** — gestión de archivos e imágenes locales
+- **Expo Camera** — captura de fotografías
+- **React Native Vector Icons** — iconografía
+- **PDF Generation** — generación de reportes PDF localmente
 
-## Base de datos en la nube
+## ⚙️ Funcionalidades actuales
 
-- Firebase Firestore
+- Creación y edición de inspecciones.
+- Persistencia de datos mediante SQLite.
+- Funcionamiento completamente offline.
+- Gestión de inspecciones pendientes y completadas.
+- Captura y gestión de fotografías.
+- Almacenamiento de imágenes en el sistema de archivos del dispositivo.
+- Generación de reportes PDF.
+- Gestión y visualización de archivos generados.
+- Edición de inspecciones previamente completadas.
+- Recuperación de inspecciones pendientes para continuar su proceso.
+- Validación del estado de las inspecciones antes de generar reportes.
 
-## Almacenamiento de archivos
+## 📱 Arquitectura
 
-- Firebase Storage
+La aplicación está diseñada con un enfoque **offline-first**, separando responsabilidades entre:
 
-## Sincronización y estado remoto
+- **UI / Screens** — interfaces y flujo de navegación.
+- **Repositories** — acceso y operaciones sobre SQLite.
+- **Services** — cámara, sistema de archivos y generación de PDF.
+- **Components** — componentes reutilizables.
+- **Database** — esquema y persistencia local.
+- **Types / Utils** — tipos y utilidades compartidas.
 
-- React Query
+## 🔮 Próximas implementaciones
 
-## Conectividad
+El proyecto está preparado para incorporar nuevas funcionalidades relacionadas con la gestión y edición de fotografías.
 
-- @react-native-community/netinfo
+### 🖼️ Editor de fotografías
 
-## Cámara
+Se prevé incorporar un editor de imágenes similar a **Paint**, permitiendo realizar modificaciones directamente sobre las fotografías de una inspección, como anotaciones, dibujos y otros elementos visuales.
 
-- Expo Camera
+### 🧭 Recorrido 3D de fotografías
 
-## Sistema de archivos
+Como evolución futura, se plantea incorporar un sistema de **recorrido 3D basado en fotografías**, permitiendo una representación más interactiva del lugar inspeccionado y una navegación entre las imágenes capturadas.
 
-- Expo FileSystem
+Estas funcionalidades forman parte del roadmap y no son necesarias para el funcionamiento actual del sistema.
 
-## Geolocalización
+## 🌐 Sincronización web
 
-- Expo Location
+La aplicación fue planteada inicialmente con la posibilidad de incorporar una **sincronización con una plataforma web**.
 
-## Mapas
+Actualmente el funcionamiento es completamente local y no depende de un backend ni de conexión a Internet. La sincronización web queda como una implementación adicional a futuro, permitiendo eventualmente:
 
-- React Native Maps
+- Sincronizar inspecciones entre dispositivos y servidor.
+- Realizar backups remotos.
+- Consultar inspecciones desde una plataforma web.
+- Gestionar reportes de forma centralizada.
 
-## Editor de imágenes
+## 📌 Estado del proyecto
 
-- React Native Skia
-- React Native Gesture Handler
-- React Native Reanimated
+**MVP funcional — Offline First**
 
-## Utilidades
+Las funcionalidades principales para crear, completar, editar, almacenar y generar reportes de inspecciones se encuentran implementadas y funcionan localmente en el dispositivo.
 
-- UUID
-- Expo print para generar pdf
-- Expo sharing para compartir archivos por wsp, aunque si guarda el pdf dentro del celular es irrelevante
-
-# Arquitectura funcional (MVP)
-
-## 1. Dashboard
-
-### Objetivo
-
-Punto de entrada de la aplicación y centro de control.
-
-### Información mostrada
-
-* Estado de la conexión
-* Calidad de conexión
-* Tipo de conexión (WiFi / Datos móviles / Sin conexión)
-* Tiempo estimado de sincronización
-* Cantidad de inspecciones pendientes
-* Cantidad de fotografías pendientes
-* Última sincronización realizada
-* Espacio utilizado por la base de datos local
-* Espacio utilizado por fotografías
-
-### Funcionalidades
-
-* Crear nueva inspección
-* Abrir listado de inspecciones
-* Abrir cola de sincronización
-* Ver estado de la conexión
-* Abrir configuración
-* Sincronización manual
-* Reintentar sincronización
-
----
-
-# 2. Nueva Inspección
-
-### Objetivo
-
-Crear una nueva inspección local.
-
-### Información
-
-* Título
-* Cliente
-* Dirección
-* Ciudad
-* Provincia
-* Fecha
-* Hora
-* Observación inicial
-* Coordenadas GPS
-* Estado (Pendiente / Sincronizada)
-
-### Funcionalidades
-
-* Guardar localmente
-* Cancelar
-* Obtener ubicación automáticamente
-* Editar información posteriormente
-
----
-
-# 3. Lista de Inspecciones
-
-### Objetivo
-
-Visualizar todas las inspecciones.
-
-### Información
-
-* Título
-* Cliente
-* Fecha
-* Estado
-* Cantidad de fotografías
-* Cantidad de observaciones
-* Cantidad de ambientes
-* Última modificación
-
-### Funcionalidades
-
-* Buscar
-* Ordenar
-* Filtrar
-* Abrir inspección
-* Eliminar inspección
-* Duplicar inspección
-* Compartir (futuro)
-
-Filtros posibles
-
-* Todas
-* Pendientes
-* Sincronizadas
-* Favoritas
-* Recientes
-
----
-
-# 4. Detalle de Inspección
-
-### Objetivo
-
-Administrar completamente una inspección.
-
-### Información
-
-* Información general
-* Estado de sincronización
-* Fecha de creación
-* Fecha de modificación
-* Cliente
-* Dirección
-* Observaciones generales
-
-### Funcionalidades
-
-* Editar datos
-* Agregar ambientes
-* Agregar fotografías
-* Agregar observaciones
-* Eliminar fotografías
-* Eliminar ambientes
-* Sincronizar únicamente esta inspección
-* Eliminar inspección
-
----
-
-# 5. Ambientes / Sectores
-
-### Objetivo
-
-Dividir la inspección por sectores.
-
-Ejemplos
-
-* Cocina
-* Living
-* Dormitorio
-* Baño
-* Patio
-* Garaje
-
-### Información
-
-* Nombre
-* Orden
-* Cantidad de fotografías
-* Cantidad de observaciones
-
-### Funcionalidades
-
-* Crear ambiente
-* Editar nombre
-* Reordenar
-* Eliminar
-* Agregar fotografías
-* Agregar observaciones
-
----
-
-# 6. Fotografías
-
-### Objetivo
-
-Administrar todas las fotografías de un ambiente.
-
-### Información
-
-* Miniatura
-* Fecha
-* Hora
-* Tamaño
-* Estado de sincronización
-
-### Funcionalidades
-
-* Tomar fotografía
-* Seleccionar desde galería (opcional)
-* Eliminar
-* Editar
-* Renombrar
-* Compartir (futuro)
-
----
-
-# 7. Editor de Fotografías
-
-### Objetivo
-
-Agregar anotaciones sobre la imagen.
-
-### Herramientas
-
-* Lápiz
-* Flecha
-* Línea
-* Rectángulo
-* Círculo
-* Texto
-* Resaltador
-* Borrador
-* Selector de color
-* Selector de grosor
-* Zoom
-* Pan
-* Deshacer
-* Rehacer
-
-### Funcionalidades
-
-* Guardar cambios
-* Cancelar cambios
-* Exportar imagen editada
-* Restaurar imagen original
-
----
-
-# 8. Observaciones
-
-### Objetivo
-
-Registrar notas relacionadas con un ambiente o fotografía.
-
-### Información
-
-* Título
-* Descripción
-* Fecha
-* Hora
-
-### Funcionalidades
-
-* Crear
-* Editar
-* Eliminar
-* Asociar fotografía
-* Asociar ambiente
-
----
-
-# 9. Cola de Sincronización
-
-### Objetivo
-
-Visualizar todo lo pendiente de subir.
-
-### Información
-
-* Registros pendientes
-* Fotografías pendientes
-* Errores
-* Reintentos
-* Última sincronización
-
-### Funcionalidades
-
-* Sincronizar todo
-* Cancelar sincronización
-* Reintentar elementos con error
-* Ver detalles del error
-
----
-
-# 10. Estado de Conexión
-
-### Objetivo
-
-Determinar si conviene sincronizar.
-
-### Información
-
-* Tipo de conexión
-* Intensidad de señal
-* Latencia
-* Velocidad estimada de subida
-* Velocidad estimada de descarga
-* Estado del servidor Firebase
-* Tiempo estimado de sincronización
-* Cantidad de datos pendientes
-
-### Clasificación
-
-* Excelente
-* Buena
-* Aceptable
-* Lenta
-* Muy lenta
-* Sin conexión
-
-### Funcionalidades
-
-* Ejecutar prueba de conexión
-* Ver historial de mediciones
-* Sincronizar manualmente
-
----
-
-# 11. Configuración
-
-### Información
-
-* Calidad de fotografías
-* Compresión
-* Carpeta de almacenamiento
-* Sincronización automática
-* Frecuencia de sincronización
-* Tamaño máximo de subida
-* Información de la aplicación
-
-### Funcionalidades
-
-* Limpiar base de datos local
-* Limpiar caché
-* Eliminar fotografías temporales
-* Exportar base de datos
-* Importar base de datos
-* Restaurar copia de seguridad
-
----
-
-# Arquitectura de datos
-
-## Inspección
-
-* Información general
-* Ambientes
-* Observaciones
-* Fotografías
-* Estado de sincronización
-* Historial de cambios
-
----
-
-## Ambiente
-
-* Nombre
-* Orden
-* Fotografías
-* Observaciones
-
----
-
-## Fotografía
-
-* Ruta local
-* Ruta en Firebase Storage
-* Fecha
-* Hora
-* Coordenadas GPS
-* Ambiente asociado
-* Estado de sincronización
-* Imagen editada
-
----
-
-## Observación
-
-* Título
-* Descripción
-* Fecha
-* Hora
-* Ambiente asociado
-* Fotografía asociada
-
----
-
-# Motor Offline First
-
-## Responsabilidades
-
-* Guardar inmediatamente en SQLite.
-* Nunca depender de Internet para trabajar.
-* Registrar todas las operaciones pendientes.
-* Detectar cambios locales.
-* Detectar cambios sincronizados.
-* Reintentar automáticamente cuando vuelva la conexión.
-* Evitar duplicados.
-* Resolver conflictos de sincronización.
-* Mantener consistencia entre SQLite y Firestore.
-
----
-
-# Motor de Sincronización
-
-## Funcionalidades
-
-* Cola FIFO de sincronización.
-* Subida por lotes.
-* Reanudación después de interrupciones.
-* Reintentos automáticos.
-* Cancelación manual.
-* Sincronización individual.
-* Sincronización completa.
-* Priorización de datos antes que fotografías.
-
----
-
-# Medidor Inteligente de Conexión
-
-## Variables analizadas
-
-* Tipo de red.
-* Intensidad de señal.
-* Latencia.
-* Velocidad de subida.
-* Velocidad de descarga.
-* Cantidad de registros pendientes.
-* Cantidad de fotografías.
-* Peso total de la sincronización.
-
-## Resultado esperado
-
-Mostrar al usuario:
-
-* Calidad de conexión.
-* Tiempo estimado para sincronizar.
-* Recomendación de sincronizar o esperar.
-* Progreso en tiempo real durante la subida.
-
----
-
-# Funcionalidades futuras
-
-* PDF automático del informe.
-* Firma digital.
-* Plantillas de inspección.
-* Checklists personalizadas.
-* Grabación de audio.
-* Dictado por voz.
-* Escaneo de códigos QR.
-* Escaneo de códigos de barras.
-* Modo oscuro.
-* Exportación a Excel.
-* Exportación a PDF.
-* Copias de seguridad automáticas.
-* Compartir inspecciones.
-* Trabajo colaborativo.
-* Multiusuario.
-* Panel web administrativo.
-* Notificaciones push.
-* Estadísticas de inspecciones.
-* IA para generar observaciones a partir de fotografías.
+El proyecto continúa preparado para futuras extensiones como edición avanzada de fotografías, recorridos 3D y sincronización con una plataforma web.

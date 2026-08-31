@@ -12,7 +12,6 @@ class SQLiteService {
 
     await runMigrations(this.db);
 
-    console.log("✅ SQLite inicializada");
   }
 
   getDatabase(): SQLite.SQLiteDatabase {
