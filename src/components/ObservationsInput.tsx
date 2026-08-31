@@ -22,6 +22,7 @@ interface ObservationInputProps {
   onFocus: () => void;
   onBlur: () => void;
   expanded: boolean;
+  currentText?:string;
 }
 
 const ObservationInput = forwardRef<
@@ -35,6 +36,7 @@ const ObservationInput = forwardRef<
       onFocus,
       onBlur,
       expanded,
+      currentText
     },
     ref
   ) => {
@@ -85,7 +87,7 @@ const ObservationInput = forwardRef<
                 )
               );
             }}
-            placeholder="Escribe las observaciones..."
+            placeholder={currentText ? currentText : "Escribe las observaciones..."}
             style={[
               styles.inputboxContainerViewDesc,
               {

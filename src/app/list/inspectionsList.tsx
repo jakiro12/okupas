@@ -17,7 +17,7 @@ const InspectionsList = () => {
   const [selectedInspection, setSelectedInspection] =useState<Inspection | null>(null);
   const [showInfoModal,setShowInfoModal]=useState<boolean>(false)
   const [selectedInfo,setSelectedInfo]=useState<{title:string,about:string}>({title:"",about:""})
-  const [fileLoader,setFileLoader]=useState<boolean>(false)
+  const [fileGeneration,setFileGeneration]=useState<string | null>(null)
   useEffect(() => {
     const loadInspections = async () => {
       try {
@@ -67,7 +67,7 @@ const handleDeleteInspection = async () => {
   }
 };
 const handleGeneratePdf = async (id:string) => {
-  setFileLoader(true)
+  setFileGeneration(id)
   if (!id) {
     setSelectedInfo({
       title: "Error",
@@ -119,7 +119,7 @@ const handleGeneratePdf = async (id:string) => {
 
     setShowInfoModal(true);
   }finally{
-  setFileLoader(false)
+  setFileGeneration(null)
   }
 };
   return (
@@ -253,7 +253,7 @@ const handleGeneratePdf = async (id:string) => {
                   style={styles.dataInspectionCardContainerBtns}
                 >
                   {
-                    fileLoader ? <ActivityIndicator size={30} color="#2563EB"/>
+                    fileGeneration === inspection.id ? <ActivityIndicator size={30} color="#2563EB"/>
                     :
                   <TouchableOpacity
                   onPress={()=>handleGeneratePdf(inspection.id)}

@@ -1,13 +1,14 @@
-import { ActivityIndicator, Alert, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, Alert, Keyboard, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import styles from '../../styles/inspection-styles'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { router, useLocalSearchParams } from "expo-router";
 import NavigationBar from "@/components/NavBar";
 import { InspectionData } from "@/types/dataTypes";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Inspection } from "@/database/schema/InspectionTable";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
+import ObservationInput ,{ObservationInputRef}from "@/components/ObservationsInput";
 
 const EditDataInspection=()=>{
     const [loadingInspection,setLoadingInspection]=useState<boolean>(false)
@@ -19,6 +20,8 @@ const EditDataInspection=()=>{
         observations:'',
         province:''
     })
+    const [observationsFocused, setObservationsFocused] = useState(false);
+    const observationInputRef = useRef<ObservationInputRef>(null);
 const { inspectionId } =useLocalSearchParams<{ inspectionId: string }>();
     const handleInputChange = (field:string,value:string)=>{
     setInspectionData(prev=>({...prev,[field]:value}))
@@ -103,6 +106,143 @@ const handleSubmitInspectionData = async () => {
     
         loadInspections();
       }, [inspectionId]);
+      useEffect(() => {
+        const keyboardDidHideListener = Keyboard.addListener(
+          "keyboardDidHide",
+          () => {
+            observationInputRef.current?.blur();
+            setObservationsFocused(false);
+          }
+        );
+      
+        return () => {
+          keyboardDidHideListener.remove();
+        };
+      }, []);
+      const renderInspectionFields = () => {
+  if (observationsFocused) {
+    return null;
+  }
+
+  return (
+    <>
+      <View style={styles.inputboxContainer}>
+        <Text style={styles.inputboxContainerViewTitle}>
+          Nombre de la inspección:
+        </Text>
+
+        <View style={styles.inputboxContainerView}>
+          <View style={styles.inputboxContainerViewLogo}>
+            <FontAwesome6
+              name="clipboard-list"
+              size={20}
+              color="#2563EB"
+              iconStyle="solid"
+            />
+          </View>
+
+          <TextInput
+            onChangeText={(t) => handleInputChange("name", t)}
+            style={styles.inputboxContainerViewDesc}
+            value={inspectionData.name}
+          />
+        </View>
+      </View>
+
+      <View style={styles.inputboxContainer}>
+        <Text style={styles.inputboxContainerViewTitle}>
+          Inspección realizada por:
+        </Text>
+
+        <View style={styles.inputboxContainerView}>
+          <View style={styles.inputboxContainerViewLogo}>
+            <FontAwesome6
+              name="user"
+              size={20}
+              color="#2563EB"
+              iconStyle="solid"
+            />
+          </View>
+
+          <TextInput
+            onChangeText={(t) => handleInputChange("createdBy", t)}
+            style={styles.inputboxContainerViewDesc}
+            value={inspectionData.createdBy}
+          />
+        </View>
+      </View>
+
+      <View style={styles.inputboxContainer}>
+        <Text style={styles.inputboxContainerViewTitle}>
+          Dirección:
+        </Text>
+
+        <View style={styles.inputboxContainerView}>
+          <View style={styles.inputboxContainerViewLogo}>
+            <FontAwesome6
+              name="map-location"
+              size={20}
+              color="#2563EB"
+              iconStyle="solid"
+            />
+          </View>
+
+          <TextInput
+            onChangeText={(t) => handleInputChange("address", t)}
+            style={styles.inputboxContainerViewDesc}
+            value={inspectionData.address}
+          />
+        </View>
+      </View>
+
+      <View style={styles.inputboxContainer}>
+        <Text style={styles.inputboxContainerViewTitle}>
+          Ciudad:
+        </Text>
+
+        <View style={styles.inputboxContainerView}>
+          <View style={styles.inputboxContainerViewLogo}>
+            <FontAwesome6
+              name="building"
+              size={20}
+              color="#2563EB"
+              iconStyle="solid"
+            />
+          </View>
+
+          <TextInput
+            onChangeText={(t) => handleInputChange("city", t)}
+            style={styles.inputboxContainerViewDesc}
+            value={inspectionData.city}
+          />
+        </View>
+      </View>
+
+      <View style={styles.inputboxContainer}>
+        <Text style={styles.inputboxContainerViewTitle}>
+          Provincia:
+        </Text>
+
+        <View style={styles.inputboxContainerView}>
+          <View style={styles.inputboxContainerViewLogo}>
+            <FontAwesome6
+              name="flag"
+              size={20}
+              color="#2563EB"
+              iconStyle="solid"
+            />
+          </View>
+
+          <TextInput
+            onChangeText={(t) => handleInputChange("province", t)}
+            style={styles.inputboxContainerViewDesc}
+            value={inspectionData.province}
+          />
+        </View>
+      </View>
+    </>
+  );
+};
     return(
           <SafeAreaView
                           style={{ flex: 1, backgroundColor: "black" }}
@@ -148,181 +288,18 @@ const handleSubmitInspectionData = async () => {
     <View
                         style={styles.mainContainerView}
                     >
-                        <View
-                            style={styles.inputboxContainer}
-                        >
-                            <Text
-                                style={styles.inputboxContainerViewTitle}
-                            >
-                                Nombre de la inspección:
-                            </Text>
-                            <View
-                                style={styles.inputboxContainerView}
-                            >
-                                <View
-                                    style={styles.inputboxContainerViewLogo}
-                                >
-                                <FontAwesome6
-                                    name="clipboard-list"
-                                    size={20}
-                                    color="#2563EB"
-                                    iconStyle="solid"
-                                    />
-
-                                </View>
-                                <TextInput 
-                                    onChangeText={(t)=>handleInputChange("name",t)}
-                                    style={styles.inputboxContainerViewDesc}
-                                    placeholder={inspectionData.name}
-                                    value={inspectionData.name}
-                                />
-                            </View>
-                        </View>
-                         <View
-                            style={styles.inputboxContainer}
-                        >
-                            <Text
-                                style={styles.inputboxContainerViewTitle}
-                            >
-                                Inspección realizada por:
-                            </Text>
-                            <View
-                                style={styles.inputboxContainerView}
-                            >
-                                <View
-                                    style={styles.inputboxContainerViewLogo}
-                                >
-                                <FontAwesome6
-                                    name="user"
-                                    size={20}
-                                    color="#2563EB"
-                                    iconStyle="solid"
-                                    />
-                                </View>
-                                <TextInput                                     
-                                    onChangeText={(t)=>handleInputChange("createdBy",t)}
-                                    style={styles.inputboxContainerViewDesc}
-                                    placeholder={inspectionData.createdBy}
-                                    value={inspectionData.createdBy}
-                                />
-                            </View>
-                        </View>
-                            <View
-                            style={styles.inputboxContainer}
-                        >
-                            <Text
-                                style={styles.inputboxContainerViewTitle}
-                            >
-                                Direccion:
-                            </Text>
-                            <View
-                                style={styles.inputboxContainerView}
-                            >
-                                <View
-                                    style={styles.inputboxContainerViewLogo}
-                                >
-                                <FontAwesome6
-                                    name="map-location"
-                                    size={20}
-                                    color="#2563EB"
-                                    iconStyle="solid"
-                                    />
-                                </View>
-                                <TextInput 
-                                    onChangeText={(t)=>handleInputChange("address",t)}                                    
-                                    style={styles.inputboxContainerViewDesc}
-                                    placeholder={inspectionData.address}
-                                    value={inspectionData.address}
-                                />
-                            </View>
-                        </View>
-                          <View
-                            style={styles.inputboxContainer}
-                        >
-                            <Text
-                                style={styles.inputboxContainerViewTitle}
-                            >
-                                Ciudad:
-                            </Text>
-                            <View
-                                style={styles.inputboxContainerView}
-                            >
-                                <View
-                                    style={styles.inputboxContainerViewLogo}
-                                >
-                                <FontAwesome6
-                                    name="building"
-                                    size={20}
-                                    color="#2563EB"
-                                    iconStyle="solid"
-                                    />
-                                </View>
-                                <TextInput                                     
-                                    onChangeText={(t)=>handleInputChange("city",t)}                                    
-                                    style={styles.inputboxContainerViewDesc}
-                                    placeholder={inspectionData.city}
-                                    value={inspectionData.city}
-                                />
-                            </View>
-                        </View>
-                              <View
-                            style={styles.inputboxContainer}
-                        >
-                            <Text
-                                style={styles.inputboxContainerViewTitle}
-                            >
-                                Provincia:
-                            </Text>
-                            <View
-                                style={styles.inputboxContainerView}
-                            >
-                                <View
-                                    style={styles.inputboxContainerViewLogo}
-                                >
-                                <FontAwesome6
-                                    name="flag"
-                                    size={20}
-                                    color="#2563EB"
-                                    iconStyle="solid"
-                                    />
-                                </View>
-                                <TextInput 
-                                    onChangeText={(t)=>handleInputChange("province",t)}                                    
-                                    style={styles.inputboxContainerViewDesc}
-                                    placeholder={inspectionData.province}
-                                    value={inspectionData.province}
-                                />
-                            </View>
-                        </View>
-                                <View
-                            style={styles.inputboxContainer}
-                        >
-                            <Text
-                                style={styles.inputboxContainerViewTitle}
-                            >
-                                Observaciones:
-                            </Text>
-                            <View
-                                style={styles.inputboxContainerView}
-                            >
-                                <View
-                                    style={styles.inputboxContainerViewLogo}
-                                >
-                                <FontAwesome6
-                                    name="award"
-                                    size={20}
-                                    color="#2563EB"
-                                    iconStyle="solid"
-                                    />
-                                </View>
-                                <TextInput 
-                                    onChangeText={(t)=>handleInputChange("observations",t)}                                    
-                                    style={styles.inputboxContainerViewDesc}
-                                    placeholder={inspectionData.observations}
-                                    value={inspectionData.observations}
-                                />
-                            </View>
-                        </View>
+                        {renderInspectionFields()}
+                           <ObservationInput
+                        ref={observationInputRef}
+                        value={inspectionData.observations}
+                        currentText={inspectionData.observations}
+                        onChangeText={(text) =>
+                            handleInputChange("observations", text)
+                        }
+                        onFocus={() => setObservationsFocused(true)}
+                        onBlur={() => {}}
+                        expanded={observationsFocused}
+                        />
                         <TouchableOpacity
                             style={styles.getPhotosBtn}
                             onPress={handleSubmitInspectionData}  
