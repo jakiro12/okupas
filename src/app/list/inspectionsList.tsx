@@ -253,7 +253,12 @@ const handleGeneratePdf = async (id:string) => {
                   style={styles.dataInspectionCardContainerBtns}
                 >
                   {
-                    fileGeneration === inspection.id ? <ActivityIndicator size={30} color="#2563EB"/>
+                    fileGeneration === inspection.id ? 
+                    <View
+                      style={styles.headerViewContainerCardIcon}
+                    >
+                    <ActivityIndicator size={30} color="#2563EB"/>
+                    </View>
                     :
                   <TouchableOpacity
                   onPress={()=>handleGeneratePdf(inspection.id)}

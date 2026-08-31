@@ -3,27 +3,28 @@ import { Inspection } from "@/database/schema/InspectionTable";
 import PdfService from "@/services/pdf/PdfService";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import styles from '../../styles/files-styles'
 import { formatDate } from "@/utils/dateFormat";
+import ModalToShowInformation from "@/components/ModalToShowInformation";
 
 const FilesList=()=>{
-    const [files, setFiles] =useState<Inspection[]>([]);
+    const [files, setFiles] =useState<Inspection[]>([])
+    const [showInfoModal,setShowInfoModal]=useState<boolean>(false)
+  const [selectedInfo,setSelectedInfo]=useState<{title:string,about:string}>({title:"",about:""})
       const loadPdfs = async () => {
     try {
       const result =
         await InspectionRepository.findAll();
 
       const inspectionsWithPdf: Inspection[] = [];
-        console.log(result)
       for (const inspection of result) {
         const pdf =
           await PdfService.getInspectionPdf(
             inspection.id
           );
-          console.log(pdf)
         if (pdf) {
           inspectionsWithPdf.push(inspection);
         }
@@ -52,17 +53,18 @@ const FilesList=()=>{
       );
 
     if (!deleted) {
-      Alert.alert(
-        "PDF no encontrado",
-        "El archivo ya no existe."
-      );
+       setShowInfoModal(true)
+    setSelectedInfo({
+      title:"PDF no encontrado",
+      about:"El archivo ya no existe."
+    });
       return;
     }
-
-    Alert.alert(
-      "PDF eliminado",
-      "El PDF fue eliminado correctamente."
-    );
+    setShowInfoModal(true)
+    setSelectedInfo({
+      title:"PDF eliminado",
+      about:"El PDF fue eliminado correctamente."
+    });
 
     loadPdfs();
 
@@ -72,11 +74,12 @@ const FilesList=()=>{
       "Error eliminando PDF:",
       error
     );
+setShowInfoModal(true)
+    setSelectedInfo({
+      title:"Error",
+      about:"No se pudo eliminar el PDF."
+    });
 
-    Alert.alert(
-      "Error",
-      "No se pudo eliminar el PDF."
-    );
   }
 };
     return(
@@ -227,7 +230,12 @@ const FilesList=()=>{
                 ))
             )}
             </ScrollView>
-
+<ModalToShowInformation 
+          visible={showInfoModal}
+          about={selectedInfo.about}
+          title={selectedInfo.title}
+          onCancel={()=>setShowInfoModal(false)}
+        />
         </View>
 
         </SafeAreaView>

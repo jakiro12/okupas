@@ -14,7 +14,6 @@ class PdfService {
   await this.getInspectionPdf(inspectionId);
 
 if (existingPdf) {
-  console.log("El PDF ya existe:", existingPdf);
   return existingPdf;
 }
       const inspection =
@@ -187,7 +186,7 @@ if (existingPdf) {
   base64: true,
 });
 
-console.log("RESULT PRINT:", result);
+
 
 const pdfDirectory =
   FileSystemService.getInspectionPdfDirectory(
@@ -207,25 +206,6 @@ await destinationFile.write(result.base64!, {
   encoding: "base64",
 });
 
-console.log(
-  "PDF generado por Print:",
-  result.uri
-);
-
-console.log(
-  "PDF guardado permanentemente:",
-  destinationFile.uri
-);
-
-console.log(
-  "PDF existe:",
-  destinationFile.exists
-);
-
-console.log(
-  "PDF tamaño:",
-  destinationFile.size
-);
 
 return destinationFile.uri;
 
@@ -247,41 +227,17 @@ async getInspectionPdf(
         inspectionId
       );
 
-    console.log(
-      "DIRECTORIO PDF:",
-      pdfDirectory.uri
-    );
-
-    console.log(
-      "DIRECTORIO EXISTE:",
-      pdfDirectory.exists
-    );
-
     if (!pdfDirectory.exists) {
       return null;
     }
 
-    const files = pdfDirectory.list();
 
-    console.log(
-      "ARCHIVOS EN PDF:",
-      files
-    );
 
     const pdfFile = new File(
       pdfDirectory,
       `inspection-${inspectionId}.pdf`
     );
 
-    console.log(
-      "PDF BUSCADO:",
-      pdfFile.uri
-    );
-
-    console.log(
-      "PDF EXISTS:",
-      pdfFile.exists
-    );
 
     if (!pdfFile.exists) {
       return null;
@@ -318,7 +274,6 @@ async deleteInspectionPdf(
 
   pdfFile.delete();
 
-  console.log("PDF eliminado:", pdfFile.uri);
 
   return true;
 }
