@@ -11,6 +11,7 @@ import FileSystemService from "@/services/fyilesystem/FileSystemService";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
 import * as Crypto from "expo-crypto";
 import ObservationInput,{ObservationInputRef} from "@/components/ObservationsInput";
+import AddProvince from "@/components/AddProvince";
 
 const NewDataInspection=()=>{
     const [inspectionData,setInspectionData]=useState<InspectionData>({
@@ -22,9 +23,13 @@ const NewDataInspection=()=>{
         province:''
     })
     const [observationsFocused, setObservationsFocused] = useState(false);
+    const [addProvince,setAddProvince]=useState<boolean>(false)
     const observationInputRef = useRef<ObservationInputRef>(null);
     const handleInputChange = (field:string,value:string)=>{
     setInspectionData(prev=>({...prev,[field]:value}))
+  }
+  const handleSetProvince=(value:string)=>{
+    setInspectionData(prev=>({...prev,"province":value}))
   }
    const handleSubmitInspectionData = async () => {
   const now = new Date().toISOString();
@@ -223,7 +228,8 @@ useEffect(() => {
                                 />
                             </View>
                         </View>
-                              <View
+                              <TouchableOpacity
+                              onPress={()=>setAddProvince(true)}
                             style={styles.inputboxContainer}
                         >
                             <Text
@@ -244,22 +250,26 @@ useEffect(() => {
                                     iconStyle="solid"
                                     />
                                 </View>
-                                <TextInput 
-                                    onChangeText={(t)=>handleInputChange("province",t)}                                    
-                                    style={styles.inputboxContainerViewDesc}
-                                    placeholder="Ej: Buenos Aires"
-                                />
+                                <Text 
+                                    style={[styles.inputboxContainerViewDesc,{verticalAlign:'middle',paddingLeft:4}]}
+                                >
+                                    {inspectionData.province === ''? 'Seleccionar Provincia' : inspectionData.province}
+                                </Text>
                             </View>
-                        </View>
+                        </TouchableOpacity>
+
     </>
                          )}
                        
+                <AddProvince
+                    onCancel={()=>setAddProvince(false)}
+                    visible={addProvince}
+                    onChangeText={handleSetProvince}
+                />
                   <ObservationInput
                         ref={observationInputRef}
                         value={inspectionData.observations}
-                        onChangeText={(text) =>
-                            handleInputChange("observations", text)
-                        }
+                        onChangeText={handleSetProvince}
                         onFocus={() => setObservationsFocused(true)}
                         onBlur={() => {}}
                         expanded={observationsFocused}
