@@ -27,7 +27,7 @@ const UncompletedInspectionDetail=()=>{
     const handleOpenInfoModal=()=>{
       setSelectedInfo({
         title: "Observaciones",
-        about: inspectionData?.observations ?? ""
+        about: inspectionData?.observations ?? "Sin Observaciones"
       })
       setShowInfoModal(true)
     }
@@ -68,7 +68,7 @@ const UncompletedInspectionDetail=()=>{
                         </TouchableOpacity> 
           <Text 
             style={styles.mainTitle}
-          >Inspeccion Sin Completar </Text>    
+          >Inspeccion Incompleta </Text>    
         </View>
           <View
             style={styles.boxInspectionCurrentData}

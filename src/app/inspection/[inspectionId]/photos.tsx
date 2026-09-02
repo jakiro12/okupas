@@ -12,12 +12,13 @@ import * as Crypto from "expo-crypto";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
 import { Inspection } from "@/database/schema/InspectionTable";
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
+import ModalToShowInformation from "@/components/ModalToShowInformation";
 
 const CameraScreen=()=>{
     const [image, setImage] = useState<CameraResult | null>(null);
     const [savedImages, setSavedImages] = useState<Photo[]>([]);
-    const [showAlert,setShowAlert]=useState<{show:boolean,message:string}>({show:false,message:''})
-
+    const [showInfoModal,setShowInfoModal]=useState<boolean>(false)
+    const [selectedInfo,setSelectedInfo]=useState<{title:string,about:string}>({title:"",about:""})
     const { inspectionId } = useLocalSearchParams<{ inspectionId: string }>()
     const handleTakePhoto = async () => {
     const result = await CameraService.takePhoto();
@@ -26,6 +27,7 @@ switch (result?.status) {
     setImage(result.image!);
     break;
   case "permission-blocked":
+   
     Alert.alert(
   "Permiso bloqueado",
   "Debes habilitar el acceso a la cámara desde los ajustes del dispositivo.",
@@ -42,10 +44,11 @@ switch (result?.status) {
 );
     break;
   case "permission-denied":
-    Alert.alert(
-      "Permiso requerido",
-      "Debes permitir el acceso a la cámara para tomar fotografías."
-    );
+     setSelectedInfo({
+        title: "Permiso requerido",
+        about: "Debes permitir el acceso a la cámara para tomar fotografías.",
+      });
+      setShowInfoModal(true);
     break;
 
   case "cancelled":
@@ -53,18 +56,59 @@ switch (result?.status) {
 }
 };
 
+const handlePickImage = async () => {
+  const result = await CameraService.pickImage();
 
+  switch (result.status) {
+    case "success":
+      setImage(result.image!);
+      break;
+
+    case "permission-blocked":
+      Alert.alert(
+        "Permiso bloqueado",
+        "Debes habilitar el acceso a las fotos desde los ajustes.",
+        [
+          { text: "Cancelar", style: "cancel" },
+          {
+            text: "Abrir ajustes",
+            onPress: () => Linking.openSettings(),
+          },
+        ]
+      );
+      break;
+
+    case "permission-denied":
+     setSelectedInfo({
+        title: "Permiso requerido",
+        about: "Debes permitir el acceso a la galeria de imagenes.",
+      });
+      setShowInfoModal(true);
+      break;
+
+    case "cancelled":
+      break;
+  }
+};
 
 
 const handleSaveImage = async () => {
   if (!image) {
-    Alert.alert("No hay imagen");
+    setSelectedInfo({
+        title: "Imagen requerida",
+        about: "Debes agregar al menos una fotografía.",
+      });
+      setShowInfoModal(true);
     return;
   }
 
   if (!inspectionId) {
 
-    setShowAlert({show:true,message:"No se encontró la inspección."});
+    setSelectedInfo({
+        title: "Error",
+        about: "Inspeccion no encontrada.",
+      });
+      setShowInfoModal(true);
     return;
   }
 
@@ -96,7 +140,11 @@ const handleSaveImage = async () => {
     setImage(null);
   } catch (error) {
     console.error("Error guardando imagen:", error);
-    setShowAlert({show:true,message:"No fue posible guardar la imagen."});
+     setSelectedInfo({
+        title: "Error",
+        about: "No se pudo guardar la imagen",
+      });
+      setShowInfoModal(true);
   }
 };
 const handleDeleteImage = async (photo: Photo) => {
@@ -105,7 +153,11 @@ const handleDeleteImage = async (photo: Photo) => {
       await FileSystemService.deleteImage(photo);
 
     if (!deleted) {
-    setShowAlert({show:true,message:"No se puede eliminar un imagen que no existe."});  
+       setSelectedInfo({
+        title: "Error",
+        about: "No se puede eliminar un imagen inexistente.",
+      });
+      setShowInfoModal(true);
       return;
     }
 
@@ -120,15 +172,20 @@ const handleDeleteImage = async (photo: Photo) => {
       "Error eliminando imagen:",
       error
     );
-    setShowAlert({show:true,message:"No fue posible eliminar la imagen."});  
+    setSelectedInfo({
+        title: "Error",
+        about: "No fue posible eliminar la imagen.",
+      });
+      setShowInfoModal(true); 
   }
 };
 const handleFinishInspection = async () => {
   if (!inspectionId) {
-    setShowAlert({
-      show: true,
-      message: "No se encontró la inspección.",
-    });
+        setSelectedInfo({
+        title: "Error",
+        about: "Inspeccion no encontrada.",
+      });
+      setShowInfoModal(true);
     return;
   }
 
@@ -137,10 +194,11 @@ const handleFinishInspection = async () => {
       await InspectionRepository.findById(inspectionId);
 
     if (!inspection) {
-      setShowAlert({
-        show: true,
-        message: "No se encontró la inspección.",
+          setSelectedInfo({
+        title: "Error",
+        about: "Inspeccion no encontrada.",
       });
+      setShowInfoModal(true);
       return;
     }
 
@@ -158,11 +216,11 @@ const handleFinishInspection = async () => {
       "Error finalizando inspección:",
       error
     );
-
-    setShowAlert({
-      show: true,
-      message: "No fue posible finalizar la inspección.",
-    });
+    setSelectedInfo({
+        title: "Error",
+        about: "No fue posible finalizar la inspección.",
+      });
+      setShowInfoModal(true);
   }
 };
   useEffect(() => {
@@ -226,7 +284,9 @@ useEffect(() => {
                         />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonActions}>
+                    <TouchableOpacity 
+                    onPress={handlePickImage}
+                    style={styles.buttonActions}>
                     <FontAwesome6
                         name="image"
                         size={20}
@@ -259,11 +319,16 @@ useEffect(() => {
                         source={{ uri: photo.uri }}
                         style={{width:100,height:80,objectFit:'cover'}}
                       />
-
+                      <Text>{photo.height > photo.width ? "Vertical" : "Panoramica"}</Text>
                       <TouchableOpacity
                         onPress={() => handleDeleteImage(photo)}
                       >
-                        <Text>🗑️</Text>
+                         <FontAwesome6
+                        name="trash-can"
+                        size={20}
+                        color="#2563EB"
+                        iconStyle="solid"
+                        />
                       </TouchableOpacity>
                     </View>
                   ))}
@@ -279,46 +344,12 @@ useEffect(() => {
                   </TouchableOpacity>
                 }
                 </ScrollView>
-                <Modal
-                  visible={showAlert.show}
-                  transparent
-                  animationType="fade"
-         >
-           <View
-           style={{
-             flex: 1,
-             backgroundColor: "rgba(0,0,0,0.6)",
-             justifyContent: "center",
-             alignItems: "center"
-           }}
-         >
-           <View
-             style={{
-               width: "80%",
-               backgroundColor: "white",
-               padding: 30,
-               borderRadius: 10
-             }}
-           >
-            <Text>
-              {showAlert.message}
-            </Text>
- <TouchableOpacity
-             activeOpacity={0.8}
-               style={{
-                 marginTop: 20,
-                 alignSelf: "flex-end",
-                 width:'auto',
-                 height:'auto',
-                 padding:6
-               }}
-               onPress={()=>setShowAlert({show:false,message:''})}
-             >
-               <Text style={{ color: "#6e8ac6",fontFamily: "Optima-Medium" }}>Cerrar</Text>
-             </TouchableOpacity>
-           </View>
-           </View>
-                </Modal>
+               <ModalToShowInformation 
+                visible={showInfoModal}
+                about={selectedInfo.about}
+                title={selectedInfo.title}
+                onCancel={()=>setShowInfoModal(false)}
+              />
         </SafeAreaView>
     )
 }

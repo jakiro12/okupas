@@ -259,7 +259,7 @@ const handleGeneratePdf = async () => {
                   source={{uri:p.uri}}
                   style={styles.tinyPhoto}
                 />
-                <Text>{Math.ceil(p.fileSize/1024)} Kb</Text>
+                <Text>{p.height > p.width ? "Vertical" : "Panoramica"}</Text>
                 <TouchableOpacity
                   onPress={()=>handleOpenPhoto(p)}
                 >

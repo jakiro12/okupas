@@ -19,7 +19,7 @@ const PhotoScreenStyles : PhotoScreenStyles = StyleSheet.create({
     backgroundColor: "#F8FAFC",
   },
   previewContainer: {
-    height: 260,
+    height: '45%',
     borderRadius: 20,
     backgroundColor: "#EFF6FF",
     justifyContent: "center",
