@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { Inspection } from "@/database/schema/InspectionTable";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
 import ObservationInput ,{ObservationInputRef}from "@/components/ObservationsInput";
+import AddProvince from "@/components/AddProvince";
 
 const EditDataInspection=()=>{
     const [loadingInspection,setLoadingInspection]=useState<boolean>(false)
@@ -21,10 +22,14 @@ const EditDataInspection=()=>{
         province:''
     })
     const [observationsFocused, setObservationsFocused] = useState(false);
+    const [addProvince,setAddProvince]=useState<boolean>(false)
     const observationInputRef = useRef<ObservationInputRef>(null);
 const { inspectionId } =useLocalSearchParams<{ inspectionId: string }>();
     const handleInputChange = (field:string,value:string)=>{
     setInspectionData(prev=>({...prev,[field]:value}))
+  }
+    const handleSetProvince=(value:string)=>{
+    setInspectionData(prev=>({...prev,"province":value}))
   }
 const handleSubmitInspectionData = async () => {
   if (!inspectionId) {
@@ -218,28 +223,35 @@ const handleSubmitInspectionData = async () => {
         </View>
       </View>
 
-      <View style={styles.inputboxContainer}>
-        <Text style={styles.inputboxContainerViewTitle}>
-          Provincia:
-        </Text>
-
-        <View style={styles.inputboxContainerView}>
-          <View style={styles.inputboxContainerViewLogo}>
-            <FontAwesome6
-              name="flag"
-              size={20}
-              color="#2563EB"
-              iconStyle="solid"
-            />
-          </View>
-
-          <TextInput
-            onChangeText={(t) => handleInputChange("province", t)}
-            style={styles.inputboxContainerViewDesc}
-            value={inspectionData.province}
-          />
-        </View>
-      </View>
+           <TouchableOpacity
+                              onPress={()=>setAddProvince(true)}
+                            style={styles.inputboxContainer}
+                        >
+                            <Text
+                                style={styles.inputboxContainerViewTitle}
+                            >
+                                Provincia:
+                            </Text>
+                            <View
+                                style={styles.inputboxContainerView}
+                            >
+                                <View
+                                    style={styles.inputboxContainerViewLogo}
+                                >
+                                <FontAwesome6
+                                    name="flag"
+                                    size={20}
+                                    color="#2563EB"
+                                    iconStyle="solid"
+                                    />
+                                </View>
+                                <Text 
+                                    style={[styles.inputboxContainerViewDesc,{verticalAlign:'middle',paddingLeft:4}]}
+                                >
+                                    {inspectionData.province === ''? 'Seleccionar Provincia' : inspectionData.province}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
     </>
   );
 };
@@ -289,6 +301,11 @@ const handleSubmitInspectionData = async () => {
                         style={styles.mainContainerView}
                     >
                         {renderInspectionFields()}
+                        <AddProvince
+                    onCancel={()=>setAddProvince(false)}
+                    visible={addProvince}
+                    onChangeText={handleSetProvince}
+                />
                            <ObservationInput
                         ref={observationInputRef}
                         value={inspectionData.observations}
