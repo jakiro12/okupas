@@ -51,6 +51,7 @@ const NavigationBar=()=>{
                 >Pendientes</Text>
             </TouchableOpacity>
               <TouchableOpacity
+              onPress={()=>router.push('/settings/settings')}
             style={styles.btnContainer}
             >
                 <FontAwesome6
