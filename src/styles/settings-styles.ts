@@ -14,6 +14,10 @@ interface SettingsTypesStyles{
   themeBtns:ViewStyle
   themeBtnsDesc:ViewStyle
   titleOptionsDesc:TextStyle
+  titleOptionsDescAbout:TextStyle
+  photosOptionsBox:ViewStyle
+  photosOptionsBoxDesc:ViewStyle
+  photosOptionsBoxQuality:ViewStyle
 }
 
 const SettingsStyles : SettingsTypesStyles = StyleSheet.create({
@@ -54,8 +58,6 @@ const SettingsStyles : SettingsTypesStyles = StyleSheet.create({
   mainContainerOptions:{
     width:'100%',
     height:'93%',
-    borderWidth:1,
-    borderColor:'#000000',
     display:'flex',
     justifyContent:'space-around',
     alignItems:'center',
@@ -95,7 +97,7 @@ const SettingsStyles : SettingsTypesStyles = StyleSheet.create({
     width:'78%',
     height:'100%',
     display:'flex',
-    justifyContent:'space-between',
+    justifyContent:'space-around',
     alignItems:'flex-start',
     flexDirection:'column'
   },
@@ -132,7 +134,43 @@ const SettingsStyles : SettingsTypesStyles = StyleSheet.create({
   titleOptionsDesc:{
     fontSize:15,
     fontWeight:'bold'
-  }
+  },
+  titleOptionsDescAbout:{
+    fontSize:12,
+    color:'#888fa0'
+  },
+  photosOptionsBox:{
+    width:'100%',
+    height:'50%',
+    display:'flex',
+    justifyContent:'space-between',
+    alignItems:'center',
+    flexDirection:'row',
+    paddingInline:10
+  },
+  photosOptionsBoxDesc:{
+    width:'70%',
+    height:'70%',
+   display:'flex',
+    justifyContent:'space-around',
+    alignItems:'flex-start',
+    flexDirection:'column' 
+  },
+  photosOptionsBoxQuality:{
+    width:'auto',
+    height:'auto',
+    padding:5,
+    borderWidth:1,
+    borderColor:'#888fa041',
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    flexDirection:'row',
+    columnGap:5,
+    backgroundColor:'#96c4fd8c',
+    borderRadius:4
+  },
+  
 })
 
 export default SettingsStyles

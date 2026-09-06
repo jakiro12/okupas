@@ -2,6 +2,7 @@ import FileSystemService from "@/services/fyilesystem/FileSystemService";
 import { Stack } from "expo-router";
 import { createContext, useEffect, useState } from "react";
 import SQLiteService  from '../database/sqlite'
+import { ThemeProvider } from "@/theme/ThemeProvider";
 
 //para borrar y resetar todo en caso de agregar algo
 //import * as SQLite from "expo-sqlite";
@@ -30,6 +31,7 @@ export default function RootLayout() {
   init();
 }, []);
   return ( 
+    <ThemeProvider>
     <DataContext.Provider value={{initialized}}>
         <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="index" />    
@@ -41,5 +43,6 @@ export default function RootLayout() {
               <Stack.Screen name="uncompleted/[id]/uncompletedDetails"/>
           </Stack>
           </DataContext.Provider> 
+      </ThemeProvider>
           )
       }
