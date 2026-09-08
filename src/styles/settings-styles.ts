@@ -1,4 +1,5 @@
 import { StyleSheet,ImageStyle,ViewStyle,TextStyle} from "react-native";
+import { Theme } from "@/theme/theme";
 
 interface SettingsTypesStyles{
   container:ViewStyle
@@ -19,8 +20,7 @@ interface SettingsTypesStyles{
   photosOptionsBoxDesc:ViewStyle
   photosOptionsBoxQuality:ViewStyle
 }
-
-const SettingsStyles : SettingsTypesStyles = StyleSheet.create({
+const SettingsStyles=(theme:Theme) : SettingsTypesStyles => StyleSheet.create({
    container: {
     display:'flex',
     width:'100%',
@@ -28,7 +28,7 @@ const SettingsStyles : SettingsTypesStyles = StyleSheet.create({
     justifyContent:'space-between',
     alignItems:'center',
     flexDirection:'column',
-    backgroundColor:'#F8FAFC'
+    backgroundColor:theme.background
     },
     headerFilesListContainer:{
     width:'95%',
@@ -53,7 +53,7 @@ const SettingsStyles : SettingsTypesStyles = StyleSheet.create({
     height:'auto',
     fontSize:22,
     fontWeight:'bold',
-    color:'#091431'
+    color:theme.text
   },
   mainContainerOptions:{
     width:'100%',
@@ -67,7 +67,7 @@ const SettingsStyles : SettingsTypesStyles = StyleSheet.create({
     width:'95%',
     height:'31%',
     borderWidth:1,
-    borderColor:'#96c4fd',
+    borderColor:theme.border,
     borderRadius:10,
     display:'flex',
     justifyContent:'space-around',
@@ -133,7 +133,8 @@ const SettingsStyles : SettingsTypesStyles = StyleSheet.create({
   },
   titleOptionsDesc:{
     fontSize:15,
-    fontWeight:'bold'
+    fontWeight:'bold',
+    color:theme.text
   },
   titleOptionsDescAbout:{
     fontSize:12,
@@ -169,8 +170,7 @@ const SettingsStyles : SettingsTypesStyles = StyleSheet.create({
     columnGap:5,
     backgroundColor:'#96c4fd8c',
     borderRadius:4
-  },
-  
+  }
 })
 
 export default SettingsStyles

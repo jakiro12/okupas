@@ -1,3 +1,4 @@
+import { useTheme } from "@/theme/ThemeProvider";
 import { Modal, Text, TouchableOpacity, View } from "react-native"
 
 interface ModalDeleteProps{
@@ -10,6 +11,7 @@ interface ModalDeleteProps{
 const ModalToShowInformation=({about,visible,onCancel,title}:ModalDeleteProps)=>{
     
 
+             const { theme } = useTheme()
    
     return(
         <Modal 
@@ -30,7 +32,7 @@ const ModalToShowInformation=({about,visible,onCancel,title}:ModalDeleteProps)=>
           style={{
             width: '90%',
             height: 180,
-            backgroundColor: "#e0e3e9",
+            backgroundColor: theme.bgModal,
             borderRadius: 15,
             justifyContent: "center",
             alignItems: "center",
@@ -42,6 +44,7 @@ const ModalToShowInformation=({about,visible,onCancel,title}:ModalDeleteProps)=>
               fontSize: 20,
               fontWeight: "700",
               marginBottom: 10,
+              color:theme.text
             }}
           >
            {title}
@@ -63,7 +66,7 @@ const ModalToShowInformation=({about,visible,onCancel,title}:ModalDeleteProps)=>
                 paddingVertical: 12,
                 paddingHorizontal: 20,
                 borderRadius: 10,
-                backgroundColor: "#0057fd",
+                backgroundColor: theme.primary,
               }}
             >
               <Text

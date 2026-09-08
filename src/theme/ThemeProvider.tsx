@@ -23,7 +23,7 @@ export const ThemeProvider = ({
 }) => {
   const systemScheme = useColorScheme();
 
-  const [mode, setMode] = useState<ThemeMode>("system");
+  const [mode, setMode] = useState<ThemeMode>("light");
 
   const theme = useMemo(() => {
     if (mode === "system") {

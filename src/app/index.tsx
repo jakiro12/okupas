@@ -1,5 +1,4 @@
 import { Text, View,  TouchableOpacity } from "react-native";
-import styles from '../styles/index-styles'
 import { SafeAreaView } from "react-native-safe-area-context";
 import NavigationBar from "@/components/NavBar";
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
@@ -9,6 +8,8 @@ import InspectionRepository from "@/database/repositories/InspectionRepository";
 import { DataContext } from "./_layout";
 import FileSystemService from "@/services/fyilesystem/FileSystemService";
 import { formatDate } from "@/utils/dateFormat";
+import { useTheme } from "@/theme/ThemeProvider";
+import DashboardStyles from "../styles/index-styles";
 
 export default function Index() {
    const [lastFile, setLastFile] =useState<{name:string,createdAt:string}>({name:"",createdAt:""});
@@ -17,6 +18,8 @@ export default function Index() {
       if (!context) throw new Error("DataContext no está disponible")
      
        const { initialized } = context
+       const { theme,mode } = useTheme()
+       const styles = DashboardStyles(theme);
     const loadPdfsData = async () => {
   try {
     const result = await InspectionRepository.findAll();
@@ -105,7 +108,7 @@ export default function Index() {
                <FontAwesome6
                   name="folder"
                   size={20}
-                  color="#2563EB"
+                  color={theme.primary}
                   iconStyle="solid"
                   />
             </View>
@@ -128,7 +131,7 @@ export default function Index() {
                <FontAwesome6
                   name="file-invoice"
                   size={20}
-                  color="#2563EB"
+                  color={theme.primary}
                   iconStyle="solid"
                   />
             </View>
@@ -137,10 +140,10 @@ export default function Index() {
             >Ultimo Reporte</Text>
             <Text
               style={styles.headerViewContainerCardTextValue}
-            >{lastFile.name}</Text>
+            >{lastFile.name ? lastFile.name : "Sin Reportes"}</Text>
             <Text
              style={styles.headerViewContainerCardText}
-            >PDF Generado</Text>
+            >{lastFile.name ? "PDF Generado" : null}</Text>
           </View>
             <View
             style={styles.headerViewContainerCard}
@@ -151,7 +154,7 @@ export default function Index() {
                <FontAwesome6
                   name="calendar"
                   size={20}
-                  color="#2563EB"
+                  color={theme.primary}
                   iconStyle="solid"
                   />
             </View>
@@ -160,10 +163,10 @@ export default function Index() {
             >Generado</Text>
             <Text
               style={styles.headerViewContainerCardTextValue}
-            >{formatDate(lastFile.createdAt,"date")}</Text>
+            >{lastFile.createdAt ? formatDate(lastFile.createdAt,"date"):"--/--/----"}</Text>
             <Text
              style={styles.headerViewContainerCardText}
-            >{formatDate(lastFile.createdAt,"time")}</Text>
+            >{ lastFile.createdAt ?  formatDate(lastFile.createdAt,"time") : "--:--"}</Text>
           </View>
         </View>
         <View
@@ -182,7 +185,7 @@ export default function Index() {
                 <FontAwesome6
                   name="circle-plus"
                   size={34}
-                  color="#2563EB"
+                  color={theme.primary}
                   iconStyle="solid"
                   />
               </View>
@@ -199,7 +202,7 @@ export default function Index() {
                 <FontAwesome6
                     name="arrow-right"
                     size={20}
-                    color="#2563EB"
+                    color={theme.iconColor}
                     iconStyle="solid"
                     />
               </View>
@@ -215,7 +218,7 @@ export default function Index() {
                 <FontAwesome6
                   name="file-invoice"
                   size={34}
-                  color="#2563EB"
+                  color={theme.primary}
                   iconStyle="solid"
                   />
               </View>
@@ -232,7 +235,7 @@ export default function Index() {
                 <FontAwesome6
                     name="arrow-right"
                     size={20}
-                    color="#2563EB"
+                    color={theme.iconColor}
                     iconStyle="solid"
                     />
               </View>
@@ -252,7 +255,7 @@ export default function Index() {
                 <FontAwesome6
                   name="file-circle-exclamation"
                   size={28}
-                  color="#2563EB"
+                  color={theme.primary}
                   iconStyle="solid"
                   />
               </View>
@@ -269,7 +272,7 @@ export default function Index() {
                 <FontAwesome6
                     name="arrow-right"
                     size={20}
-                    color="#2563EB"
+                    color={theme.iconColor}
                     iconStyle="solid"
                     />
               </View>
@@ -285,7 +288,7 @@ export default function Index() {
                 <FontAwesome6
                   name="file-pdf"
                   size={28}
-                  color="#2563EB"
+                  color={theme.primary}
                   iconStyle="solid"
                   />
               </View>
@@ -302,7 +305,7 @@ export default function Index() {
                 <FontAwesome6
                     name="arrow-right"
                     size={20}
-                    color="#2563EB"
+                    color={theme.iconColor}
                     iconStyle="solid"
                     />
               </View>

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { Alert, Image, Linking, Modal, ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { Alert, Image, Linking,  ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import CameraService, { CameraResult } from "@/services/camera/CameraService";
 import ImageProcessor from "@/services/image/ImageProcessor";
-import styles from '../../../styles/photo-screen-styles'
 import FileSystemService from "@/services/fyilesystem/FileSystemService";
 import { router, useLocalSearchParams } from "expo-router";
 import { Photo } from "@/database/schema/PhotoTable";
@@ -13,6 +12,8 @@ import InspectionRepository from "@/database/repositories/InspectionRepository";
 import { Inspection } from "@/database/schema/InspectionTable";
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import ModalToShowInformation from "@/components/ModalToShowInformation";
+import { useTheme } from "@/theme/ThemeProvider";
+import PhotoScreenStyles from "../../../styles/photo-screen-styles";
 
 const CameraScreen=()=>{
     const [image, setImage] = useState<CameraResult | null>(null);
@@ -20,6 +21,8 @@ const CameraScreen=()=>{
     const [showInfoModal,setShowInfoModal]=useState<boolean>(false)
     const [selectedInfo,setSelectedInfo]=useState<{title:string,about:string}>({title:"",about:""})
     const { inspectionId } = useLocalSearchParams<{ inspectionId: string }>()
+    const { theme } = useTheme()
+  const styles = PhotoScreenStyles(theme);
     const handleTakePhoto = async () => {
     const result = await CameraService.takePhoto();
 switch (result?.status) {
@@ -255,10 +258,9 @@ useEffect(() => {
                   style={{ flex: 1, backgroundColor: "black" }}
                   edges={["bottom", "top"]}
                 >
-                <ScrollView
-                contentContainerStyle={styles.container}
-                showsVerticalScrollIndicator={false}
-                >                
+              <View
+                style={styles.container}
+              >   
                 <View style={styles.previewContainer}>
                     {image ? (
                     <Image
@@ -271,7 +273,6 @@ useEffect(() => {
                     </Text>
                     )}
                 </View>
-
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity 
                         onPress={handleTakePhoto}
@@ -311,6 +312,12 @@ useEffect(() => {
                     null
                      }                                        
                 </View>
+<ScrollView
+                
+                style={styles.cardPhotoContainer}
+                showsVerticalScrollIndicator={false}
+                >    
+                
                   {savedImages.map((photo) => (
                     <View
                       style={styles.cardPhotoData}
@@ -319,19 +326,22 @@ useEffect(() => {
                         source={{ uri: photo.uri }}
                         style={{width:100,height:80,objectFit:'cover'}}
                       />
-                      <Text>{photo.height > photo.width ? "Vertical" : "Panoramica"}</Text>
+                      <Text
+                        style={{color:theme.text}}
+                      >{photo.height > photo.width ? "Vertical" : "Panoramica"}</Text>
                       <TouchableOpacity
                         onPress={() => handleDeleteImage(photo)}
                       >
                          <FontAwesome6
                         name="trash-can"
                         size={20}
-                        color="#2563EB"
+                        color={theme.primary}
                         iconStyle="solid"
                         />
                       </TouchableOpacity>
                     </View>
                   ))}
+                </ScrollView>
                   {savedImages.length === 0 ? null
                   :
                   <TouchableOpacity
@@ -343,13 +353,13 @@ useEffect(() => {
                     >Generar Reporte</Text>
                   </TouchableOpacity>
                 }
-                </ScrollView>
                <ModalToShowInformation 
                 visible={showInfoModal}
                 about={selectedInfo.about}
                 title={selectedInfo.title}
                 onCancel={()=>setShowInfoModal(false)}
               />
+              </View> 
         </SafeAreaView>
     )
 }

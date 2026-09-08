@@ -4,7 +4,6 @@ import { router, useLocalSearchParams } from "expo-router"
 import { useEffect, useState } from "react"
 import { ActivityIndicator, Image, Modal, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import styles from '../../../styles/inspection-styles'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { Inspection } from "@/database/schema/InspectionTable"
 import { Photo } from "@/database/schema/PhotoTable"
@@ -13,6 +12,8 @@ import ModalToShowInformation from "@/components/ModalToShowInformation"
 import PdfService from "@/services/pdf/PdfService"
 import { formatDate } from "@/utils/dateFormat"
 import FileSystemService from "@/services/fyilesystem/FileSystemService"
+import InspectionStyles from "../../../styles/inspection-styles"
+import { useTheme } from "@/theme/ThemeProvider"
 
 const InspectionDetail=()=>{
     const [inspectionData,setInspectionData]=useState<Inspection | null>(null)
@@ -22,7 +23,10 @@ const InspectionDetail=()=>{
     const [showInfoModal,setShowInfoModal]=useState<boolean>(false)
     const [selectedInfo,setSelectedInfo]=useState<{title:string,about:string}>({title:"",about:""})
     const [fileLoader,setFileLoader]=useState<boolean>(false)
+ const { theme } = useTheme()
 
+
+  const styles = InspectionStyles(theme);
         const { id } = useLocalSearchParams<{ id: string }>()
     const handleOpenPhoto = (photo: Photo) => {
             setSelectedPhoto(photo);
@@ -141,7 +145,7 @@ const handleGeneratePdf = async () => {
                  <FontAwesome6
                       name="building-circle-check"
                       size={20}
-                      color="#2563EB"
+                      color={theme.iconColor}
                       iconStyle="solid"
                       />
               </View>
@@ -173,9 +177,11 @@ const handleGeneratePdf = async () => {
                       color="#888fa0"
                       iconStyle="solid"
                       />
-              <Text>Creada por:</Text>
               <Text
-                style={{marginLeft:'auto'}}
+              style={styles.inspectionInfo}
+              >Creada por:</Text>
+              <Text
+                style={{marginLeft:'auto',color:theme.text}}
               >{inspectionData?.createdBy}</Text>
             </View>
             <View
@@ -187,9 +193,11 @@ const handleGeneratePdf = async () => {
                       color="#888fa0"
                       iconStyle="solid"
                       />
-              <Text>Direccion:</Text>
               <Text
-                style={{marginLeft:'auto'}}
+                style={styles.inspectionInfo}
+              >Direccion:</Text>
+              <Text
+                style={{marginLeft:'auto',color:theme.text}}
               >{inspectionData?.address}</Text>
             </View>
             <View
@@ -201,9 +209,11 @@ const handleGeneratePdf = async () => {
                       color="#888fa0"
                       iconStyle="solid"
                       />
-              <Text>Fecha:</Text>
               <Text
-                style={{marginLeft:'auto'}}
+              style={styles.inspectionInfo}
+              >Fecha:</Text>
+              <Text
+                style={{marginLeft:'auto',color:theme.text}}
               >{formatDate(inspectionData?.createdAt!,"date")}
                 </Text>
             </View>
@@ -216,9 +226,11 @@ const handleGeneratePdf = async () => {
                       color="#888fa0"
                       iconStyle="solid"
                       />
-              <Text>Hora:</Text>
               <Text
-                style={{marginLeft:'auto'}}
+              style={styles.inspectionInfo}
+              >Hora:</Text>
+              <Text
+                style={{marginLeft:'auto',color:theme.text}}
               >{formatDate(inspectionData?.createdAt!,"time")}</Text>
             </View>
             <TouchableOpacity
@@ -231,10 +243,12 @@ const handleGeneratePdf = async () => {
                       color="#888fa0"
                       iconStyle="solid"
                       />
-              <Text>Observaciones:</Text>
+              <Text
+              style={styles.inspectionInfo}
+              >Observaciones:</Text>
               <Text
                   numberOfLines={1}
-                style={{marginLeft:'auto',width:'60%',color:"#0057fd",textAlign:'right'}}
+                style={{marginLeft:'auto',width:'60%',color:theme.primaryStrong,textAlign:'right'}}
               >{inspectionData?.observations}</Text>
             </TouchableOpacity>
           </View>
@@ -259,7 +273,9 @@ const handleGeneratePdf = async () => {
                   source={{uri:p.uri}}
                   style={styles.tinyPhoto}
                 />
-                <Text>{p.height > p.width ? "Vertical" : "Panoramica"}</Text>
+                <Text
+                  style={styles.inspectionInfo}
+                >{p.height > p.width ? "Vertical" : "Panoramica"}</Text>
                 <TouchableOpacity
                   onPress={()=>handleOpenPhoto(p)}
                 >
@@ -269,7 +285,7 @@ const handleGeneratePdf = async () => {
                 <Ionicons
                     name="resize-outline"
                     size={20}
-                    color="#2563EB"
+                    color={theme.primary}
                   />
               </View>
                 </TouchableOpacity>

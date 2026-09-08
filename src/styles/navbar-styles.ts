@@ -1,3 +1,4 @@
+import { Theme } from "@/theme/theme";
 import { StyleSheet,ImageStyle,ViewStyle,TextStyle} from "react-native";
 
 interface NavigationBarStyles{
@@ -6,13 +7,13 @@ interface NavigationBarStyles{
   btnText:TextStyle
 }
 
-const NavBarStyles : NavigationBarStyles = StyleSheet.create({
+const NavBarStyles =(theme:Theme): NavigationBarStyles => StyleSheet.create({
    container: {
     display:'flex',
     width:'100%',
     height:80,
     borderTopWidth:1,
-    borderTopColor:'#96c4fd',
+    borderTopColor:theme.backgroundColorHeaderBorder,
     justifyContent:'space-around',
     alignItems:'center',
     flexDirection:'row'
@@ -26,7 +27,7 @@ const NavBarStyles : NavigationBarStyles = StyleSheet.create({
       flexDirection:'column', 
     },
     btnText:{
-      color:'#2563EB',
+      color:theme.iconColor,
       fontSize:12
     }
 })

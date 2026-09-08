@@ -1,4 +1,5 @@
 import { Inspection } from "@/database/schema/InspectionTable";
+import { useTheme } from "@/theme/ThemeProvider";
 import { Modal, Text, TouchableOpacity, View } from "react-native"
 
 interface ModalDeleteProps{
@@ -11,6 +12,7 @@ interface ModalDeleteProps{
 const ModalToDeleteItems=({inspection,visible,onCancel,onConfirm}:ModalDeleteProps)=>{
     if (!inspection) return null;
 
+          const { theme } = useTheme()
    
     return(
         <Modal 
@@ -31,7 +33,7 @@ const ModalToDeleteItems=({inspection,visible,onCancel,onConfirm}:ModalDeletePro
           style={{
             width: '90%',
             height: 180,
-            backgroundColor: "#e0e3e9",
+            backgroundColor: theme.bgModal,
             borderRadius: 15,
             justifyContent: "center",
             alignItems: "center",
@@ -43,6 +45,7 @@ const ModalToDeleteItems=({inspection,visible,onCancel,onConfirm}:ModalDeletePro
               fontSize: 20,
               fontWeight: "700",
               marginBottom: 10,
+              color:theme.text
             }}
           >
             Eliminar inspección
@@ -53,7 +56,8 @@ const ModalToDeleteItems=({inspection,visible,onCancel,onConfirm}:ModalDeletePro
               fontSize: 15,
               textAlign: "center",
               marginBottom: 24,
-              width:'95%'
+              width:'95%',
+              color:theme.text
             }}
           >
             ¿Quieres eliminar la inspeccion "{inspection.name ? inspection.name : "Sin completar"}"?
@@ -71,7 +75,7 @@ const ModalToDeleteItems=({inspection,visible,onCancel,onConfirm}:ModalDeletePro
                 paddingVertical: 12,
                 paddingHorizontal: 20,
                 borderRadius: 10,
-                backgroundColor: "#5097fc",
+                backgroundColor: theme.primary,
               }}
             >
               <Text
@@ -85,7 +89,7 @@ const ModalToDeleteItems=({inspection,visible,onCancel,onConfirm}:ModalDeletePro
                 paddingVertical: 12,
                 paddingHorizontal: 20,
                 borderRadius: 10,
-                backgroundColor: "#0057fd",
+                backgroundColor: theme.primary,
               }}
             >
               <Text

@@ -1,6 +1,5 @@
 import { ActivityIndicator, Alert, Keyboard, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import styles from '../../styles/inspection-styles'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { router, useLocalSearchParams } from "expo-router";
 import NavigationBar from "@/components/NavBar";
@@ -10,6 +9,8 @@ import { Inspection } from "@/database/schema/InspectionTable";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
 import ObservationInput ,{ObservationInputRef}from "@/components/ObservationsInput";
 import AddProvince from "@/components/AddProvince";
+import { useTheme } from "@/theme/ThemeProvider";
+import InspectionStyles from "../../styles/inspection-styles";
 
 const EditDataInspection=()=>{
     const [loadingInspection,setLoadingInspection]=useState<boolean>(false)
@@ -25,6 +26,10 @@ const EditDataInspection=()=>{
     const [addProvince,setAddProvince]=useState<boolean>(false)
     const observationInputRef = useRef<ObservationInputRef>(null);
 const { inspectionId } =useLocalSearchParams<{ inspectionId: string }>();
+const { theme } = useTheme()
+
+
+  const styles = InspectionStyles(theme);
     const handleInputChange = (field:string,value:string)=>{
     setInspectionData(prev=>({...prev,[field]:value}))
   }
@@ -274,7 +279,7 @@ const handleSubmitInspectionData = async () => {
                                 <FontAwesome6
                                     name="arrow-left"
                                     size={20}
-                                    color="#2563EB"
+                                    color={theme.iconColor}
                                     iconStyle="solid"
                                     />
                         </TouchableOpacity>
@@ -283,7 +288,7 @@ const handleSubmitInspectionData = async () => {
                         >
                             <Text
                                 style={styles.headerViewContainerLegendTitle}
-                            >Nueva inspección</Text>
+                            >Editar inspección</Text>
                             <Text
                                 style={styles.headerViewContainerLegendDesc}
                             >Completa la Información de la inspección</Text>
@@ -292,7 +297,7 @@ const handleSubmitInspectionData = async () => {
                     {loadingInspection ? (
   <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
     <ActivityIndicator size="large" color="#0c6efd" />
-    <Text style={{ marginTop: 10 }}>
+    <Text style={{ marginTop: 10,color:theme.text }}>
       Cargando inspección...
     </Text>
   </View>
@@ -327,7 +332,9 @@ const handleSubmitInspectionData = async () => {
                                     color="#eaf4fb"
                                     iconStyle="solid"
                                     />
-                            <Text>Tomar fotos</Text>
+                            <Text
+                            style={styles.inspectionInfo}
+                            >Tomar fotos</Text>
                         </TouchableOpacity>
                     </View>)}                                     
                 <NavigationBar/>

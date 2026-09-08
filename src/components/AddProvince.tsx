@@ -1,5 +1,6 @@
 
 
+import { useTheme } from "@/theme/ThemeProvider";
 import { PROVINCIAS_ARGENTINA } from "@/utils/provinces";
 import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native"
 
@@ -10,11 +11,11 @@ interface ModalDeleteProps{
 }
 
 const AddProvince=({visible,onCancel,onChangeText}:ModalDeleteProps)=>{
-    const provinceList=["1","2"]
     const handlePickProvince=(e:string)=>{
         onChangeText(e)
         onCancel()
     }
+       const { theme } = useTheme()
    
     return(
         <Modal 
@@ -34,7 +35,7 @@ const AddProvince=({visible,onCancel,onChangeText}:ModalDeleteProps)=>{
           style={{
             width: '90%',
             height:'80%',
-            backgroundColor: "#e0e3e9",
+            backgroundColor: theme.bgModal,
             borderRadius: 15,
             justifyContent: "center",
             alignItems: "center",
@@ -46,21 +47,24 @@ const AddProvince=({visible,onCancel,onChangeText}:ModalDeleteProps)=>{
               fontSize: 20,
               fontWeight: "700",
               marginBottom: 5,
+              color:theme.text
             }}
           >
            Elegir provincia
           </Text>
             <ScrollView
                 contentContainerStyle={{width:'100%'}}
-                style={{width:'100%',height:'auto',borderTopColor:'#091431',borderTopWidth:1}}
+                style={{width:'100%',height:'auto'}}
             >
                 {PROVINCIAS_ARGENTINA.map((e,i)=>
                 <TouchableOpacity
-                    style={{width:'100%',height:45,borderBottomColor:'#96c4fd',borderBottomWidth:1,display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'row'}}
+                    style={{width:'100%',height:45,borderBottomColor:theme.border,borderBottomWidth:1,display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'row'}}
                     key={i}
                     onPress={()=>handlePickProvince(e)}
                 >
-                    <Text>{e}</Text>
+                    <Text
+                      style={{color:theme.text,fontWeight:'bold'}}
+                    >{e}</Text>
                 </TouchableOpacity>
                 )}
             </ScrollView>
@@ -73,7 +77,7 @@ const AddProvince=({visible,onCancel,onChangeText}:ModalDeleteProps)=>{
                 paddingVertical: 12,
                 paddingHorizontal: 20,
                 borderRadius: 10,
-                backgroundColor: "#0057fd",
+                backgroundColor: theme.primary,
                 marginBottom:5
               }}
             >

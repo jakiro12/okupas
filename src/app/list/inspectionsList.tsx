@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 import { Text,  View,  TouchableOpacity,  ScrollView, ActivityIndicator,} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import styles from '../../styles/inspection-styles'
 import { router } from "expo-router";
 import ModalToDeleteItems from "@/components/ModalToDeleteItems";
 import { formatDate } from "@/utils/dateFormat";
 import PdfService from "@/services/pdf/PdfService";
 import FileSystemService from "@/services/fyilesystem/FileSystemService";
 import ModalToShowInformation from "@/components/ModalToShowInformation";
+import { useTheme } from "@/theme/ThemeProvider";
+import InspectionStyles from "../../styles/inspection-styles";
 const InspectionsList = () => {
   const [inspections, setInspections] = useState<Inspection[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -18,6 +19,10 @@ const InspectionsList = () => {
   const [showInfoModal,setShowInfoModal]=useState<boolean>(false)
   const [selectedInfo,setSelectedInfo]=useState<{title:string,about:string}>({title:"",about:""})
   const [fileGeneration,setFileGeneration]=useState<string | null>(null)
+   const { theme } = useTheme()
+
+
+  const styles = InspectionStyles(theme);
   useEffect(() => {
     const loadInspections = async () => {
       try {
@@ -140,7 +145,7 @@ const handleGeneratePdf = async (id:string) => {
                                 <FontAwesome6
                                     name="arrow-left"
                                     size={20}
-                                    color="#2563EB"
+                                    color={theme.iconColor}
                                     iconStyle="solid"
                                     />
                         </TouchableOpacity> 

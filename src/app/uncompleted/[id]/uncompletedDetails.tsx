@@ -4,13 +4,14 @@ import { router, useLocalSearchParams } from "expo-router"
 import { useEffect, useState } from "react"
 import { Image, Modal, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import styles from '../../../styles/inspection-styles'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { Inspection } from "@/database/schema/InspectionTable"
 import { Photo } from "@/database/schema/PhotoTable"
 import Ionicons from "@react-native-vector-icons/ionicons";
 import ModalToShowInformation from "@/components/ModalToShowInformation"
 import { formatDate } from "@/utils/dateFormat"
+import { useTheme } from "@/theme/ThemeProvider"
+import InspectionStyles from "../../../styles/inspection-styles"
 
 const UncompletedInspectionDetail=()=>{
     const [inspectionData,setInspectionData]=useState<Inspection | null>(null)
@@ -20,6 +21,10 @@ const UncompletedInspectionDetail=()=>{
     const [showInfoModal,setShowInfoModal]=useState<boolean>(false)
     const [selectedInfo,setSelectedInfo]=useState<{title:string,about:string}>({title:"",about:""})
         const { id } = useLocalSearchParams<{ id: string }>()
+          const { theme } = useTheme()
+
+
+  const styles = InspectionStyles(theme);
     const handleOpenPhoto = (photo: Photo) => {
             setSelectedPhoto(photo);
             setShowPhotoModal(true);
@@ -62,7 +67,7 @@ const UncompletedInspectionDetail=()=>{
                                 <FontAwesome6
                                     name="arrow-left"
                                     size={20}
-                                    color="#2563EB"
+                                    color={theme.iconColor}
                                     iconStyle="solid"
                                     />
                         </TouchableOpacity> 
@@ -82,7 +87,7 @@ const UncompletedInspectionDetail=()=>{
                  <FontAwesome6
                       name="building-circle-check"
                       size={20}
-                      color="#2563EB"
+                      color={theme.iconColor}
                       iconStyle="solid"
                       />
               </View>
@@ -109,9 +114,11 @@ const UncompletedInspectionDetail=()=>{
                       color="#888fa0"
                       iconStyle="solid"
                       />
-              <Text>Creada por:</Text>
               <Text
-                style={{marginLeft:'auto'}}
+                style={styles.inspectionInfo}
+              >Creada por:</Text>
+              <Text
+                style={{marginLeft:'auto',color:theme.text}}
               >{inspectionData?.createdBy}</Text>
             </View>
             <View
@@ -123,9 +130,11 @@ const UncompletedInspectionDetail=()=>{
                       color="#888fa0"
                       iconStyle="solid"
                       />
-              <Text>Direccion:</Text>
               <Text
-                style={{marginLeft:'auto'}}
+              style={styles.inspectionInfo}
+              >Direccion:</Text>
+              <Text
+                style={{marginLeft:'auto',color:theme.text}}
               >{inspectionData?.address}</Text>
             </View>
             <View
@@ -137,9 +146,11 @@ const UncompletedInspectionDetail=()=>{
                       color="#888fa0"
                       iconStyle="solid"
                       />
-              <Text>Fecha:</Text>
               <Text
-                style={{marginLeft:'auto'}}
+              style={styles.inspectionInfo}
+              >Fecha:</Text>
+              <Text
+                style={{marginLeft:'auto',color:theme.text}}
               >{formatDate(inspectionData?.createdAt!,"date")}
                 </Text>
             </View>
@@ -152,9 +163,11 @@ const UncompletedInspectionDetail=()=>{
                       color="#888fa0"
                       iconStyle="solid"
                       />
-              <Text>Hora:</Text>
               <Text
-                style={{marginLeft:'auto'}}
+              style={styles.inspectionInfo}
+              >Hora:</Text>
+              <Text
+                style={{marginLeft:'auto',color:theme.text}}
               >{formatDate(inspectionData?.createdAt!,"time")}</Text>
             </View>
             <TouchableOpacity
@@ -167,7 +180,9 @@ const UncompletedInspectionDetail=()=>{
                       color="#888fa0"
                       iconStyle="solid"
                       />
-              <Text>Observaciones:</Text>
+              <Text
+              style={styles.inspectionInfo}
+              >Observaciones:</Text>
               <Text
                   numberOfLines={1}
                 style={{marginLeft:'auto',width:'60%',color:"#0057fd",textAlign:'right'}}
@@ -185,7 +200,9 @@ const UncompletedInspectionDetail=()=>{
             contentContainerStyle={{rowGap:10}}
            >
             {
-             inspectionPhotos.length === 0 ? <Text>Fotografias sin agregar</Text> : 
+             inspectionPhotos.length === 0 ? <Text
+             style={styles.inspectionInfo}
+             >Fotografias sin agregar</Text> : 
               inspectionPhotos.map((p)=>              
               <View
                 key={p.id}

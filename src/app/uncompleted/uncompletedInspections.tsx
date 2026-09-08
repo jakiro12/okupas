@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { Text,  View,  TouchableOpacity,  ScrollView, Alert, ActivityIndicator,} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import styles from '../../styles/inspection-styles'
 import { router } from "expo-router";
 import ModalToDeleteItems from "@/components/ModalToDeleteItems";
 import { formatDate } from "@/utils/dateFormat";
 import ModalToShowInformation from "@/components/ModalToShowInformation";
+import { useTheme } from "@/theme/ThemeProvider";
+import InspectionStyles from "../../styles/inspection-styles";
 
 const UncompletedInspectionsList = () => {
   const [inspections, setInspections] = useState<Inspection[]>([]);
@@ -16,7 +17,10 @@ const UncompletedInspectionsList = () => {
   const [selectedInspection, setSelectedInspection] =useState<Inspection | null>(null);
   const [showInfoModal,setShowInfoModal]=useState<boolean>(false)
   const [selectedInfo,setSelectedInfo]=useState<{title:string,about:string}>({title:"",about:""})
-  const [fileLoader,setFileLoader]=useState<boolean>(false)
+  const { theme } = useTheme()
+
+
+  const styles = InspectionStyles(theme);
   useEffect(() => {
     const loadInspections = async () => {
       try {
@@ -84,7 +88,7 @@ const handleDeleteInspection = async () => {
                                 <FontAwesome6
                                     name="arrow-left"
                                     size={20}
-                                    color="#2563EB"
+                                    color={theme.iconColor}
                                     iconStyle="solid"
                                     />
                         </TouchableOpacity> 
@@ -221,7 +225,7 @@ const handleDeleteInspection = async () => {
                 <FontAwesome6
                     name="eye"
                     size={20}
-                    color="#2563EB"
+                    color={theme.primary}
                     iconStyle="solid"
                     />
                   </TouchableOpacity>
@@ -239,7 +243,7 @@ const handleDeleteInspection = async () => {
                 <FontAwesome6
                     name="pen-clip"
                     size={20}
-                    color="#2563EB"
+                    color={theme.primary}
                     iconStyle="solid"
                     />
                   </TouchableOpacity>
@@ -250,7 +254,7 @@ const handleDeleteInspection = async () => {
                 <FontAwesome6
                     name="trash-can"
                     size={20}
-                    color="#2563EB"
+                    color={theme.primary}
                     iconStyle="solid"
                     />
               </TouchableOpacity>

@@ -1,9 +1,14 @@
 import { Text, TouchableOpacity, View } from "react-native"
-import styles from '../styles/navbar-styles'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { router } from "expo-router";
+import { useTheme } from "@/theme/ThemeProvider";
+import NavBarStyles from "../styles/navbar-styles";
 
 const NavigationBar=()=>{
+    const { theme } = useTheme()
+
+
+  const styles = NavBarStyles(theme);
     return(
         <View
         style={styles.container}
@@ -15,7 +20,7 @@ const NavigationBar=()=>{
             <FontAwesome6
                     name="house"
                     size={24}
-                    color="#2563EB"
+                    color={theme.primary}
                     iconStyle="solid"
                     />
                 <Text
@@ -29,7 +34,7 @@ const NavigationBar=()=>{
                 <FontAwesome6
                     name="file-invoice"
                     size={24}
-                    color="#2563EB"
+                    color={theme.primary}
                     iconStyle="solid"
                     />
                 <Text
@@ -43,7 +48,7 @@ const NavigationBar=()=>{
                  <FontAwesome6
                     name="file-circle-exclamation"
                     size={24}
-                    color="#2563EB"
+                    color={theme.primary}
                     iconStyle="solid"
                     />
                 <Text
@@ -57,7 +62,7 @@ const NavigationBar=()=>{
                 <FontAwesome6
                     name="gear"
                     size={24}
-                    color="#2563EB"
+                    color={theme.primary}
                     iconStyle="solid"
                     />
                 <Text

@@ -1,3 +1,4 @@
+import { Theme } from "@/theme/theme";
 import { StyleSheet,ImageStyle,ViewStyle,TextStyle} from "react-native";
 
 interface InspectionScreen{
@@ -35,9 +36,10 @@ interface InspectionScreen{
   cardPhotoData:ViewStyle
   tinyPhoto:ImageStyle
   subtitle:TextStyle
+  inspectionInfo:TextStyle
 }
 
-const InspectionStyles : InspectionScreen = StyleSheet.create({
+const InspectionStyles =(theme:Theme): InspectionScreen => StyleSheet.create({
    container: {
     width:'100%',
     height:'100%',
@@ -45,7 +47,7 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     justifyContent: "space-between",
     alignItems:'center',
     flexDirection:'column',
-    backgroundColor:'#F8FAFC'
+    backgroundColor:theme.background
   },
   headerViewContainer:{
     width:'95%',
@@ -59,7 +61,7 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
   arrowBackView:{
     width:40,
     height:40,
-    backgroundColor:'#5098fc31',
+    backgroundColor:theme.backgroundIcon,
     borderRadius:5,
     display:'flex',
     justifyContent:'center',
@@ -78,7 +80,7 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     height:'auto',
     fontSize:20,
     fontWeight:'bold',
-    color:'#091431'
+    color:theme.text
   },
   headerViewContainerLegendDesc:{
     width:'auto',
@@ -132,17 +134,17 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     borderWidth:1,
     borderRadius:4,
       fontWeight:'bold',
-    color:'#091431'
+    color:theme.text
   },
   inputboxContainerViewTitle:{
     width:'auto',
     height:'auto',
     fontSize:14,
     fontWeight:'bold',
-    color:'#2563EB'
+    color:theme.primary
   },
   getPhotosBtn:{
-    backgroundColor:'#2563EB',
+    backgroundColor:theme.primary,
     width:'100%',
     height:40,
     borderRadius:4,
@@ -173,7 +175,7 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
   inspectionContainer:{
     width:'100%',
     height:'auto',
-    backgroundColor:'#F8FAFC',
+    backgroundColor:theme.background,
     display:'flex',
     flexDirection:'column',
     justifyContent:'flex-start',
@@ -183,7 +185,7 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
   inspectionScreenContainer:{
     width:'100%',
     height:'100%',
-    backgroundColor:'#F8FAFC',
+    backgroundColor:theme.background,
      display:'flex',
     flexDirection:'column',
     justifyContent:'space-between',
@@ -194,7 +196,7 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     height:'auto',
     fontSize:22,
     fontWeight:'bold',
-    color:'#091431'
+    color:theme.text
   },
   inspectionDate: { 
     fontSize: 12, 
@@ -203,12 +205,12 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
    inspectionName: { 
     fontSize: 18, 
     fontWeight: "700", 
-    color: "#091431"
+    color: theme.text
   },
   labelInspectionData: { 
     fontSize: 12, 
     fontWeight: "600", 
-    color: "#091431", 
+    color: theme.text, 
     marginBottom: 2, 
   },
   dataInspectionCardContainer:{
@@ -225,7 +227,7 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     rowGap:18
   },
   valueInspectionData:{
-    color: "#091431",
+    color: theme.text,
     fontSize:14
   },
   headerInspectionsListContainer:{
@@ -240,7 +242,7 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
   inspectionDetailContainer:{
      width:'100%',
     height:'100%',
-    backgroundColor:'#F8FAFC',
+    backgroundColor:theme.background,
      display:'flex',
     flexDirection:'column',
     justifyContent:'space-between',
@@ -310,10 +312,13 @@ const InspectionStyles : InspectionScreen = StyleSheet.create({
     objectFit:'cover'
   },
   subtitle:{
-    color: "#091431",
+    color: theme.text,
     fontSize:16,
     fontWeight:'bold',
     marginBottom:5
+  },
+  inspectionInfo:{
+    color:theme.text
   }
 })
 

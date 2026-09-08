@@ -1,6 +1,5 @@
 import {  Text, TextInput, TouchableOpacity, View,Keyboard } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import styles from '../../styles/inspection-styles'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { router } from "expo-router";
 import NavigationBar from "@/components/NavBar";
@@ -12,6 +11,8 @@ import InspectionRepository from "@/database/repositories/InspectionRepository";
 import * as Crypto from "expo-crypto";
 import ObservationInput,{ObservationInputRef} from "@/components/ObservationsInput";
 import AddProvince from "@/components/AddProvince";
+import { useTheme } from "@/theme/ThemeProvider";
+import InspectionStyles from "../../styles/inspection-styles";
 
 const NewDataInspection=()=>{
     const [inspectionData,setInspectionData]=useState<InspectionData>({
@@ -25,6 +26,10 @@ const NewDataInspection=()=>{
     const [observationsFocused, setObservationsFocused] = useState(false);
     const [addProvince,setAddProvince]=useState<boolean>(false)
     const observationInputRef = useRef<ObservationInputRef>(null);
+    const { theme } = useTheme()
+
+
+  const styles = InspectionStyles(theme);
     const handleInputChange = (field:string,value:string)=>{
     setInspectionData(prev=>({...prev,[field]:value}))
   }
@@ -95,7 +100,7 @@ useEffect(() => {
                                 <FontAwesome6
                                     name="arrow-left"
                                     size={20}
-                                    color="#2563EB"
+                                    color={theme.iconColor}
                                     iconStyle="solid"
                                     />
                         </TouchableOpacity>
@@ -132,7 +137,7 @@ useEffect(() => {
                                 <FontAwesome6
                                     name="clipboard-list"
                                     size={20}
-                                    color="#2563EB"
+                                    color={theme.primary}
                                     iconStyle="solid"
                                     />
 
@@ -140,7 +145,6 @@ useEffect(() => {
                                 <TextInput 
                                     onChangeText={(t)=>handleInputChange("name",t)}
                                     style={styles.inputboxContainerViewDesc}
-                                    placeholder="Ej: inspeccion Departamento 123"
                                 />
                             </View>
                         </View>
@@ -161,14 +165,13 @@ useEffect(() => {
                                 <FontAwesome6
                                     name="user"
                                     size={20}
-                                    color="#2563EB"
+                                    color={theme.primary}
                                     iconStyle="solid"
                                     />
                                 </View>
                                 <TextInput                                     
                                     onChangeText={(t)=>handleInputChange("createdBy",t)}
                                     style={styles.inputboxContainerViewDesc}
-                                    placeholder="Ej: Juan Gomez"
                                 />
                             </View>
                         </View>
@@ -189,14 +192,13 @@ useEffect(() => {
                                 <FontAwesome6
                                     name="map-location"
                                     size={20}
-                                    color="#2563EB"
+                                    color={theme.primary}
                                     iconStyle="solid"
                                     />
                                 </View>
                                 <TextInput 
                                     onChangeText={(t)=>handleInputChange("address",t)}                                    
                                     style={styles.inputboxContainerViewDesc}
-                                    placeholder="Ej: Av. Example 123"
                                 />
                             </View>
                         </View>
@@ -217,14 +219,13 @@ useEffect(() => {
                                 <FontAwesome6
                                     name="building"
                                     size={20}
-                                    color="#2563EB"
+                                    color={theme.primary}
                                     iconStyle="solid"
                                     />
                                 </View>
                                 <TextInput                                     
                                     onChangeText={(t)=>handleInputChange("city",t)}                                    
                                     style={styles.inputboxContainerViewDesc}
-                                    placeholder="Ej: Buenos Aires"
                                 />
                             </View>
                         </View>
@@ -246,7 +247,7 @@ useEffect(() => {
                                 <FontAwesome6
                                     name="flag"
                                     size={20}
-                                    color="#2563EB"
+                                    color={theme.primary}
                                     iconStyle="solid"
                                     />
                                 </View>
@@ -269,7 +270,9 @@ useEffect(() => {
                   <ObservationInput
                         ref={observationInputRef}
                         value={inspectionData.observations}
-                        onChangeText={handleSetProvince}
+                         onChangeText={(text) =>
+                                handleInputChange("observations", text)
+                            }
                         onFocus={() => setObservationsFocused(true)}
                         onBlur={() => {}}
                         expanded={observationsFocused}
@@ -285,7 +288,9 @@ useEffect(() => {
                                     color="#eaf4fb"
                                     iconStyle="solid"
                                     />
-                            <Text>Tomar fotos</Text>
+                            <Text
+                                style={styles.inspectionInfo}
+                            >Tomar fotos</Text>
                         </TouchableOpacity>
                     </View>         
                      {!observationsFocused &&                       

@@ -1,12 +1,19 @@
 import {  Text, TouchableOpacity, View} from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import styles from '../../styles/settings-styles'
-import { router } from "expo-router"
+import { router} from "expo-router"
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import Ionicons from "@react-native-vector-icons/ionicons";
 import  MaterialIcon  from "@react-native-vector-icons/material-design-icons";
+import { useTheme } from "@/theme/ThemeProvider";
+import SettingsStyles from "../../styles/settings-styles";
+
+
 const Settings=()=>{
     
+    const { mode,setMode,theme } = useTheme()
+
+
+  const styles = SettingsStyles(theme);
     return(
           <SafeAreaView
                           style={{ flex: 1, backgroundColor: "black" }}
@@ -26,7 +33,7 @@ const Settings=()=>{
                                 <FontAwesome6
                                     name="arrow-left"
                                     size={20}
-                                    color="#2563EB"
+                                    color={theme.iconColor}
                                     iconStyle="solid"
                                     />
                         </TouchableOpacity>
@@ -53,7 +60,7 @@ const Settings=()=>{
                                     <Ionicons
                                         name="sunny"
                                         size={24}
-                                        color="#2563EB"
+                                        color={theme.iconColor}
                                         />
                                 </View>     
                                 <View
@@ -71,7 +78,7 @@ const Settings=()=>{
                                 style={styles.optionsBoxDisplay}
                             >
                                 <TouchableOpacity
-                                    onPress={()=>console.log('tema claro')}
+                                    onPress={()=>setMode("light")}
                                     style={styles.themeBtns}
                                 >
                                    <View
@@ -80,23 +87,23 @@ const Settings=()=>{
                                     <Ionicons
                                         name="sunny"
                                         size={18}
-                                        color="#091431"
+                                        color={mode === "light" ? "#2563EB" : "#888fa0"}
                                         />
                                         <Text
-                                            style={styles.titleOptionsDesc}
+                                            style={[styles.titleOptionsDesc,{color:mode === "light" ? "#2563EB" : "#888fa0"}]}
                                         >Claro</Text>
                                     </View> 
                                     {
                                         <FontAwesome6
                                         name="circle"
                                         size={20}
-                                        color="#2563EB"
+                                        color={mode === "light" ? "#2563EB" : "#888fa0" }                                        
                                         iconStyle="solid"
                                         />
                                     }
                                 </TouchableOpacity>
                                   <TouchableOpacity
-                                    onPress={()=>console.log('tema claro')}
+                                    onPress={()=>setMode("dark")}
                                     style={[styles.themeBtns,{borderTopColor:'#888fa041',borderBottomColor:'#888fa041',borderTopWidth:1,borderBottomWidth:1}]}
                                 >
                                    <View
@@ -105,23 +112,23 @@ const Settings=()=>{
                                     <Ionicons
                                         name="moon"
                                         size={18}
-                                        color="#091431"
+                                        color={mode === "dark" ? "#2563EB" : "#888fa0"}
                                         />
                                         <Text
-                                            style={styles.titleOptionsDesc}
+                                            style={[styles.titleOptionsDesc,{color:mode === "dark" ? "#2563EB" : "#888fa0"}]}
                                         >Oscuro</Text>
                                     </View> 
                                     {
                                         <FontAwesome6
                                         name="circle"
                                         size={20}
-                                        color="#888fa0"
+                                        color={mode === "dark" ? "#2563EB" : "#888fa0" }                                        
                                         iconStyle="solid"
                                         />
                                     }
                                 </TouchableOpacity>
                                   <TouchableOpacity
-                                    onPress={()=>console.log('tema claro')}
+                                    onPress={()=>setMode("system")}
                                     style={styles.themeBtns}
                                 >
                                    <View
@@ -130,17 +137,17 @@ const Settings=()=>{
                                     <Ionicons
                                         name="game-controller"
                                         size={18}
-                                        color="#091431"
+                                        color={mode === "system" ? "#2563EB" : "#888fa0"}
                                         />
                                         <Text
-                                            style={styles.titleOptionsDesc}
+                                            style={[styles.titleOptionsDesc,{color:mode === "system" ? "#2563EB" : "#888fa0"}]}
                                         >Sistema</Text>
                                     </View> 
                                     {
                                         <FontAwesome6
                                         name="circle"
                                         size={20}
-                                        color="#888fa0"
+                                         color={mode === "system" ? "#2563EB" : "#888fa0" }  
                                         iconStyle="solid"
                                         />
                                     }
@@ -159,7 +166,7 @@ const Settings=()=>{
                                     <Ionicons
                                         name="camera"
                                         size={24}
-                                        color="#2563EB"
+                                        color={theme.iconColor}
                                         />
                                 </View>     
                                 <View
@@ -193,11 +200,11 @@ const Settings=()=>{
                                     activeOpacity={0.8}
                                     style={styles.photosOptionsBoxQuality}
                                 >
-                                    <Text>Media</Text>
+                                    <Text style={{color:mode=== "light" ?"#091431": "#eaf4fb"}}>Media</Text>
                                     <MaterialIcon
                                         name="arrow-down-bold"
                                         size={16}
-                                        color="#2563EB"
+                                        color={theme.iconColor}
                                         />
                                 </TouchableOpacity>
                                </View>
@@ -239,7 +246,7 @@ const Settings=()=>{
                                     <FontAwesome6
                                         name="database"
                                         size={22}
-                                        color="#2563EB"
+                                        color={theme.iconColor}
                                         iconStyle="solid"
                                         />
                                 </View>     
@@ -273,7 +280,9 @@ const Settings=()=>{
                                             style={styles.titleOptionsDesc}
                                         >Imagenes</Text>
                                     </View> 
-                                    <Text>0 Mb</Text>
+                                    <Text
+                                    style={styles.titleOptionsDesc}
+                                    >0 Mb</Text>
                                 </TouchableOpacity>
                                   <TouchableOpacity
                                     onPress={()=>console.log('tema claro')}
@@ -291,7 +300,9 @@ const Settings=()=>{
                                             style={styles.titleOptionsDesc}
                                         >PDFs</Text>
                                     </View> 
-                                    <Text>0 Mb</Text>
+                                    <Text
+                                    style={styles.titleOptionsDesc}
+                                    >0 Mb</Text>
                                 </TouchableOpacity>
                                   <TouchableOpacity
                                     onPress={()=>console.log('tema claro')}
@@ -303,13 +314,15 @@ const Settings=()=>{
                                     <Ionicons
                                         name="file-tray"
                                         size={18}
-                                        color="#091431"
+                                        color="#000000"
                                         />
                                         <Text
                                             style={styles.titleOptionsDesc}
                                         >Sistema</Text>
                                     </View> 
-                                    <Text>0 Mb</Text>
+                                    <Text
+                                    style={styles.titleOptionsDesc}
+                                    >0 Mb</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

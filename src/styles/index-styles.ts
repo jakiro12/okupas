@@ -1,3 +1,4 @@
+import { Theme } from "@/theme/theme";
 import { StyleSheet,ImageStyle,ViewStyle,TextStyle} from "react-native";
 
 interface DashboardScreen{
@@ -20,7 +21,7 @@ interface DashboardScreen{
   cardsDashboardBtnLogoArrow:ViewStyle
 }
 
-const DashboardStyles : DashboardScreen = StyleSheet.create({
+const DashboardStyles=(theme:Theme)  : DashboardScreen => StyleSheet.create({
    container: {
     width:'100%',
     height:'100%',
@@ -28,7 +29,7 @@ const DashboardStyles : DashboardScreen = StyleSheet.create({
     justifyContent: "space-between",
     alignItems:'center',
     flexDirection:'column',
-    backgroundColor:'#F8FAFC'
+    backgroundColor:theme.background
   },
   mainInformationContainer:{
     width:'100%',
@@ -43,9 +44,9 @@ const DashboardStyles : DashboardScreen = StyleSheet.create({
     width:'95%',
     height:'20%',
     borderWidth:1,
-    borderColor:'#96c4fd',
+    borderColor:theme.backgroundColorHeaderBorder,
     borderRadius:10,
-    backgroundColor:'#f1f8fe',
+    backgroundColor:theme.backgroundColorHeader,
     display:'flex',
     flexDirection:'row',
     alignItems:'center',
@@ -64,7 +65,7 @@ const DashboardStyles : DashboardScreen = StyleSheet.create({
     height:'auto',
     fontSize:24,
     fontWeight:'bold',
-    color:'#091431'
+    color:theme.text
   },
   mainSubTitle:{
     width:'auto',
@@ -118,7 +119,7 @@ const DashboardStyles : DashboardScreen = StyleSheet.create({
     width:'auto',
     height:'auto',
     fontSize:14,
-    color:'#091431',
+    color:theme.text,
     fontWeight:'bold',
     textAlign:'center'
   },
@@ -128,7 +129,7 @@ const DashboardStyles : DashboardScreen = StyleSheet.create({
     display:'flex',
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor:'#5098fc31',
+    backgroundColor:theme.backgroundIcon,
     borderRadius:5
   },
   cardsDashboardBtnLogo:{
@@ -151,7 +152,7 @@ const DashboardStyles : DashboardScreen = StyleSheet.create({
     width:'auto',
     height:'auto',
     fontSize:15,
-    color:'#091431',
+    color:theme.text,
     fontWeight:'bold'
   },
   cardsDashboardBtnLogoArrow:{
@@ -161,7 +162,7 @@ const DashboardStyles : DashboardScreen = StyleSheet.create({
     display:'flex',
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor:'#5098fc31',
+    backgroundColor:theme.backgroundIcon,
   },
 })
 

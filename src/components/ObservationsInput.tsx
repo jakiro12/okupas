@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import styles from "../styles/inspection-styles";
+import { useTheme } from "@/theme/ThemeProvider";
+import InspectionStyles from "../styles/inspection-styles";
 
 export interface ObservationInputRef {
   blur: () => void;
@@ -42,13 +44,15 @@ const ObservationInput = forwardRef<
   ) => {
     const inputRef = useRef<TextInput>(null);
     const [height, setHeight] = useState(38);
-
     useImperativeHandle(ref, () => ({
       blur: () => {
         inputRef.current?.blur();
       },
     }));
+const { theme } = useTheme()
 
+
+  const styles = InspectionStyles(theme);
     return (
       <View style={styles.inputboxContainer}>
         <Text style={styles.inputboxContainerViewTitle}>
@@ -68,7 +72,7 @@ const ObservationInput = forwardRef<
             <FontAwesome6
               name="award"
               size={20}
-              color="#2563EB"
+              color={theme.primary}
               iconStyle="solid"
             />
           </View>
@@ -87,7 +91,7 @@ const ObservationInput = forwardRef<
                 )
               );
             }}
-            placeholder={currentText ? currentText : "Escribe las observaciones..."}
+            placeholder={currentText ? currentText : ""}
             style={[
               styles.inputboxContainerViewDesc,
               {

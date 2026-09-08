@@ -1,3 +1,4 @@
+import { Theme } from "@/theme/theme";
 import { StyleSheet,ImageStyle,ViewStyle,TextStyle} from "react-native";
 
 interface PhotoScreenStyles{
@@ -10,16 +11,24 @@ interface PhotoScreenStyles{
   buttonText:TextStyle
   cardPhotoData:ViewStyle
   buttonActions:ViewStyle
+  cardPhotoContainer:ViewStyle
 }
 
-const PhotoScreenStyles : PhotoScreenStyles = StyleSheet.create({
+const PhotoScreenStyles=(theme:Theme) : PhotoScreenStyles => StyleSheet.create({
   container: {
-    flexGrow: 1,
-    padding: 20,
-    backgroundColor: "#F8FAFC",
+    height:'100%',
+    width:'100%',
+    backgroundColor: theme.background,
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    flexDirection:'column',
+    paddingTop:10,
+    paddingBottom:10
   },
   previewContainer: {
-    height: '45%',
+    height: '40%',
+    width:'90%',
     borderRadius: 20,
     backgroundColor: "#EFF6FF",
     justifyContent: "center",
@@ -27,7 +36,7 @@ const PhotoScreenStyles : PhotoScreenStyles = StyleSheet.create({
     marginBottom: 24,
     overflow: "hidden",
     borderWidth: 1,
-    borderColor: "#D6E4F5",
+    borderColor: theme.border,
   },
 
   image: {
@@ -41,7 +50,7 @@ const PhotoScreenStyles : PhotoScreenStyles = StyleSheet.create({
   },
 
   buttonContainer: {
-    marginBottom: 28,
+    marginBottom: 8,
     display:'flex',
     width:'100%',
     flexDirection:'row',
@@ -50,13 +59,18 @@ const PhotoScreenStyles : PhotoScreenStyles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: "#2563EB",
+    backgroundColor: theme.primary,
     borderRadius: 16,
     paddingVertical: 16,
     justifyContent: "center",
     alignItems: "center",
+    width:'90%'
   },
-
+  cardPhotoContainer:{
+    width:'90%',
+    height:'auto',
+    marginBottom:8
+  },
   buttonText: {
     color: "#FFFFFF",
     fontWeight: "600",
@@ -75,7 +89,7 @@ const PhotoScreenStyles : PhotoScreenStyles = StyleSheet.create({
     marginBottom:10
   },
    buttonActions: {
-    backgroundColor: "#2563EB",
+    backgroundColor: theme.primary,
     borderRadius: 6,
     justifyContent: "center",
     alignItems: "center",
