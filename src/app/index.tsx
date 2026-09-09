@@ -18,7 +18,7 @@ export default function Index() {
       if (!context) throw new Error("DataContext no está disponible")
      
        const { initialized } = context
-       const { theme,mode } = useTheme()
+       const { theme} = useTheme()
        const styles = DashboardStyles(theme);
     const loadPdfsData = async () => {
   try {

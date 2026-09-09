@@ -1,3 +1,4 @@
+import { Theme } from "@/theme/theme";
 import { StyleSheet,ImageStyle,ViewStyle,TextStyle} from "react-native";
 
 interface FilesTypesStyles{
@@ -7,7 +8,7 @@ interface FilesTypesStyles{
   mainTitle:TextStyle
 }
 
-const FilesStyles : FilesTypesStyles = StyleSheet.create({
+const FilesStyles=(theme:Theme) : FilesTypesStyles => StyleSheet.create({
    container: {
     display:'flex',
     width:'100%',
@@ -15,7 +16,7 @@ const FilesStyles : FilesTypesStyles = StyleSheet.create({
     justifyContent:'space-around',
     alignItems:'center',
     flexDirection:'column',
-    backgroundColor:'#F8FAFC'
+    backgroundColor:theme.background
     },
     headerFilesListContainer:{
     width:'95%',
@@ -40,7 +41,7 @@ const FilesStyles : FilesTypesStyles = StyleSheet.create({
     height:'auto',
     fontSize:22,
     fontWeight:'bold',
-    color:'#091431'
+    color:theme.text
   },
 })
 

@@ -6,14 +6,17 @@ import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import styles from '../../styles/files-styles'
 import { formatDate } from "@/utils/dateFormat";
 import ModalToShowInformation from "@/components/ModalToShowInformation";
+import { useTheme } from "@/theme/ThemeProvider";
+import FilesStyles from "../../styles/files-styles";
 
 const FilesList=()=>{
     const [files, setFiles] =useState<Inspection[]>([])
     const [showInfoModal,setShowInfoModal]=useState<boolean>(false)
   const [selectedInfo,setSelectedInfo]=useState<{title:string,about:string}>({title:"",about:""})
+  const { theme} = useTheme()
+       const styles = FilesStyles(theme);
       const loadPdfs = async () => {
     try {
       const result =
@@ -98,7 +101,7 @@ setShowInfoModal(true)
                                 <FontAwesome6
                                     name="arrow-left"
                                     size={20}
-                                    color="#2563EB"
+                                    color={theme.iconColor}
                                     iconStyle="solid"
                                     />
                         </TouchableOpacity>
@@ -118,7 +121,7 @@ setShowInfoModal(true)
             {files.length === 0 ? (
                 <View
                 style={{
-                    backgroundColor: "white",
+                    backgroundColor: theme.background,
                     width:'95%',
                     borderRadius: 18,
                     alignItems: "center",
@@ -128,7 +131,7 @@ setShowInfoModal(true)
                     style={{
                     fontSize: 16,
                     fontWeight: "600",
-                    color: "#334155",
+                    color: theme.text,
                     }}
                 >
                     No hay PDFs generados
@@ -137,7 +140,7 @@ setShowInfoModal(true)
                 <Text
                     style={{
                     marginTop: 8,
-                    color: "#64748b",
+                    color: theme.text,
                     textAlign: "center",
                     }}
                 >
@@ -149,20 +152,20 @@ setShowInfoModal(true)
                 <View
                     key={inspection.id}
                     style={{
-                    backgroundColor: "white",
+                    backgroundColor: theme.backgroundColorHeader,
                     width:'95%',
                     borderRadius: 18,
                     padding: 18,
                     marginBottom: 12,
                     borderWidth: 1,
-                    borderColor: "#d6e4f5",
+                    borderColor: theme.backgroundColorHeaderBorder,
                     }}
                 >
                     <Text
                     style={{
                         fontSize: 18,
                         fontWeight: "700",
-                        color: "#1e293b",
+                        color: theme.text,
                     }}
                     >
                     {inspection.name}
@@ -200,7 +203,7 @@ setShowInfoModal(true)
                             fontWeight: "600",
                         }}
                         >
-                        Eliminar PDF
+                        Eliminar
                         </Text>
                     </TouchableOpacity>
 
@@ -222,7 +225,7 @@ setShowInfoModal(true)
                             fontWeight: "600",
                         }}
                         >
-                        Ver PDF
+                        Compartir
                         </Text>
                     </TouchableOpacity>
                     </View>
