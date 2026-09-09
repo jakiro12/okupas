@@ -125,13 +125,13 @@ const handleGeneratePdf = async () => {
                                 <FontAwesome6
                                     name="arrow-left"
                                     size={20}
-                                    color="#2563EB"
+                                    color={theme.iconColor}
                                     iconStyle="solid"
                                     />
                         </TouchableOpacity> 
           <Text 
             style={styles.mainTitle}
-          >Inspeccion </Text>    
+          >Detalles </Text>    
         </View>
           <View
             style={styles.boxInspectionCurrentData}
@@ -153,7 +153,7 @@ const handleGeneratePdf = async () => {
                 style={styles.inspectionName}
               >{inspectionData?.name}</Text>
               {
-                 fileLoader ? <ActivityIndicator size={30} color="#2563EB"/>
+                 fileLoader ? <ActivityIndicator size={30} color={theme.iconColor}/>
                                     :
                <TouchableOpacity
                 onPress={handleGeneratePdf}

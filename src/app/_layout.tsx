@@ -3,17 +3,22 @@ import { Stack } from "expo-router";
 import { createContext, useEffect, useState } from "react";
 import SQLiteService  from '../database/sqlite'
 import { ThemeProvider } from "@/theme/ThemeProvider";
+import { ImageQuality } from "@/services/image/ImageProcessor";
 
 //para borrar y resetar todo en caso de agregar algo
 //import * as SQLite from "expo-sqlite";
 //await SQLite.deleteDatabaseAsync("okupas.db"),
 type DataContextType = {
   initialized:boolean,
+  quality: ImageQuality;
+  setQuality: (quality: ImageQuality) => void;
 };
+
 export const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export default function RootLayout() {
   const [initialized,setInitialized]=useState<boolean>(false)
+  const [quality, setQuality] =useState<ImageQuality>("medium");
  useEffect(() => {
     
   const init = async () => {
@@ -32,7 +37,7 @@ export default function RootLayout() {
 }, []);
   return ( 
     <ThemeProvider>
-    <DataContext.Provider value={{initialized}}>
+    <DataContext.Provider value={{initialized,quality, setQuality}}>
         <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="index" />    
               <Stack.Screen name="inspection/inspection" />   

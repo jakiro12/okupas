@@ -6,13 +6,21 @@ import Ionicons from "@react-native-vector-icons/ionicons";
 import  MaterialIcon  from "@react-native-vector-icons/material-design-icons";
 import { useTheme } from "@/theme/ThemeProvider";
 import SettingsStyles from "../../styles/settings-styles";
+import { DataContext } from "../_layout";
+import { useContext, useState } from "react";
+import SetPhotoQuality from "@/components/ModalQualityPhotos";
 
 
 const Settings=()=>{
     
     const { mode,setMode,theme } = useTheme()
-
-
+ 
+        const [showCurrentQuality,setShowCurrentQuality]=useState<boolean>(false)
+         const context = useContext(DataContext)
+        if (!context) throw new Error("DataContext no está disponible")
+       
+         const { quality } = context
+        
   const styles = SettingsStyles(theme);
     return(
           <SafeAreaView
@@ -198,13 +206,14 @@ const Settings=()=>{
                                 </View>
                                 <TouchableOpacity
                                     activeOpacity={0.8}
+                                    onPress={()=>setShowCurrentQuality(true)}
                                     style={styles.photosOptionsBoxQuality}
                                 >
-                                    <Text style={{color:mode=== "light" ?"#091431": "#eaf4fb"}}>Media</Text>
+                                    <Text style={{color:mode=== "light" ?"#091431": "#eaf4fb"}}>{quality}</Text>
                                     <MaterialIcon
                                         name="arrow-down-bold"
                                         size={16}
-                                        color={theme.iconColor}
+                                        color={theme.primary}
                                         />
                                 </TouchableOpacity>
                                </View>
@@ -327,6 +336,10 @@ const Settings=()=>{
                             </View>
                         </View>
                         </View>
+                        <SetPhotoQuality 
+                            visible={showCurrentQuality}
+                            onCancel={()=>setShowCurrentQuality(false)}                            
+                        />
                 </View>
           </SafeAreaView>
           )

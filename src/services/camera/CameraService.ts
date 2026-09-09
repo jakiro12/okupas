@@ -71,7 +71,6 @@ class CameraService {
 
  
   async takePhoto(): Promise<CameraResponse> {
-    const granted = await this.requestCameraPermission();
     const permission = await this.requestCameraPermission()
     if (permission === "blocked") {
   return {
@@ -84,11 +83,7 @@ if (permission === "denied") {
     status: "permission-denied",
   };
 }
-    if (!granted) {
-      return {
-        status: "permission-denied",
-      };
-    }
+    
 
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ["images"],

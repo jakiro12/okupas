@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Alert, Image, Linking,  ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import CameraService, { CameraResult } from "@/services/camera/CameraService";
@@ -14,6 +14,7 @@ import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import ModalToShowInformation from "@/components/ModalToShowInformation";
 import { useTheme } from "@/theme/ThemeProvider";
 import PhotoScreenStyles from "../../../styles/photo-screen-styles";
+import { DataContext } from "@/app/_layout";
 
 const CameraScreen=()=>{
     const [image, setImage] = useState<CameraResult | null>(null);
@@ -23,6 +24,10 @@ const CameraScreen=()=>{
     const { inspectionId } = useLocalSearchParams<{ inspectionId: string }>()
     const { theme } = useTheme()
   const styles = PhotoScreenStyles(theme);
+  const context = useContext(DataContext)
+        if (!context) throw new Error("DataContext no está disponible")
+       
+         const { quality } = context
     const handleTakePhoto = async () => {
     const result = await CameraService.takePhoto();
 switch (result?.status) {
@@ -117,8 +122,10 @@ const handleSaveImage = async () => {
 
   try {
     const processedImage =
-      await ImageProcessor.resizeAndCompress(image);
-
+  await ImageProcessor.resizeAndCompress(
+    image,
+    quality
+  );
     const savedImage =
       await FileSystemService.saveImage(
         inspectionId,
@@ -141,6 +148,7 @@ const handleSaveImage = async () => {
 
     setSavedImages(prev => [...prev, photo]);
     setImage(null);
+    
   } catch (error) {
     console.error("Error guardando imagen:", error);
      setSelectedInfo({
@@ -172,7 +180,6 @@ const handleDeleteImage = async (photo: Photo) => {
 
   } catch (error) {
     console.error(
-      "Error eliminando imagen:",
       error
     );
     setSelectedInfo({
@@ -216,7 +223,6 @@ const handleFinishInspection = async () => {
     router.replace("/");
   } catch (error) {
     console.error(
-      "Error finalizando inspección:",
       error
     );
     setSelectedInfo({

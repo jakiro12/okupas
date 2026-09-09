@@ -160,11 +160,15 @@ const handleGeneratePdf = async (id:string) => {
         >
           {inspections.length === 0 ? (
             <View >
-              <Text >
+              <Text 
+                style={{color:theme.text}}
+              >
                 No hay inspecciones
               </Text>
 
-              <Text >
+              <Text 
+              style={{color:theme.text}}
+              >
                 Las inspecciones que crees aparecerán aquí.
               </Text>
             </View>

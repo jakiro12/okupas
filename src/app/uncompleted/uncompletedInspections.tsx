@@ -103,11 +103,15 @@ const handleDeleteInspection = async () => {
         >
           {inspections.length === 0 ? (
             <View >
-              <Text >
+              <Text 
+                style={{color:theme.text}}
+              >
                 No hay inspecciones
               </Text>
 
-              <Text >
+              <Text 
+              style={{color:theme.text}}
+              >
                 Las inspecciones sin completar aparecerán aquí.
               </Text>
             </View>
