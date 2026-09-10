@@ -18,7 +18,7 @@ export const DataContext = createContext<DataContextType | undefined>(undefined)
 
 export default function RootLayout() {
   const [initialized,setInitialized]=useState<boolean>(false)
-  const [quality, setQuality] =useState<ImageQuality>("medium");
+  const [quality, setQuality] =useState<ImageQuality>("Media");
  useEffect(() => {
     
   const init = async () => {

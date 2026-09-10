@@ -4,18 +4,18 @@ import {
 } from "expo-image-manipulator";
 
 import type { CameraResult } from "@/services/camera/CameraService";
-export type ImageQuality = "Low" | "Medium" | "High";
+export type ImageQuality = "Baja" | "Media" | "Alta";
 
 const IMAGE_QUALITY_CONFIG = {
-  Low: {
+  Baja: {
     width: 1280,
     compress: 0.6,
   },
-  Medium: {
+  Media: {
     width: 1600,
     compress: 0.7,
   },
-  High: {
+  Alta: {
     width: 2560,
     compress: 0.9,
   },
@@ -23,7 +23,7 @@ const IMAGE_QUALITY_CONFIG = {
 class ImageProcessor {
   async resizeAndCompress(
     image: CameraResult,
-    quality: ImageQuality = "Medium"
+    quality: ImageQuality = "Media"
   ): Promise<CameraResult> {
     const config = IMAGE_QUALITY_CONFIG[quality];
 

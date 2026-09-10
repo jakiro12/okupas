@@ -3,6 +3,7 @@
 import { DataContext } from "@/app/_layout";
 import { ImageQuality } from "@/services/image/ImageProcessor";
 import { useTheme } from "@/theme/ThemeProvider";
+import { ImageQualityValues } from "@/utils/photoQuality";
 import { useContext } from "react";
 
 import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native"
@@ -18,7 +19,7 @@ const SetPhotoQuality=({visible,onCancel}:ModalDeleteProps)=>{
         if (!context) throw new Error("DataContext no está disponible")
        
          const { setQuality } = context
-    const ImageQualityValues:ImageQuality[]=["Low","Medium","High"]
+    
     const handlePickProvince=(e:ImageQuality)=>{
         setQuality(e)
         onCancel()

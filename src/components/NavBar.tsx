@@ -1,20 +1,26 @@
 import { Text, TouchableOpacity, View } from "react-native"
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { router } from "expo-router";
+import { Href, router, usePathname } from "expo-router";
 import { useTheme } from "@/theme/ThemeProvider";
 import NavBarStyles from "../styles/navbar-styles";
 
 const NavigationBar=()=>{
-    const { theme } = useTheme()
-
+    const { theme } = useTheme();
+  const pathname = usePathname();
 
   const styles = NavBarStyles(theme);
+
+  const navigate = (route: Href) => {
+    if (pathname !== route) {
+     router.push(route);
+    }
+  };
     return(
         <View
         style={styles.container}
         >
             <TouchableOpacity
-            onPress={()=>router.push('/')}
+            onPress={()=>navigate('/')}
             style={styles.btnContainer}
             >
             <FontAwesome6
@@ -28,7 +34,7 @@ const NavigationBar=()=>{
                 >Inicio</Text>
             </TouchableOpacity>
                <TouchableOpacity
-               onPress={()=>router.push('/list/inspectionsList')}
+               onPress={()=>navigate('/list/inspectionsList')}
             style={styles.btnContainer}
             >
                 <FontAwesome6
@@ -42,7 +48,7 @@ const NavigationBar=()=>{
                 >Inspecciones</Text>
             </TouchableOpacity>
               <TouchableOpacity
-              onPress={()=>router.push('/uncompleted/uncompletedInspections')}
+              onPress={()=>navigate('/uncompleted/uncompletedInspections')}
             style={styles.btnContainer}
             >
                  <FontAwesome6
@@ -56,7 +62,7 @@ const NavigationBar=()=>{
                 >Pendientes</Text>
             </TouchableOpacity>
               <TouchableOpacity
-              onPress={()=>router.push('/settings/settings')}
+              onPress={()=>navigate('/settings/settings')}
             style={styles.btnContainer}
             >
                 <FontAwesome6
