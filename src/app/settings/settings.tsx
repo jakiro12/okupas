@@ -9,6 +9,7 @@ import SettingsStyles from "../../styles/settings-styles";
 import { DataContext } from "../_layout";
 import { useContext, useState } from "react";
 import SetPhotoQuality from "@/components/ModalQualityPhotos";
+import { useImageEditorSettings } from "@/settings/ImageEditorSettingsContext";
 
 
 const Settings=()=>{
@@ -22,6 +23,8 @@ const Settings=()=>{
          const { quality } = context
         
   const styles = SettingsStyles(theme);
+  const { setEditorEnabled,editorEnabled } = useImageEditorSettings();
+
     return(
           <SafeAreaView
                           style={{ flex: 1, backgroundColor: "black" }}
@@ -231,12 +234,12 @@ const Settings=()=>{
                                     >Permitir marcar y dibujar sobre imagenes</Text>
                                 </View>
                                 <TouchableOpacity
-
+                                        onPress={()=>setEditorEnabled(!editorEnabled)}
                                 >
                                     <FontAwesome6
                                         name="circle"
                                         size={20}
-                                        color="#888fa0"
+                                        color={editorEnabled ? "#2563EB" : "#888fa0" }
                                         iconStyle="solid"
                                         />
                                 </TouchableOpacity>

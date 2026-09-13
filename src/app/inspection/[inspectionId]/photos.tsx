@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Alert, Image, Linking,  ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { Alert, Image, Linking,  Pressable,  ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import CameraService, { CameraResult } from "@/services/camera/CameraService";
 import ImageProcessor from "@/services/image/ImageProcessor";
@@ -15,15 +15,21 @@ import ModalToShowInformation from "@/components/ModalToShowInformation";
 import { useTheme } from "@/theme/ThemeProvider";
 import PhotoScreenStyles from "../../../styles/photo-screen-styles";
 import { DataContext } from "@/app/_layout";
+import { useImageEditorSettings } from "@/settings/ImageEditorSettingsContext";
+import PhotoEditor from "@/components/photo-editor/PhotoEditor";
 
 const CameraScreen=()=>{
+  const [cameraMode, setCameraMode] = useState<"capture" | "edit">("capture");
+  const [editingImageUri, setEditingImageUri] = useState<string | null>(null);
     const [image, setImage] = useState<CameraResult | null>(null);
     const [savedImages, setSavedImages] = useState<Photo[]>([]);
     const [showInfoModal,setShowInfoModal]=useState<boolean>(false)
+    const [editingPhoto, setEditingPhoto] = useState<Photo | null>(null);
     const [selectedInfo,setSelectedInfo]=useState<{title:string,about:string}>({title:"",about:""})
     const { inspectionId } = useLocalSearchParams<{ inspectionId: string }>()
     const { theme } = useTheme()
   const styles = PhotoScreenStyles(theme);
+  const { editorEnabled } = useImageEditorSettings();
   const context = useContext(DataContext)
         if (!context) throw new Error("DataContext no está disponible")
        
@@ -236,7 +242,63 @@ const handleFinishInspection = async () => {
   CameraService.requestCameraPermission();
   CameraService.requestGalleryPermission();
 }, []);
+const handleEditedImageSave = async (editedImageUri: string): Promise<void> => {
+  if (!inspectionId) {
+    setSelectedInfo({ title: "Error", about: "Inspección no encontrada." });
+    setShowInfoModal(true);
+    return;
+  }
 
+  try {
+    const editedImageSize = await new Promise<{ width: number; height: number }>(
+      (resolve, reject) => {
+        Image.getSize(
+          editedImageUri,
+          (width, height) => resolve({ width, height }),
+          reject
+        );
+      }
+    );
+
+    // Caso 1: Edición sobre la vista previa temporal (aún NO guardada en SQLite)
+    if (!editingPhoto) {
+      setImage({
+        uri: editedImageUri,
+        width: editedImageSize.width,
+        height: editedImageSize.height,
+        fileName: `preview-edited-${Date.now()}.png`,
+        fileSize: null,
+        mimeType: "image/png",
+      });
+    } else {
+      // Caso 2: Edición sobre una foto existente en la lista SQLite
+      const updatedPhoto: Photo = {
+        ...editingPhoto,
+        uri: editedImageUri,
+        width: editedImageSize.width,
+        height: editedImageSize.height,
+      };
+
+      await PhotoRepository.update(updatedPhoto);
+
+      setSavedImages((prev) =>
+        prev.map((item) => (item.id === updatedPhoto.id ? updatedPhoto : item))
+      );
+    }
+
+    // Limpieza de estado de edición
+    setEditingPhoto(null);
+    setEditingImageUri(null);
+    setCameraMode("capture");
+  } catch (error) {
+    console.error("Error guardando imagen editada:", error);
+    setSelectedInfo({
+      title: "Error",
+      about: "No se pudo guardar la imagen editada.",
+    });
+    setShowInfoModal(true);
+  }
+};
 useEffect(() => {
   const loadPhotos = async () => {
     if (!inspectionId) return;
@@ -259,6 +321,19 @@ useEffect(() => {
   loadPhotos();
 }, [inspectionId]);
 
+if (cameraMode === "edit" && editingImageUri) {
+  return (
+    <PhotoEditor
+      imageUri={editingImageUri}
+      onCancel={() => {
+        setCameraMode("capture");
+        setEditingImageUri(null);
+      }}
+      onSave={handleEditedImageSave}
+    />
+  );
+}
+
     return(
          <SafeAreaView
                   style={{ flex: 1, backgroundColor: "black" }}
@@ -267,7 +342,7 @@ useEffect(() => {
               <View
                 style={styles.container}
               >   
-                <View style={styles.previewContainer}>
+                <View style={styles.previewContainer}>                 
                     {image ? (
                     <Image
                         source={{ uri: image.uri }}
@@ -301,6 +376,19 @@ useEffect(() => {
                         iconStyle="solid"
                         />
                     </TouchableOpacity> 
+                  {image && editorEnabled && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      // Dejamos editingPhoto en null si es una captura previa aún no registrada en SQLite
+                      setEditingPhoto(null);
+                      setEditingImageUri(image.uri);
+                      setCameraMode("edit");
+                    }}
+                    style={styles.buttonActions}
+                  >
+                    <FontAwesome6 name="pencil" size={20} color="#eaf4fb" iconStyle="solid" />
+                  </TouchableOpacity>
+                )}
                     {image ?
                     <TouchableOpacity
                       onPress={handleSaveImage}

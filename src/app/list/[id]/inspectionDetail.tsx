@@ -153,7 +153,7 @@ const handleGeneratePdf = async () => {
                 style={styles.inspectionName}
               >{inspectionData?.name}</Text>
               {
-                 fileLoader ? <ActivityIndicator size={30} color={theme.iconColor}/>
+                 fileLoader ? <ActivityIndicator size={30} color={theme.iconColor} style={{marginLeft:'auto'}}/>
                                     :
                <TouchableOpacity
                 onPress={handleGeneratePdf}

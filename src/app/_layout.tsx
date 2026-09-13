@@ -4,7 +4,8 @@ import { createContext, useEffect, useState } from "react";
 import SQLiteService  from '../database/sqlite'
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import { ImageQuality } from "@/services/image/ImageProcessor";
-
+import { ImageEditorSettingsProvider } from "@/settings/ImageEditorSettingsContext";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 //para borrar y resetar todo en caso de agregar algo
 //import * as SQLite from "expo-sqlite";
 //await SQLite.deleteDatabaseAsync("okupas.db"),
@@ -36,6 +37,8 @@ export default function RootLayout() {
   init();
 }, []);
   return ( 
+    <GestureHandlerRootView style={{ flex: 1 }}>
+    <ImageEditorSettingsProvider>
     <ThemeProvider>
     <DataContext.Provider value={{initialized,quality, setQuality}}>
         <Stack screenOptions={{ headerShown: false }}>
@@ -49,5 +52,7 @@ export default function RootLayout() {
           </Stack>
           </DataContext.Provider> 
       </ThemeProvider>
+      </ImageEditorSettingsProvider>
+      </GestureHandlerRootView>
           )
       }

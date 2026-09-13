@@ -34,6 +34,33 @@ class PhotoRepository {
     );
   }
 
+  async update(photo: Photo): Promise<void> {
+    const db = SQLiteService.getDatabase();
+
+    await db.runAsync(
+      `
+      UPDATE ${PHOTO_TABLE}
+      SET
+        fileName = ?,
+        uri = ?,
+        width = ?,
+        height = ?,
+        fileSize = ?,
+        mimeType = ?
+      WHERE id = ?
+      `,
+      [
+        photo.fileName,
+        photo.uri,
+        photo.width,
+        photo.height,
+        photo.fileSize,
+        photo.mimeType,
+        photo.id,
+      ]
+    );
+  }
+
   async findByInspectionId(
     inspectionId: string
   ): Promise<Photo[]> {
