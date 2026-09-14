@@ -69,21 +69,7 @@ const ModalToDeleteItems=({inspection,visible,onCancel,onConfirm}:ModalDeletePro
               gap: 12,
             }}
           >
-            <TouchableOpacity
-              onPress={onCancel}
-              style={{
-                paddingVertical: 12,
-                paddingHorizontal: 20,
-                borderRadius: 10,
-                backgroundColor: theme.primary,
-              }}
-            >
-              <Text
-                style={{color:'#ffffff'}}
-              >Cancelar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
+              <TouchableOpacity
               onPress={onConfirm}
               style={{
                 paddingVertical: 12,
@@ -101,6 +87,19 @@ const ModalToDeleteItems=({inspection,visible,onCancel,onConfirm}:ModalDeletePro
                 Eliminar
               </Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              onPress={onCancel}
+              style={{
+                paddingVertical: 12,
+                paddingHorizontal: 20,
+                borderRadius: 10,
+                backgroundColor: theme.primary,
+              }}
+            >
+              <Text
+                style={{color:'#ffffff'}}
+              >Cancelar</Text>
+            </TouchableOpacity>          
           </View>
         </View>
         </View>

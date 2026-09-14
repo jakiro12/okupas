@@ -2,8 +2,8 @@ import { Text, View,  TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import NavigationBar from "@/components/NavBar";
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { router } from "expo-router";
-import { useContext, useEffect, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback, useContext, useEffect, useState } from "react";
 import InspectionRepository from "@/database/repositories/InspectionRepository";
 import { DataContext } from "./_layout";
 import FileSystemService from "@/services/fyilesystem/FileSystemService";
@@ -20,13 +20,16 @@ export default function Index() {
        const { initialized } = context
        const { theme} = useTheme()
        const styles = DashboardStyles(theme);
-    const loadPdfsData = async () => {
+ const loadPdfsData = useCallback(async () => {
   try {
     const result = await InspectionRepository.findAll();
-    setFilesQuantity(result.length)
+
+    setFilesQuantity(result.length);
+
     const completedInspections = result
       .filter(
-        inspection => inspection.status === "completed"
+        (inspection) =>
+          inspection.status === "completed"
       )
       .sort(
         (a, b) =>
@@ -44,9 +47,10 @@ export default function Index() {
     }
 
     for (const inspection of completedInspections) {
-      const pdf = await FileSystemService.getInspectionPdf(
-        inspection.id
-      );
+      const pdf =
+        await FileSystemService.getInspectionPdf(
+          inspection.id
+        );
 
       if (pdf) {
         setLastFile({
@@ -58,21 +62,26 @@ export default function Index() {
       }
     }
 
-    // Hay inspecciones completas pero ninguna tiene PDF
     setLastFile({
       name: "",
       createdAt: "",
     });
-
   } catch (error) {
-    console.error("Error cargando PDFs:", error);
+    console.error(
+      "Error cargando PDFs:",
+      error
+    );
   }
-};
-    useEffect(() => {
-  if (!initialized) return;
+}, []);
+       useFocusEffect(
+  useCallback(() => {
+    if (!initialized) {
+      return;
+    }
 
-  loadPdfsData();
-}, [initialized]);
+    loadPdfsData();
+  }, [initialized])
+);
   return (
      <SafeAreaView
           style={{ flex: 1, backgroundColor: "black" }}

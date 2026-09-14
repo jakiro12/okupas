@@ -22,6 +22,7 @@ const NavigationBar=()=>{
             <TouchableOpacity
             onPress={()=>navigate('/')}
             style={styles.btnContainer}
+            activeOpacity={0.7}
             >
             <FontAwesome6
                     name="house"
@@ -34,6 +35,7 @@ const NavigationBar=()=>{
                 >Inicio</Text>
             </TouchableOpacity>
                <TouchableOpacity
+            activeOpacity={0.7}
                onPress={()=>navigate('/list/inspectionsList')}
             style={styles.btnContainer}
             >
@@ -48,6 +50,7 @@ const NavigationBar=()=>{
                 >Inspecciones</Text>
             </TouchableOpacity>
               <TouchableOpacity
+            activeOpacity={0.7}
               onPress={()=>navigate('/uncompleted/uncompletedInspections')}
             style={styles.btnContainer}
             >
@@ -62,6 +65,7 @@ const NavigationBar=()=>{
                 >Pendientes</Text>
             </TouchableOpacity>
               <TouchableOpacity
+            activeOpacity={0.7}
               onPress={()=>navigate('/settings/settings')}
             style={styles.btnContainer}
             >
