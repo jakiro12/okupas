@@ -224,7 +224,7 @@ export default function PhotoEditor({
                     path={currentPath}
                     color="#ff0000"
                     style="stroke"
-                    strokeWidth={6}
+                    strokeWidth={3}
                     strokeCap="round"
                     strokeJoin="round"
                   />

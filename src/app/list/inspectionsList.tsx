@@ -61,7 +61,6 @@ const handleDeleteInspection = async () => {
     setSelectedInspection(null);
 
     console.log(
-      "🗑️ Inspección eliminada:",
       selectedInspection.id
     );
   } catch (error) {
