@@ -246,98 +246,94 @@ const Settings=()=>{
                                </View>
                             </View>
                         </View>
-                         <View
-                            style={styles.optionsBox}
-                        >
-                            <View
-                                style={styles.optionsBoxTitle}
-                            >
-                               <View
-                                    style={styles.boxOptionsLogo}
-                                >
-                                    <FontAwesome6
-                                        name="database"
-                                        size={22}
-                                        color={theme.iconColor}
-                                        iconStyle="solid"
-                                        />
-                                </View>     
-                                <View
-                                    style={styles.optionsBoxTitleDesc}
-                                >
-                                    <Text
-                                            style={styles.titleOptionsDesc}
-                                    >Almacenamiento</Text>
-                                    <Text
-                                    style={styles.titleOptionsDescAbout}
-                                    >Espacio ocupado por la aplicacion</Text>
-                                </View>
-                            </View>
-                            <View
-                                style={styles.optionsBoxDisplay}
-                            >
-                                <TouchableOpacity
-                                    onPress={()=>console.log('tema claro')}
-                                    style={styles.themeBtns}
-                                >
-                                   <View
-                                    style={styles.themeBtnsDesc}
-                                   >
-                                    <Ionicons
-                                        name="image-sharp"
-                                        size={18}
-                                        color="#44c66f"
-                                        />
-                                        <Text
-                                            style={styles.titleOptionsDesc}
-                                        >Imagenes</Text>
-                                    </View> 
-                                    <Text
-                                    style={styles.titleOptionsDesc}
-                                    >0 Mb</Text>
-                                </TouchableOpacity>
-                                  <TouchableOpacity
-                                    onPress={()=>console.log('tema claro')}
-                                    style={[styles.themeBtns,{borderTopColor:'#888fa041',borderBottomColor:'#888fa041',borderTopWidth:1,borderBottomWidth:1}]}
-                                >
-                                   <View
-                                    style={styles.themeBtnsDesc}
-                                   >
-                                    <Ionicons
-                                        name="document-attach"
-                                        size={18}
-                                        color="#F40F02"
-                                        />
-                                        <Text
-                                            style={styles.titleOptionsDesc}
-                                        >PDFs</Text>
-                                    </View> 
-                                    <Text
-                                    style={styles.titleOptionsDesc}
-                                    >0 Mb</Text>
-                                </TouchableOpacity>
-                                  <TouchableOpacity
-                                    onPress={()=>console.log('tema claro')}
-                                    style={styles.themeBtns}
-                                >
-                                   <View
-                                    style={styles.themeBtnsDesc}
-                                   >
-                                    <Ionicons
-                                        name="file-tray"
-                                        size={18}
-                                        color="#000000"
-                                        />
-                                        <Text
-                                            style={styles.titleOptionsDesc}
-                                        >Sistema</Text>
-                                    </View> 
-                                    <Text
-                                    style={styles.titleOptionsDesc}
-                                    >0 Mb</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                        <View style={styles.optionsBox}>
+    <View style={styles.optionsBoxTitle}>
+        <View style={styles.boxOptionsLogo}>
+            <FontAwesome6
+                name="circle-info"
+                size={22}
+                color={theme.iconColor}
+                iconStyle="solid"
+            />
+        </View>
+
+        <View style={styles.optionsBoxTitleDesc}>
+            <Text style={styles.titleOptionsDesc}>
+                Acerca de la aplicación
+            </Text>
+
+            <Text style={styles.titleOptionsDescAbout}>
+                Información sobre Okupas
+            </Text>
+        </View>
+    </View>
+
+    <View style={styles.optionsBoxDisplay}>
+        <View style={styles.themeBtns}>
+            <View style={styles.themeBtnsDesc}>
+                <Ionicons
+                    name="phone-portrait-outline"
+                    size={18}
+                    color={theme.iconColor}
+                />
+
+                <Text style={styles.titleOptionsDesc}>
+                    Aplicación
+                </Text>
+            </View>
+
+            <Text style={styles.titleOptionsDesc}>
+                Okupas
+            </Text>
+        </View>
+
+        <View
+            style={[
+                styles.themeBtns,
+                {
+                    borderTopColor: "#888fa041",
+                    borderBottomColor: "#888fa041",
+                    borderTopWidth: 1,
+                    borderBottomWidth: 1,
+                },
+            ]}
+        >
+            <View style={styles.themeBtnsDesc}>
+                <Ionicons
+                    name="information-circle-outline"
+                    size={18}
+                    color={theme.iconColor}
+                />
+
+                <Text style={styles.titleOptionsDesc}>
+                    Versión
+                </Text>
+            </View>
+
+            <Text style={styles.titleOptionsDesc}>
+                1.0.0
+            </Text>
+        </View>
+
+        <View style={styles.themeBtns}>
+            <View style={styles.themeBtnsDesc}>
+                <Ionicons
+                    name="document-text-outline"
+                    size={18}
+                    color={theme.iconColor}
+                />
+
+                <Text style={styles.titleOptionsDesc}>
+                    Descripción
+                </Text>
+            </View>
+
+            <Text style={styles.titleOptionsDesc}>
+                Inspecciones/reportes
+            </Text>
+        </View>
+    </View>
+</View>
                         </View>
                         <SetPhotoQuality 
                             visible={showCurrentQuality}
